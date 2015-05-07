@@ -1,88 +1,113 @@
-#' Writing data frame or matrix into a file
-#'
-#' This function exports a data frame or matrix into a data file with file format based on the file extension.
-#'
-#' @param x data frame or matrix to be written into a file.
-#' @param file a character string naming a file.
-#' @param format a character string code of file format. The following file formats are supported: txt, rds, csv and dta.
-#' @param row.names a logical value ('TRUE' or 'FALSE') indicating whether the row names of 'x' are to be written along with 'x'
-#' @param header a logical value indicating whether the file contains the names of the variables as its first line. 
-#' @param ... additional arguments for the underlying export functions.
-#' @examples
-#' export(iris, "iris.csv")
-#' @export
-
-export <- function(x, file="", format=NULL, row.names=FALSE, header=TRUE, ... ) {
-  if (!is.data.frame(x) & !is.matrix(x)) {
-    stop("x is not a data frame or matrix.")
-  }
-  if (is.matrix(x)) {
-    x <- as.data.frame(x)
-  }
-  format <- .guess(file)
-  ### DRY(don't repeat yourself) way of doing this, rather than a series of if-else statement
-  switch(format,
-         txt=write.table(x, file=file, sep="\t", row.names=row.names, col.names=header,...), ##tab-seperate txt file
-         rds=saveRDS(x, file=file, ...),
-         csv=write.csv(x, file=file, row.names=row.names, ...), 
-         dta=write.dta(x, file=file, ...), ### stata
-         stop("Unknown file format")
-         )
+export.csv <- function(x, file, row.names = FALSE, ...) {
+    write.csv(x, file = file, row.names = row.names, ...)
 }
 
-#' Reading data frame or matrix from a file
-#'
-#' This function imports a data frame or matrix from a data file with the file format based on the file extension.
-#'
-#' @param file a character string naming a file.
-#' @param format a character string code of file format. The following file formats are supported: txt, rds, csv, dta, sav, mtp and rec.
-#' @param header a logical value indicating whether the file contains the names of the variables as its first line. 
-#' @param ... Additional arguments for the underlying import functions.
-#' @note For csv and txt files with row names exported from export(), additional ... argument of row.names might be useful to specify the column of the table which contain row names. See example below. 
-#' @examples
-#' #x <- import("iris.dta")
-#' myIris <- datasets::iris
-#' export(myIris, "myIris.csv", row.names=TRUE)
-#' myIris2 <- import("myIris.csv") ### with the additional spurious column
-#' head(myIris2)
-#' myIris3 <- import("myIris.csv", row.names=1)
-#' head(myIris3)
-#' @export
-
-import <- function(file="", format=NULL, header=TRUE, ... ) {
-  format <- .guess(file, format)
-  x <- switch(format,
-              txt=read.table(file=file, sep="\t", header=header, ...), ##tab-seperate txt file
-              rds=readRDS(file=file, ...),
-              csv=read.csv(file=file, header=header, ...),
-              dta=read.dta(file=file, ...),
-              sav=read.spss(file=file,to.data.frame=TRUE, ...),
-              mtp=read.mtp(file=file, ...),
-              rec=read.epiinfo(file=file, ...),
-              stop("Unknown file format")
-              )
-  return(x)
+export.delim <- function(x, file, sep = "\t", row.names = FALSE,
+                         col.names = TRUE, ...) {
+    write.table(x, file = file, sep = sep, row.names = row.names,
+                col.names = col.names, ...)
 }
 
-#convert <- function(in_file, out_file, in_format=NULL, out_format=NULL, row.names=FALSE, ...) {
-#    export(import(file=in_file, format=in_format, ...), file=out_file, format=out_format, row.names=row.names, ...)
-#}
+export.fwf <- function(x, file, sep = "", row.names = FALSE, quote = FALSE, col.names = FALSE, ...) {
+    dat <- lapply(x, function(col) {
+        if(is.character(col)) {
+            col <- as.numeric(as.factor(col))
+        } else if(is.factor(col)) {
+            col <- as.numeric(col)
+        }
+        if(is.numeric(col)) {
+            s <- strsplit(as.character(col), ".", fixed = TRUE)
+            m1 <- max(nchar(sapply(s, `[`, 1)), na.rm = TRUE)
+            m2 <- max(nchar(sapply(s, `[`, 2)), na.rm = TRUE)
+            return(formatC(sprintf(fmt = paste0("%0.",m2,"f"), col), width = (m1+m2+1)))
+        } else if(is.logical(col)) {
+            return(sprintf("%i",col))
+        }
+    })
+    dat <- do.call(cbind, dat)
+    n <- nchar(dat[1,]) + c(rep(nchar(sep), ncol(dat)-1), 0)
+    dict <- paste0(names(n), ":\t", c(1, cumsum(n)+1), "-", cumsum(n), "\n")
+    message("Columns:\n", paste0(dict[-length(dict)], collapse = ""))
+    if(sep == "")
+        message('Read in with `import("', file, '", widths = c(', paste0(n, collapse = ","), '))`\n')
+    write.table(dat, file = file, row.names = row.names, sep = sep, quote = quote,
+                col.names = col.names, ...)
+}
 
+export.xml <- function(x, file, ...) {
+    root <- newXMLNode(as.character(substitute(x)))
+    for(i in 1:nrow(x)){
+        obs <- newXMLNode("Observation", parent = root)
+        rowname <- newXMLNode("rowname", parent = obs)
+        xmlValue(rowname) <- rownames(x)[i]
+        for(j in 1:ncol(x)) {
+            obs_value <- newXMLNode(names(x)[j], parent = obs)
+            xmlValue(obs_value) <- x[i,j]
+        }
+    }
+    invisible(saveXML(doc = root, file = file, ...))
+}
 
-#### internal helper function to handle the pre-condition of the import and export functions
-#### Not export and no doc
+export.clipboard <- function(x, row.names = FALSE, col.names = TRUE, sep = "\t", ...) {
+    if(Sys.info()["sysname"] == "Darwin") {
+        clip <- pipe("pbcopy", "w")
+        write.table(x, file = clip, sep = sep, row.names = row.names,
+                    col.names = col.names, ...)
+        close(clip)
+    } else if(Sys.info()["sysname"] == "Windows") {
+        write.table(x, file="clipboard", sep = sep, row.names = row.names,
+                    col.names = col.names, ...)
+    } else {
+        stop("Writing to clipboard is not supported on your OS")
+        return(NULL)
+    }
+}
 
-.guess <- function(filename, format=NULL) {
-  # guess the file format of filename based on file extension
-  # TODO: use the unix utility "file" to read the file info.
-  # or MIME info.
-  if (!is.character(filename)) {
-    stop("Filename is not a string")
-  }
-  guess_format <- ifelse(!is.null(format), tolower(format), str_extract(tolower(filename), "\\.(txt|csv|dta|sav|sas|rec|rds|mtp)$"))
-  if (is.na(guess_format)) {
-    stop("Unknown file format")
-  } else {
-    return(str_replace(guess_format, "\\.", ""))
-  }
+export <- function(x, file, format, ...) {
+    if(missing(file) & missing(format)) {
+        stop("Must specify 'file' and/or 'format'")
+    } else if(!missing(file) & !missing(format)) {
+        fmt <- tolower(format)
+    } else if(!missing(file) & missing(format)) {
+        fmt <- get_ext(file)
+    } else if(!missing(format)) {
+        fmt <- get_type(format)
+        file <- paste0(as.character(substitute(x)), ".", fmt)
+    }
+    if (!is.data.frame(x) & !is.matrix(x)) {
+        stop("`x` is not a data.frame or matrix")
+    } else if (is.matrix(x)) {
+        x <- as.data.frame(x)
+    }
+    switch(fmt,
+           txt = export.delim(x, file = file, ...),
+           tsv = export.delim(x, file = file, ...),
+           csv = export.delim(x, file = file, sep = ",", dec = ".", ...),
+           csv2 = export.delim(x, file = file, sep = ";", dec = ",", ...),
+           psv = export.delim(x, file = file, sep = "|", ...),
+           fwf = export.fwf(x, file = file, ...),
+           r = dput(x, file = file, ...),
+           dump = dump(as.character(substitute(x)), file = file, ...),
+           rds = saveRDS(x, file = file, ...),
+           rdata = save(x, file = file, ...),
+           sav = write_sav(data = x, path = file),
+           dta = write_dta(data = x, path = file),
+           dbf = write.dbf(dataframe = x, file = file, ...),
+           json = cat(toJSON(x, ...), file = file),
+           arff = write.arff(x = x, file = file, ...),
+           xlsx = write.xlsx(x = x, file = file, ...),
+           xml = export.xml(x, file = file, ...), 
+           clipboard = export.clipboard(x, ...),
+           # unsupported formats
+           jpg = stop(stop_for_export(fmt)),
+           png = stop(stop_for_export(fmt)),
+           tiff = stop(stop_for_export(fmt)),
+           matlab = stop(stop_for_export(fmt)),
+           xpt = stop(stop_for_export(fmt)),
+           gexf = stop(stop_for_export(fmt)),
+           npy = stop(stop_for_export(fmt)),
+           # unrecognized format
+           stop("Unrecognized file format")
+           )
+    invisible(file)
 }

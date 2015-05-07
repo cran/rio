@@ -1,34 +1,65 @@
 \name{export}
 \alias{export}
-\title{Writing data frame or matrix into a file}
+\title{Write data.frame or matrix to a file}
 \usage{
-  export(x, file = "", format = NULL, row.names = FALSE,
-    header = TRUE, ...)
+    export(x, file, format, ...)
 }
 \arguments{
-  \item{x}{data frame or matrix to be written into a file.}
-
-  \item{file}{a character string naming a file.}
-
-  \item{format}{a character string code of file format. The
-  following file formats are supported: txt, rds, csv and
-  dta.}
-
-  \item{row.names}{a logical value ('TRUE' or 'FALSE')
-  indicating whether the row names of 'x' are to be written
-  along with 'x'}
-
-  \item{header}{a logical value indicating whether the file
-  contains the names of the variables as its first line.}
-
-  \item{...}{additional arguments for the underlying export
-  functions.}
+    \item{x}{A data frame or matrix to be written into a file.}
+    \item{file}{A character string naming a file. Must specify \code{file} and/or \code{format}.}
+    \item{format}{An optional character string containing the file format, which can be used to override the format inferred from \code{file} or, in lieu of specifying \code{file}, a file with the symbol name of \code{x} and the specified file extension will be created. Must specify \code{file} and/or \code{format}. Shortcuts include: \dQuote{,} (for comma-separated values), \dQuote{;} (for semicolon-separated values), \dQuote{|} (for pipe-separated values), and \dQuote{dump} for \code{\link[base]{dump}}.}
+    \item{...}{Additional arguments for the underlying export functions.}
 }
-\description{
-  This function exports a data frame or matrix into a data
-  file with file format based on the file extension.
+\value{The name of the output file as a character string (invisibly).}
+\description{This function exports a data frame or matrix into a file with file format based on the file extension (or the manually specified format, if \code{format} is specified).
+
+\code{export} supports many file formats. See the documentation for the underlying export functions for optional arguments that can be passed via \code{...}
+
+\itemize{
+    \item Tab-separated data (.tsv), using \code{\link[utils]{write.table}} with \code{row.names = FALSE}
+    \item Comma-separated data (.csv), using \code{\link[utils]{write.csv}} with \code{row.names = FALSE}
+    \item Pipe-separated data (.psv), using \code{\link[utils]{write.table}} with \code{sep = '|'} and \code{row.names = FALSE}
+    \item Fixed-width format data (.fwf), using \code{\link[utils]{write.table}} with \code{row.names = FALSE}, \code{quote = FALSE}, and \code{col.names = FALSE}
+    \item Serialized R objects (.rds), using \code{\link[base]{saveRDS}}
+    \item Saved R objects (.RData), using \code{\link[base]{save}}
+    \item JSON (.json), using \code{\link[jsonlite]{toJSON}}
+    \item Stata (.dta), using \code{\link[haven]{write_dta}}
+    \item SPSS (.sav), using \code{\link[haven]{write_sav}}
+    \item "XBASE" database files (.dbf), using \code{\link[foreign]{write.dbf}}
+    \item Weka Attribute-Relation File Format (.arff), using \code{\link[foreign]{write.arff}}
+    \item R syntax object (.R), using \code{\link[base]{dput}} (by default) or \code{\link[base]{dump}} (if \code{format = 'dump'}
+    \item Excel (.xlsx), using \code{\link[openxlsx]{write.xlsx}}
+    \item XML (.xml), using a custom method to create an XML tree and write to disk using \code{\link[XML]{saveXML}}
+    \item Clipboard export (on Windows and Mac OS), using \code{\link[utils]{write.table}} with \code{row.names = FALSE}
+}
+
 }
 \examples{
+# specify only `file` argument
 export(iris, "iris.csv")
-}
 
+# specify only `format` argument
+"iris.dta" %in% dir()
+export(iris, format = "stata")
+"iris.dta" %in% dir()
+
+# specify `file` and `format` to override default format
+export(iris, file = "iris.txt", format = "csv")
+
+# export to JSON
+export(iris, "iris.json")
+
+# pass arguments to underlying export function
+export(iris, "iris.csv", col.names = FALSE)
+
+# write data to .R syntax file and append additional data
+export(iris, file = "data.R", format = "dump")
+export(mtcars, file = "data.R", format = "dump", append = TRUE)
+source("data.R", echo = TRUE)
+
+# cleanup
+unlink("iris.csv")
+unlink("iris.dta")
+unlink("iris.json")
+unlink("data.R")
+}

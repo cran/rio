@@ -18,18 +18,19 @@
 \itemize{
     \item Tab-separated data (.tsv), using \code{\link[utils]{read.table}} with \code{row.names = FALSE} and \code{stringsAsFactors = FALSE} (or, if \code{fread = TRUE}, \code{\link[data.table]{fread}})
     \item Comma-separated data (.csv), using \code{\link[utils]{read.csv}} with \code{row.names = FALSE} and \code{stringsAsFactors = FALSE} (or, if \code{fread = TRUE}, \code{\link[data.table]{fread}})
+    \item \href{http://csvy.org/}{CSVY} (CSV with a YAML metadata header) using \code{\link[utils]{read.csv}} with \code{row.names = FALSE} and \code{stringsAsFactors = FALSE} (or, if \code{fread = TRUE}, \code{\link[data.table]{fread}})
     \item Pipe-separated data (.psv), using \code{\link[utils]{read.table}} with \code{sep = '|'}, \code{row.names = FALSE}, and \code{stringsAsFactors = FALSE} (or, if \code{fread = TRUE}, \code{\link[data.table]{fread}})
     \item Fixed-width format data (.fwf), using a faster version of \code{\link[utils]{read.fwf}} that requires a \code{widths} argument and by default in rio has \code{stringsAsFactors = FALSE}
     \item Serialized R objects (.rds), using \code{\link[base]{readRDS}}
     \item Saved R objects (.RData), using \code{\link[base]{load}} for single-object .Rdata files
     \item JSON (.json), using \code{\link[jsonlite]{fromJSON}}
-    \item Stata (.dta), using \code{\link[haven]{read_dta}}. If \code{haven = FALSE}, \code{\link[foreign]{read.dta}} can be used.
-    \item SPSS and SPSS portable (.sav and .por), using \code{\link[haven]{read_sav}} and \code{\link[haven]{read_por}}. If \code{haven = FALSE}, \code{\link[foreign]{read.spss}} can be used for .sav files.
+    \item Stata (.dta), using \code{\link[haven]{read_dta}}. If \code{haven = FALSE}, \code{\link[foreign]{read.dta}} can be used. If \code{haven = TRUE} metadata will be stored as object-level attributes by default; if \code{column.labels = TRUE} metadata will be stored as column-level attributes.
+    \item SPSS and SPSS portable (.sav and .por), using \code{\link[haven]{read_sav}} and \code{\link[haven]{read_por}}. If \code{haven = FALSE}, \code{\link[foreign]{read.spss}} can be used for .sav files.  If \code{haven = TRUE} metadata will be stored as object-level attributes by default; if \code{column.labels = TRUE} metadata will be stored as column-level attributes.
     \item "XBASE" database files (.dbf), using \code{\link[foreign]{read.dbf}}
     \item Weka Attribute-Relation File Format (.arff), using \code{\link[foreign]{read.arff}}
     \item R syntax object (.R), using \code{\link[base]{dget}}
     \item Excel (.xls and .xlsx), using \code{\link[readxl]{read_excel}}. If \code{readxl = FALSE}, \code{\link[openxlsx]{read.xlsx}} can be used.
-    \item SAS (.sas7bdat) and SAS XPORT (.xpt), using \code{\link[haven]{read_sas}} and \code{\link[foreign]{read.xport}}
+    \item SAS (.sas7bdat) and SAS XPORT (.xpt), using \code{\link[haven]{read_sas}} and \code{\link[foreign]{read.xport}}.  If \code{haven = TRUE} metadata will be stored as object-level attributes by default; if \code{column.labels = TRUE} metadata will be stored as column-level attributes.
     \item Minitab (.mtp), using \code{\link[foreign]{read.mtp}}
     \item Epiinfo (.rec), using \code{\link[foreign]{read.epiinfo}}
     \item Systat (.syd), using \code{\link[foreign]{read.systat}}
@@ -38,6 +39,7 @@
     \item Shallow XML documents (.xml), using \code{\link[XML]{xmlToDataFrame}}. Note: optional arguments not recognized by \code{xmlToDataFrame} are passed to \code{\link[XML]{xmlParse}}.
     \item Clipboard import (on Windows and Mac OS), using \code{\link[utils]{read.table}} with \code{row.names = FALSE}
     \item Fortran data (no recognized extension), using \code{\link[utils]{read.fortran}}
+    \item Google Sheets, as Comma-separated data (.csv)
 }
 }
 \note{For csv and txt files with row names exported from \code{\link{export}}, it may be helpful to specify \code{row.names} as the column of the table which contain row names. See example below.}

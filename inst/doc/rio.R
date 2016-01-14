@@ -14,8 +14,8 @@ y <- import("iris.rds")
 z <- import("iris.dta")
 
 # confirm identical
-identical(x, y)
-identical(y, z)
+all.equal(x, y, check.attributes = FALSE)
+all.equal(x, z, check.attributes = FALSE)
 
 ## ------------------------------------------------------------------------
 head(import("iris_noext", format = "csv"))

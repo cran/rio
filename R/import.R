@@ -1,66 +1,128 @@
-import.zip <- function(file, which = 1, ...) {
+parse.zip <- function(file, which = 1, ...) {
     file_list <- unzip(file, list = TRUE)
-    if(nrow(file_list) > 1)
+    if (nrow(file_list) > 1) {
         warning("Zip archive contains multiple files. Attempting first file.")
-    else {
+    } else {
         unzip(file, exdir = tempdir())
-        import(paste0(tempdir(),"/", file_list$Name[which]), ...)
+        paste0(tempdir(),"/", file_list$Name[which])
     }
 }
 
-import.tar <- function(file, which = 1, ...) {
-    file_list <- unzip(file, list = TRUE)
-    if(nrow(file_list) > 1)
-        stop("Tar archive contains multiple files. Attempting first file.")
-    else {
+parse.tar <- function(file, which = 1, ...) {
+    e <- file_ext(file)
+    if (e == "tar") {
+        file_list <- untar(file, list = TRUE)
+        if (nrow(file_list) > 1) {
+            stop("Tar archive contains multiple files. Attempting first file.")
+        }
         untar(file, exdir = tempdir())
-        import(paste0(tempdir(),"/", file_list$Name[which]), ...)
+        paste0(tempdir(),"/", file_list$Name[which])
+    } else if (e == "gz") {
+        file_list <- untar(file, list = TRUE, compressed = TRUE)
+        if (nrow(file_list) > 1) {
+            stop("Tar archive contains multiple files. Attempting first file.")
+        }
+        untar(file, exdir = tempdir(), compressed = TRUE)
+        paste0(tempdir(),"/", file_list$Name[which])
     }
 }
 
 import.delim <- function(file, fread = TRUE, sep = "auto", header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
-    if(fread) {
+    if (fread) {
         fread(input = file, sep = sep, sep2 = "auto", header = header, stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
     } else {
-        if(missing(sep) || is.null(sep) || sep == "auto")
+        if (missing(sep) || is.null(sep) || sep == "auto") {
             sep <- "\t"
-        if(missing(header) || is.null(header) || header == "auto")
+        }
+        if (missing(header) || is.null(header) || header == "auto") {
             header <- TRUE
+        }
         read.table(file = file, sep = sep, header = header, stringsAsFactors = stringsAsFactors, ...)
     }
 }
 
+import.csvy <- function(file, ...) {
+    # read in whole file
+    f <- readLines(file)
+
+    # identify yaml delimiters
+    g <- grep("^---", f)
+    if (length(g) > 2) {
+        stop("More than 2 yaml delimiters found in file")
+    } else if (length(g) == 1) {
+        stop("Only one yaml delimiter found")
+    } else if (length(g) == 0) {
+        stop("No yaml delimiters found")
+    }
+
+    # extract yaml front matter and convert to R list
+    y <- yaml.load(paste(f[(g[1]+1):(g[2]-1)], collapse = "\n"))
+    
+    # load the data
+    out <- import.delim(file = paste0(f[(g[2]+1):length(f)], collapse = "\n"), ...)
+    for (i in seq_along(y$fields)) {
+        attr(out[, i], "title") <- y$fields[[i]][["title"]]
+        attr(out[, i], "description") <- y$fields[[i]][["description"]]
+    }
+    if ("fields" %in% names(y)) {
+        structure(out, names = sapply(y$fields, `[`, "name"))
+    } else {
+        out
+    }
+}
+
 import.fwf <- function(file = file, header = FALSE, widths, ...) {
-    if(missing(widths)) {
+    if (missing(widths)) {
         stop("Import of fixed-width format data requires a 'widths' argument. See `? read.fwf`.")
     }
     read.fwf2(file = file, widths = widths, header = header, ...)
 }
 
-import.fortran <- function(file = file, style, ...) {
-    if(missing(style)) {
+import.fortran <- function(file, style, ...) {
+    if (missing(style)) {
         stop("Import of Fortran format data requires a 'style' argument. See `? read.fortran`.")
     }
     read.fortran(file = file, format = style, ...)
 }
 
-import.dta <- function(file = file, haven = TRUE, ...) {
-    if(haven) {
+import.dta <- function(file, haven = TRUE, column.labels = FALSE, ...) {
+    if (haven) {
         a <- list(...)
-        if(length(a)) 
+        if (length(a)) {
             warning("File imported using haven. Arguments to '...' ignored.")
-        read_dta(path = file)
+        }
+        if (column.labels) {
+            return(read_dta(path = file))
+        }
+        cleanup.haven(read_dta(path = file))
     } else {
         read.dta(file = file, ...)
     }
 }
 
-import.sav <- function(file = file, haven = TRUE, ...) {
-    if(haven) {
-        read_sav(path = file)
+import.sav <- function(file, haven = TRUE, column.labels = FALSE, ...) {
+    if (haven) {
+        if(column.labels) {
+            return(read_sav(path = file))
+        }
+        cleanup.haven(read_sav(path = file))
     } else {
         read.spss(file = file, to.data.frame = TRUE, ...)
     }
+}
+
+import.por <- function(file, column.labels = FALSE, ...) {
+    if(column.labels) {
+        return(read_por(path = file))
+    }
+    cleanup.haven(read_por(path = file))
+}
+
+import.sas <- function(file, column.labels = FALSE, ...) {
+    if(column.labels) {
+        return(read_sas(b7dat = file, ...))
+    }
+    cleanup.haven(read_sas(b7dat = file, ...))
 }
 
 import.rdata <- function(file, which = 1, ...) {
@@ -70,7 +132,7 @@ import.rdata <- function(file, which = 1, ...) {
 }
 
 import.xlsx <- function(file = file, readxl = TRUE, ...) {
-    if(readxl) {
+    if (readxl) {
         read_excel(path = file, ...)
     } else {
         read.xlsx(xlsxFile = file, ...)
@@ -107,7 +169,7 @@ import.xml <- function(file, colClasses = NULL, homogeneous = NA, collectNames =
 }
 
 import.clipboard <- function(header = TRUE, sep = "\t", ...) {
-    if(Sys.info()["sysname"] == "Darwin") {
+    if (Sys.info()["sysname"] == "Darwin") {
         clip <- pipe("pbpaste")
         read.table(file = clip, sep = sep, ...)
         close(clip)
@@ -119,15 +181,21 @@ import.clipboard <- function(header = TRUE, sep = "\t", ...) {
 }
 
 import <- function(file, format, setclass, ...) {
-    if(missing(format))
+    if (grepl("^http.*://", file)) {
+        file <- remote_to_local(file, format)
+    }
+    if (!file.exists(file)) {
+        stop("No such file")
+    }
+    if (grepl("zip$", file)) {
+        file <- parse.zip(file)
+    } else if(grepl("tar$", file) | grepl("gz$", file)) {
+        file <- parse.tar(file)
+    }
+    if (missing(format)) {
         fmt <- get_ext(file)
-    else
-        fmt <- tolower(format)
-    if(grepl("^http.*://", file)) {
-        temp_file <- tempfile(fileext = fmt)
-        on.exit(unlink(temp_file))
-        curl_download(file, temp_file, mode = "wb")
-        file <- temp_file
+    } else {
+        fmt <- get_type(format)
     }
     x <- switch(fmt,
                 r = dget(file = file),
@@ -136,15 +204,16 @@ import <- function(file, format, setclass, ...) {
                 fwf = import.fwf(file = file, ...),
                 rds = readRDS(file = file, ...),
                 csv = import.delim(file = file, sep = ",", ...),
-                csv2 = import.delim(file = file, sep = ";", dec = ",", ...),
+                csv2 = import.delim(file = file, sep = ";", ...),
+                csvy = import.csvy(file = file, ...),
                 psv = import.delim(file = file, sep = "|", ...),
                 rdata = import.rdata(file = file, ...),
-                dta = import.dta(file = file, ...), 
+                dta = import.dta(file = file, ...),
                 dbf = read.dbf(file = file, ...),
                 dif = read.DIF(file = file, ...),
                 sav = import.sav(file = file, ...),
-                por = read_por(path = file),
-                sas7bdat = read_sas(b7dat = file, ...),
+                por = import.por(file = file, ...),
+                sas7bdat = import.sas(file = file, ...),
                 xpt = read.xport(file = file),
                 mtp = read.mtp(file = file, ...),
                 syd = read.systat(file = file, to.data.frame = TRUE),
@@ -154,12 +223,12 @@ import <- function(file, format, setclass, ...) {
                 xls = read_excel(path = file, ...),
                 xlsx = import.xlsx(file = file, ...),
                 fortran = import.fortran(file = file, ...),
-                zip = import.zip(file = file, ...),
-                tar = import.tar(file = file, ...),
                 ods = import.ods(file = file, ...),
                 xml = import.xml(file = file, ...),
                 clipboard = import.clipboard(...),
                 # unsupported formats
+                tar = stop(stop_for_import(fmt)),
+                zip = stop(stop_for_import(fmt)),
                 gnumeric = stop(stop_for_import(fmt)),
                 jpg = stop(stop_for_import(fmt)),
                 png = stop(stop_for_import(fmt)),
@@ -173,12 +242,13 @@ import <- function(file, format, setclass, ...) {
                 # unrecognized format
                 stop("Unrecognized file format")
                 )
-    if(missing(setclass)) {
+    if (missing(setclass)) {
         return(set_class(x))
-    } else {
-        a <- list(...)
-        if("data.table" %in% names(a) && isTRUE(a[["data.table"]]))
-            setclass <- "data.table"
-        return(set_class(x, class = setclass))
     }
+    
+    a <- list(...)
+    if ("data.table" %in% names(a) && isTRUE(a[["data.table"]])){
+        setclass <- "data.table"
+    }
+    return(set_class(x, class = setclass))
 }

@@ -1,3 +1,81 @@
+# CHANGES TO v0.4.0 #
+
+ * CRAN Release.
+
+# CHANGES TO v0.3.19 #
+
+ * Added a `gather_attrs()` function that moves variable-level attributes to the data.frame level. (#80)
+ * Added preliminary support for import from HTML tables (#86)
+
+# CHANGES TO v0.3.18 #
+
+ * Added support for export to HTML tables. (#86)
+
+# CHANGES TO v0.3.17 #
+
+ * Fixed a bug in import from remote URLs with incorrect file extensions.
+
+# CHANGES TO v0.3.16 #
+
+ * Added support for import from fixed-width format files via `readr::read_fwf()` with a specified `widths` argument. This may enable faster import of these types of files and provides a base-like interface for working with readr. (#48)
+
+# CHANGES TO v0.3.15 #
+
+ * Added support for import from and export to yaml. (#83)
+ * Fixed a bug when reading from an uncommented CSVY yaml header that contained single-line comments. (#84, h/t Tom Aldenberg)
+
+# CHANGES TO v0.3.14 #
+
+ * Diagnostic messages were cleaned up to facilitate translation. (#57)
+
+# CHANGES TO v0.3.12 #
+
+ * `.import()` and `.export()` are now exported S3 generics and documentation has been added to describe how to write rio extensions for new file types. An example of this functionality is shown in the new suggested "rio.db" package.
+
+# CHANGES TO v0.3.11 #
+
+ * `import()` now uses xml2 to read XML structures and `export()` uses a custom method for writing to XML, thereby negating dependency on the XML package. (#67)
+ * Enhancements were made to import and export of CSVY to store attribute metadata as variable-level attributes (like imports from binary file formats).
+ * `import()` gains a `which` argument that is used to select which file to return from within a compressed tar or zip archive.
+ * Export to tar now tries to correct for bugs in `tar()` that are being fixed in base R via [PR#16716](https://bugs.r-project.org/bugzilla/show_bug.cgi?id=16716).
+
+# CHANGES TO v0.3.10 #
+
+ * Fixed a bug in `import()` (introduced in #62, 7a7480e5) that prevented import from clipboard. (h/t Kevin Wright)
+ * `export()` returns a character string. (#82)
+
+# CHANGES TO v0.3.9 #
+
+ * The use of `import()` for SAS, Stata, and SPSS files has been streamlined. Regardless of whether the `haven = TRUE` argument is used, the data.frame returned by `import()` should now be (nearly) identical, with all attributes stored at the variable rather than data.frame level. This is a non-backwards compatible change. (#80)
+
+# CHANGES TO v0.3.8 #
+
+ * Fixed error in export to CSVY with a commented yaml header. (#81, h/t Andrew MacDonald)
+
+# CHANGES TO v0.3.7 #
+
+ * `export()` now allows automatic file compression as tar, gzip, or zip using the `file` argument (e.g., `export(iris, "iris.csv.zip")`).
+
+# CHANGES TO v0.3.6 #
+
+ * Expanded verbosity of `export()` for fixed-width format files and added a commented header containing column class and width information.
+ * Exporting factors to fixed-width format now saves those values as integer rather than numeric.
+ * Expanded test suite and separated tests into format-specific files. (#51)
+
+# CHANGES TO v0.3.5 #
+
+ * Export of CSVY files now includes commenting the yaml header by default. Import of CSVY accommodates this automatically. (#74)
+
+# CHANGES TO v0.3.3 #
+
+ * Export of CSVY files and metadata now supported by `export()`. (#73)
+ * Import of CSVY files now stores dataset-level metadata in attributes of the output data.frame. (#73, h/t Tom Aldenberg)
+ * When rio receives an unrecognized file format, it now issues a message. The new internal `.import.default()` and `.export.default()` then produce an error. This enables add-on packages to support additional formats through new s3 methods of the form `.import.rio_EXTENSION()` and `.export.rio_EXTENSION()`.
+
+# CHANGES TO v0.3.2 #
+
+ * Use S3 dispatch internally to call new (unexported) `.import()` and `.export()` methods. (#42, h/t Jason Becker)
+
 # CHANGES TO v0.3.0 #
 
  * Release to CRAN.

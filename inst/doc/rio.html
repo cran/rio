@@ -212,7 +212,7 @@ hr {
 
 <p>The core advantage of <strong>rio</strong> is that it makes assumptions that the user is probably willing to make. Specifically, <strong>rio</strong> uses the file extension of a file name to determine what kind of file it is. This is the same logic used by Windows OS, for example, in determining what application is associated with a given file type. By taking away the need to manually match a file type (which a beginner may not recognize) to a particular import or export function, <strong>rio</strong> allows almost all common data formats to be read with the same function.</p>
 
-<p>By making import and export easy, it&#39;s an obvious next step to also use R as a simple data conversion utility. Transferring data files between various proprietary formats is always a pain and often expensive. The <code>convert</code> function therefore combines <code>import</code> and <code>export</code> to easily convert between file formats (thus providing a FOSS replacement for programs like <a href="https://www.stattransfer.com/">Stat/Transfer</a> or <a href="http://www.openmetadata.org/site/?page_id=1089">Sledgehammer</a>).</p>
+<p>By making import and export easy, it&#39;s an obvious next step to also use R as a simple data conversion utility. Transferring data files between various proprietary formats is always a pain and often expensive. The <code>convert</code> function therefore combines <code>import</code> and <code>export</code> to easily convert between file formats (thus providing a FOSS replacement for programs like <a href="https://www.stattransfer.com/">Stat/Transfer</a> or <a href="https://www.mtna.us/#/products/sledgehammer">Sledgehammer</a>).</p>
 
 <h2>Supported file formats</h2>
 
@@ -238,7 +238,7 @@ hr {
 <tr>
 <td>CSVY (CSV + YAML metadata header) (.csvy)</td>
 <td>Yes</td>
-<td>No</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>Pipe-separated data (.psv)</td>
@@ -262,6 +262,11 @@ hr {
 </tr>
 <tr>
 <td>JSON (.json)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>YAML (.yml)</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
@@ -306,8 +311,18 @@ hr {
 <td>Yes</td>
 </tr>
 <tr>
-<td>SAS and SAS XPORT</td>
-<td>Yes (.sas7bdat and .xpt)</td>
+<td>HTML Tables (.html)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAS (.sas7bdat)</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>SAS XPORT (.xpt)</td>
+<td>Yes</td>
 <td></td>
 </tr>
 <tr>
@@ -369,7 +384,7 @@ all.equal(x, y, check.attributes = FALSE)
 <pre><code class="r">all.equal(x, z, check.attributes = FALSE)
 </code></pre>
 
-<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is factor&quot;
+<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is numeric&quot;
 </code></pre>
 
 <p>If for some reason a file does not have an extension, or has a file extension that does not match its actual type, you can manually specify a file format to override the format inference step. For example, we can read in a CSV file that does not have a file extension by specifying <code>csv</code>:</p>

@@ -1,6 +1,6 @@
 stop_for_import <- function(fmt) {
-    x <- "%s format not supported. Consider using the `%s` function"
-    switch(fmt,
+    x <- gettext("%s format not supported. Consider using the '%s()' function")
+    out <- switch(fmt,
            gnumeric = sprintf(x, fmt, "gnumeric::read.gnumeric.sheet"),
            jpg = sprintf(x, fmt, "jpeg::readJPEG"),
            png = sprintf(x, fmt, "png::readPNG"),
@@ -11,12 +11,17 @@ stop_for_import <- function(fmt) {
            matlab = sprintf(x, fmt, "R.matlab::readMat"),
            gexf = sprintf(x, fmt, "rgexf::read.gexf"),
            npy = sprintf(x, fmt, "RcppCNPy::npyLoad"),
-           stop("Unrecognized file format"))
+           fmt)
+    if (out == fmt) {
+        return(fmt)
+    } else {
+        stop(out)
+    }
 }
 
 stop_for_export <- function(fmt) {
-    x <- "%s format not supported. Consider using the `%s` function"
-    switch(fmt,
+    x <- gettext("%s format not supported. Consider using the '%s()' function")
+    out <- switch(fmt,
            jpg = sprintf(x, fmt, "jpeg::writeJPEG"),
            png = sprintf(x, fmt, "png::writePNG"),
            tiff = sprintf(x, fmt, "tiff::writeTIFF"),
@@ -24,5 +29,10 @@ stop_for_export <- function(fmt) {
            xpt = sprintf(x, fmt, "SASxport::write.xport"),
            gexf = sprintf(x, fmt, "rgexf::write.gexf"),
            npy = sprintf(x, fmt, "RcppCNPy::npySave"),
-           stop("Unrecognized file format"))
+           fmt)
+    if (out == fmt) {
+        return(fmt)
+    } else {
+        stop(out)
+    }
 }

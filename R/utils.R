@@ -46,6 +46,10 @@ get_type <- function(fmt) {
         xml = "xml",
         yml = "yml",
         yaml = "yml",
+        # compressed formats
+        zip = "zip",
+        tar = "tar",
+        gz = "gz",
         # known but unsupported formats
         gnumeric = "gnumeric",
         jpeg = "jpg",
@@ -59,7 +63,8 @@ get_type <- function(fmt) {
         mat = "matlab",
         matlab = "matlab",
         gexf = "gexf",
-        npy = "npy"
+        npy = "npy",
+        feather = 'feather'
     )
     out <- type_list[[tolower(fmt)]]
     if (is.null(out)) {

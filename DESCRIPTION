@@ -1,8 +1,8 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 0.4.0
-Date: 2016-05-01
+Version: 0.4.3
+Date: 2016-05-18
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Authors@R: c(person("Jason", "Becker", role = "ctb", email = "jason@jbecker.co"),
              person("Chung-hong", "Chan", role = "aut", email = "chainsawtiney@gmail.com"),
@@ -15,12 +15,12 @@ Description: Streamlined data import and export by making assumptions that the u
 Depends: R (>= 2.15.0)
 Imports: tools, stats, utils, urltools, foreign, haven, openxlsx,
         readODS, jsonlite, xml2, curl (>= 0.6), data.table (>= 1.9.5),
-        readxl, readr, yaml
+        readxl, readr, yaml, feather
 Suggests: datasets, bit64, testthat, knitr, magrittr
 License: GPL-2
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2016-05-01 13:58:07 UTC; THOMAS
+Packaged: 2016-05-19 15:23:27 UTC; THOMAS
 Author: Jason Becker [ctb],
   Chung-hong Chan [aut],
   Geoffrey CH Chan [ctb],
@@ -29,4 +29,4 @@ Author: Jason Becker [ctb],
   Andrew MacDonald [ctb],
   Ista Zahn [ctb]
 Repository: CRAN
-Date/Publication: 2016-05-01 18:32:17
+Date/Publication: 2016-05-19 19:56:00

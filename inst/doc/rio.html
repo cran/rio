@@ -241,6 +241,11 @@ hr {
 <td>Yes</td>
 </tr>
 <tr>
+<td>Feather R/Python interchange format (.feather)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
 <td>Pipe-separated data (.psv)</td>
 <td>Yes</td>
 <td>Yes</td>
@@ -384,7 +389,7 @@ all.equal(x, y, check.attributes = FALSE)
 <pre><code class="r">all.equal(x, z, check.attributes = FALSE)
 </code></pre>
 
-<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is numeric&quot;
+<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is labelled&quot;
 </code></pre>
 
 <p>If for some reason a file does not have an extension, or has a file extension that does not match its actual type, you can manually specify a file format to override the format inference step. For example, we can read in a CSV file that does not have a file extension by specifying <code>csv</code>:</p>

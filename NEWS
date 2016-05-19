@@ -1,3 +1,17 @@
+# CHANGES TO v0.4.2 #
+
+ * Improved, generalized, tested, and expanded documentation of `which` argument in `import()`.
+ * Expanded test suite and made some small fixes.
+
+# CHANGES TO v0.4.2 #
+
+ * Added support to import and export to `feather` data serialization format. (#88, h/t Jason Becker)
+
+# CHANGES TO v0.4.1 #
+
+ * Fixed behavior of `gather_attrs()` on a data.frame with no attributes to gather. (#94)
+ * Removed unrecognized file format error for import from compressed files. (#93)
+
 # CHANGES TO v0.4.0 #
 
  * CRAN Release.

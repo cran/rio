@@ -1,8 +1,8 @@
-a4635edc26b501e3f8be5dbe2c2aef57 *DESCRIPTION
+59fd4d75bf5d0af4c662ca53ac647d36 *DESCRIPTION
 3f22f9ef151c13b0fac1abacfea5c549 *NAMESPACE
 6ad95979bf707bafa5061d3b91907876 *NEWS
 bc77776a93ca52acd0beb3b1baef30cf *R/cleanup_haven.R
-9fb4414b1baf4661688d51f8891899a9 *R/compression.R
+929b04fd147c55c36489a598a19738f1 *R/compression.R
 394233ec8ad9b919248c697cdb4b65fd *R/convert.R
 e0b29a8c50ddc72cecb01111b0f4e79d *R/convert_google_url.R
 94f3f1e38f3fcf9efd12efc34e68b332 *R/export.R
@@ -33,7 +33,7 @@ f386ca17e88a83faac9d7b17afa9565e *man/extensions.Rd
 7c714e3c1e214accbe33d5b09b857d53 *man/rio.Rd
 b13fdac1d3ad87f4f27241b45847feaa *po/R-rio.pot
 dc67e448382de1d8b4c3d9084d2545a6 *tests/test-all.R
-4a6ddb5eb0006c74ffecb19963f68751 *tests/testthat/test_compress.R
+1c851fd64df3aa854c98503864dbb737 *tests/testthat/test_compress.R
 5909b265b8fc7f3429f4030a35eb4aed *tests/testthat/test_convert.R
 c4c823a59619ad49c7e3f3380bd2b6ab *tests/testthat/test_errors.R
 d4a551ae76ef27ab803bed3aa5b84fec *tests/testthat/test_format_R.R

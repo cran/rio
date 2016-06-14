@@ -1,6 +1,6 @@
-import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
+import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "auto", header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
   if (fread) {
-    fread(input = file, sep = sep, sep2 = "auto", header = header, stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
+    fread(input = file, sep = sep, sep2 = sep2, header = header, stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
   } else {
     if (missing(sep) || is.null(sep) || sep == "auto") {
       sep <- "\t"
@@ -8,20 +8,31 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", header = "
     if (missing(header) || is.null(header) || header == "auto") {
       header <- TRUE
     }
-    read.table(file = file, sep = sep, header = header, stringsAsFactors = stringsAsFactors, ...)
+    if (missing(sep2) || is.null(sep2) || sep2 == "auto") {
+      sep2 <- "."
+    }
+    read.table(file = file, sep = sep, dec = sep2, header = header, stringsAsFactors = stringsAsFactors, ...)
   }
 }
 
-.import.rio_r <- function(file, which = 1, ...){
-  dget(file = file, ...)
+.import.rio_tsv <- function(file, sep, which = 1, fread = TRUE, ...){
+  import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
-.import.rio_tsv <- function(file, which = 1, ...){
-  import_delim(file = file, sep = "\t", ...)
+.import.rio_txt <- function(file, sep, which = 1, fread = TRUE, ...){
+  import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
-.import.rio_txt <- function(file, which = 1, ...){
-  import_delim(file = file, sep = "\t", ...)
+.import.rio_csv <- function(file, sep, which = 1, fread = TRUE, ...){
+  import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
+}
+
+.import.rio_csv2 <- function(file, sep, which = 1, fread = TRUE, ...){
+  import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
+}
+
+.import.rio_psv <- function(file, sep, which = 1, fread = TRUE, ...){
+  import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
 .import.rio_fwf <- function(file, which = 1, widths, header = FALSE, col.names, readr = FALSE, progress = FALSE, ...) {
@@ -77,16 +88,12 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", header = "
   }
 }
 
+.import.rio_r <- function(file, which = 1, ...){
+  dget(file = file, ...)
+}
+
 .import.rio_rds <- function(file, which = 1, ...){
   readRDS(file = file, ...)
-}
-
-.import.rio_csv <- function(file, which = 1, ...){
-  import_delim(file = file, sep = ",", ...)
-}
-
-.import.rio_csv2 <- function(file, which = 1, ...){
-  import_delim(file = file, sep = ";", ...)
 }
 
 .import.rio_csvy <- function(file, which = 1, ...) {
@@ -120,10 +127,6 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", header = "
   meta <- c(list(out), y)
   out <- do.call("structure", meta)
   out
-}
-
-.import.rio_psv <- function(file, which = 1, ...){
-  import_delim(file = file, sep = "|", ...)
 }
 
 .import.rio_rdata <- function(file, which = 1, envir = new.env(), ...) {
@@ -174,17 +177,13 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", header = "
   read.DIF(file = file, ...)
 }
 
-.import.rio_sav <- function(file, which = 1, haven = TRUE, use.value.labels = FALSE, ...) {
+.import.rio_sav <- function(file, which = 1, haven = TRUE, to.data.frame = TRUE, use.value.labels = FALSE, ...) {
   if (haven) {
     convert_attributes(read_sav(path = file))
   } else {
-    convert_attributes(read.spss(file = file, to.data.frame = TRUE, 
+    convert_attributes(read.spss(file = file, to.data.frame = to.data.frame, 
                                  use.value.labels = use.value.labels, ...))
   }
-}
-
-.import.rio_por <- function(file, which = 1, ...) {
-  convert_attributes(read_por(path = file))
 }
 
 .import.rio_sas7bdat <- function(file, which = 1, column.labels = FALSE, ...) {

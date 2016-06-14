@@ -281,9 +281,9 @@ hr {
 <td>Yes</td>
 </tr>
 <tr>
-<td>SPSS and SPSS portable</td>
-<td>Yes (.sav and .por)</td>
-<td>Yes (.sav)</td>
+<td>SPSS (.sav)</td>
+<td>Yes</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>&ldquo;XBASE&rdquo; database files (.dbf)</td>
@@ -389,7 +389,7 @@ all.equal(x, y, check.attributes = FALSE)
 <pre><code class="r">all.equal(x, z, check.attributes = FALSE)
 </code></pre>
 
-<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is labelled&quot;
+<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is numeric&quot;
 </code></pre>
 
 <p>If for some reason a file does not have an extension, or has a file extension that does not match its actual type, you can manually specify a file format to override the format inference step. For example, we can read in a CSV file that does not have a file extension by specifying <code>csv</code>:</p>

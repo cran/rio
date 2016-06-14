@@ -1,7 +1,7 @@
-59fd4d75bf5d0af4c662ca53ac647d36 *DESCRIPTION
-3f22f9ef151c13b0fac1abacfea5c549 *NAMESPACE
-6ad95979bf707bafa5061d3b91907876 *NEWS
-bc77776a93ca52acd0beb3b1baef30cf *R/cleanup_haven.R
+40aa2b85f9af65a0b6d9e3c9df126446 *DESCRIPTION
+4849f825a947e78de571a2e33e208d3e *NAMESPACE
+74c58600daa7895a5566b7bdc1323917 *NEWS
+c3c97ec81242d918f0c534242c1e1aae *R/cleanup_haven.R
 929b04fd147c55c36489a598a19738f1 *R/compression.R
 394233ec8ad9b919248c697cdb4b65fd *R/convert.R
 e0b29a8c50ddc72cecb01111b0f4e79d *R/convert_google_url.R
@@ -10,17 +10,17 @@ e0b29a8c50ddc72cecb01111b0f4e79d *R/convert_google_url.R
 77995d5be8d91d822c533b0069c01176 *R/fwf2.R
 da365332ddb3ad8ed139a13cf2ac317a *R/gather_attrs.R
 28f5db01c8ec39cc73c58bcc5a31b11e *R/import.R
-20e81f77ae1b5e22a3b2e624a0a8a189 *R/import_methods.R
+7c2fa1aa881793f99b17809eb88f2dbf *R/import_methods.R
 1146a39f0bd27486161aab67fcdba656 *R/remote_to_local.R
 2bcf06cef819290092b040bda62a19ef *R/set_class.R
 dd117dc6100f610924ef16c04d2e0b18 *R/unsupported.R
-84dc29f0c90ede05123daeb3e270d2f2 *R/utils.R
-6c54dcc22c96afb7642ba8491806b0bc *README.md
+b56fe5936977099738b9fe619cc94398 *R/utils.R
+657fb4b95815236f03ba7e87efab9f9b *README.md
 0bae063a4cc4c26b28cddf2e022f8e2e *build/vignette.rds
 14c89f2f803b3e165ef08455992f1b13 *inst/CITATION
 8f63dba32074e6d499870d2d1203ea93 *inst/doc/rio.R
-18e92b28d715cccaa392527faa3e02d4 *inst/doc/rio.Rmd
-b1e893f1f852889313532bfeefa3e8c7 *inst/doc/rio.html
+76b694726f383c0e0b5e2f875f5c031c *inst/doc/rio.Rmd
+921e785f007b110eae501a82793f2ce4 *inst/doc/rio.html
 b80fc98b7502d9911f80b1fd3045f986 *inst/examples/example.csvy
 ff3fbec2f56364dc93b910430ae6873b *inst/examples/example2.csvy
 81acd8e5fb634d10e7a0f819a51a8516 *inst/examples/example3.csvy
@@ -29,7 +29,7 @@ f14512e78f5b8621a08257f177247e1b *man/convert.Rd
 abff550ea7ee68663d0af63267dbd0ed *man/export.Rd
 f386ca17e88a83faac9d7b17afa9565e *man/extensions.Rd
 098a6ff05e8ff99b65b40a9f8fe7f198 *man/gather_attrs.Rd
-8f4eb7766b190a413f98727f2831637c *man/import.Rd
+cb63a79b4eac9de4160a836d27c7598b *man/import.Rd
 7c714e3c1e214accbe33d5b09b857d53 *man/rio.Rd
 b13fdac1d3ad87f4f27241b45847feaa *po/R-rio.pot
 dc67e448382de1d8b4c3d9084d2545a6 *tests/test-all.R
@@ -38,7 +38,7 @@ dc67e448382de1d8b4c3d9084d2545a6 *tests/test-all.R
 c4c823a59619ad49c7e3f3380bd2b6ab *tests/testthat/test_errors.R
 d4a551ae76ef27ab803bed3aa5b84fec *tests/testthat/test_format_R.R
 8bbca02a695deb56ac769120af97e989 *tests/testthat/test_format_arff.R
-6c690faa6f5032ba7b38755957689d98 *tests/testthat/test_format_csv.R
+784005b07fafb5460b7e849cfc79bc3c *tests/testthat/test_format_csv.R
 789e8161c81eda4a9a76e975542b052d *tests/testthat/test_format_csvy.R
 be299e41160073b4fcf3f4310816d2a1 *tests/testthat/test_format_dbf.R
 5f30df3f75a90ac8ef77e2cc2e48355e *tests/testthat/test_format_dif.R
@@ -55,7 +55,7 @@ f0cd442abae8735d326bc6d556171243 *tests/testthat/test_format_ods.R
 7778b22e82d3cb85126545ddd3970d4e *tests/testthat/test_format_rds.R
 3ff37c4f82eced227594b3b10fda9e11 *tests/testthat/test_format_rec.R
 12d0147e767a5c653858111d92061635 *tests/testthat/test_format_sas.R
-e0afc12eb6c9a7b3c673f54c05d8b9a2 *tests/testthat/test_format_sav.R
+37ae9476f956b36ce6cebfb4def6d570 *tests/testthat/test_format_sav.R
 b2619f1d2b1cd26f04d9d5ddbbc99c20 *tests/testthat/test_format_syd.R
 17ffb3cb0ea32cffbfc2d17012edd496 *tests/testthat/test_format_tsv.R
 f255087f69f9837857b559daf631cc79 *tests/testthat/test_format_xls.R
@@ -67,4 +67,4 @@ bd5ad50be71659fc14a043a69a4b65bd *tests/testthat/test_identical.R
 2aa8667e47a80911af08bfcb4fde6e6e *tests/testthat/test_matrix.R
 15d902d3c329739fc85e2967ef1dab93 *tests/testthat/test_remote.R
 bb3bce1ce332e97826a56aa4c02b2f28 *tests/testthat/test_set_class.R
-18e92b28d715cccaa392527faa3e02d4 *vignettes/rio.Rmd
+76b694726f383c0e0b5e2f875f5c031c *vignettes/rio.Rmd

@@ -1,18 +1,25 @@
 import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "auto", header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
-  if (fread) {
-    fread(input = file, sep = sep, sep2 = sep2, header = header, stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
-  } else {
-    if (missing(sep) || is.null(sep) || sep == "auto") {
-      sep <- "\t"
+    if (fread) {
+        fread(input = file, sep = sep, sep2 = sep2, header = header, stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
+    } else {
+        dots <- list(...)
+        dots[["file"]] <- file
+        if (missing(sep) || is.null(sep) || sep == "auto") {
+            dots[["sep"]] <- "\t"
+        }
+        if (!"dec" %in% names(dots)) {
+            if (missing(sep2) || is.null(sep2) || sep2 == "auto") {
+                dots[["dec"]] <- "."
+            } else {
+                dots[["dec"]] <- sep2
+            }
+        }
+        if (missing(header) || is.null(header) || header == "auto") {
+            dots[["header"]] <- TRUE
+        }
+        dots[["stringsAsFactors"]] <- stringsAsFactors
+        do.call("read.table", dots)
     }
-    if (missing(header) || is.null(header) || header == "auto") {
-      header <- TRUE
-    }
-    if (missing(sep2) || is.null(sep2) || sep2 == "auto") {
-      sep2 <- "."
-    }
-    read.table(file = file, sep = sep, dec = sep2, header = header, stringsAsFactors = stringsAsFactors, ...)
-  }
 }
 
 .import.rio_tsv <- function(file, sep, which = 1, fread = TRUE, ...){
@@ -97,36 +104,7 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
 }
 
 .import.rio_csvy <- function(file, which = 1, ...) {
-  # read in whole file
-  f <- readLines(file)
-  
-  # identify yaml delimiters
-  g <- grep("^#?---", f)
-  if (length(g) > 2) {
-    stop("More than 2 yaml delimiters found in file")
-  } else if (length(g) == 1) {
-    stop("Only one yaml delimiter found")
-  } else if (length(g) == 0) {
-    stop("No yaml delimiters found")
-  }
-  
-  # extract yaml front matter and convert to R list
-  y <- f[(g[1]+1):(g[2]-1)]
-  if (all(grepl("^#", y))) {
-    y <- gsub("^#", "", y)
-  }
-  y <- yaml.load(paste(y, collapse = "\n"))
-  
-  # load the data
-  out <- import_delim(file = paste0(f[(g[2]+1):length(f)], collapse = "\n"), ...)
-  for (i in seq_along(y$fields)) {
-    attributes(out[, i]) <- y$fields[[i]]
-  }
-  y$fields <- NULL
-  
-  meta <- c(list(out), y)
-  out <- do.call("structure", meta)
-  out
+    read_csvy(file = file, ...)
 }
 
 .import.rio_rdata <- function(file, which = 1, envir = new.env(), ...) {
@@ -145,7 +123,8 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
 }
 
 .import.rio_feather <- function(file, which = 1, ...){
-    read_feather(path = file)
+    requireNamespace("feather")
+    feather::read_feather(path = file)
 }
 
 .import.rio_dta <- function(file, haven = TRUE, 
@@ -224,19 +203,9 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
         which <- a$sheet
   }
   if (readxl) {
-    if (is.numeric(which)) {
-        read_excel(path = file, sheet = which, ...)
-    } else {
-        stop("'which' must be a positive integer specifying a sheet number.")
-        read_excel(path = file, sheet = 1, ...)
-    }
+    read_excel(path = file, sheet = which, ...)
   } else {
-    if (is.numeric(which)) {
-        read.xlsx(xlsxFile = file, sheet = which, ...)
-    } else {
-        stop("'which' must be a positive integer specifying a sheet number.")
-        read.xlsx(xlsxFile = file, sheet = 1, ...)
-    }
+    read.xlsx(xlsxFile = file, sheet = which, ...)
   }
 }
 

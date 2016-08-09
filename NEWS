@@ -1,3 +1,18 @@
+# CHANGES TO v0.4.11 #
+
+ * Note unsupported NumPy i/o via RcppCNPy. (#112)
+ * Fix import of European-style CSV files (sep = "," and sep2 = ";"). (#106, #107, h/t Stani Stadlmann)
+
+# CHANGES TO v0.4.10 #
+
+ * Changed feather Imports to Suggests to make rio installable on older R versions. (#104)
+ * Noted new RStudio add-in, GREA, that uses rio. (#109)
+ * Migrated CSVY-related code to separate package (https://github.com/leeper/csvy/). (#111)
+
+# CHANGES TO v0.4.9 #
+
+ * Removed unnecessary error in xlsx imports. (#103, h/t Kevin Wright)
+
 # CHANGES TO v0.4.8 #
 
  * Fixed a bug in the handling of "labelled" class variables imported from haven. (#102, h/t Pierre LaFortune)

@@ -1,7 +1,7 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 0.4.11
+Version: 0.4.12
 Date: 2016-08-09
 Authors@R: c(person("Jason", "Becker", role = "ctb", email = "jason@jbecker.co"),
              person("Chung-hong", "Chan", role = "aut", email = "chainsawtiney@gmail.com"),
@@ -20,7 +20,7 @@ Suggests: datasets, bit64, testthat, knitr, magrittr, feather
 License: GPL-2
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2016-08-09 10:16:55 UTC; THOMAS
+Packaged: 2016-08-10 08:20:34 UTC; THOMAS
 Author: Jason Becker [ctb],
   Chung-hong Chan [aut],
   Geoffrey CH Chan [ctb],
@@ -31,4 +31,4 @@ Author: Jason Becker [ctb],
   Stanislaus Stadlmann [ctb]
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Repository: CRAN
-Date/Publication: 2016-08-09 13:08:25
+Date/Publication: 2016-08-10 13:51:07

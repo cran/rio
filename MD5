@@ -1,6 +1,6 @@
-a96bdfc210f834e1b79c42d66f02f5a6 *DESCRIPTION
+7ac46138899129dbc6b822ca4a8a507e *DESCRIPTION
 f57890569187c1c27ab94e36376d9b2d *NAMESPACE
-bb2288d0999dffba81b3df7b7da6d505 *NEWS
+8f4972474958970d9479eae13517c707 *NEWS
 c3c97ec81242d918f0c534242c1e1aae *R/cleanup_haven.R
 929b04fd147c55c36489a598a19738f1 *R/compression.R
 394233ec8ad9b919248c697cdb4b65fd *R/convert.R
@@ -11,6 +11,7 @@ e0b29a8c50ddc72cecb01111b0f4e79d *R/convert_google_url.R
 da365332ddb3ad8ed139a13cf2ac317a *R/gather_attrs.R
 28f5db01c8ec39cc73c58bcc5a31b11e *R/import.R
 81b6f44a55f49a763c6e4aa4cf83f797 *R/import_methods.R
+2a59533f4b8fa8cff35c98291218d694 *R/onLoad.R
 1146a39f0bd27486161aab67fcdba656 *R/remote_to_local.R
 2bcf06cef819290092b040bda62a19ef *R/set_class.R
 4901388795c63de579fed6e0270681f3 *R/unsupported.R
@@ -43,7 +44,7 @@ d4a551ae76ef27ab803bed3aa5b84fec *tests/testthat/test_format_R.R
 be299e41160073b4fcf3f4310816d2a1 *tests/testthat/test_format_dbf.R
 5f30df3f75a90ac8ef77e2cc2e48355e *tests/testthat/test_format_dif.R
 da9dbe2e22f70b073c0f85064cbc2c4c *tests/testthat/test_format_dta.R
-28ca9de2d641a8c6c44a6b4c47afb75a *tests/testthat/test_format_feather.R
+cd2076766b409316b513915bcf4cabfc *tests/testthat/test_format_feather.R
 1cfa9aae7dee00bc9966c454930d9a49 *tests/testthat/test_format_fortran.R
 5c10cc36d31ac9fec07b8c331af38799 *tests/testthat/test_format_fwf.R
 894d1f8e4a88d648a7efe1d72c52000b *tests/testthat/test_format_html.R

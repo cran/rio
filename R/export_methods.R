@@ -1,3 +1,5 @@
+# @importFrom data.table fwrite
+#' @importFrom utils write.table
 export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
                          col.names = TRUE, ...) {
     if (fwrite) {
@@ -8,32 +10,41 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
                 col.names = col.names, ...)
 }
 
-.export.rio_txt <- function(file, x, ...){
+#' @export
+.export.rio_txt <- function(file, x, ...) {
     export_delim(x = x, file = file, ...)
 }
 
-.export.rio_tsv <- function(file, x, ...){
+#' @export
+.export.rio_tsv <- function(file, x, ...) {
     export_delim(x = x, file = file, ...)
 }
 
 
+#' @export
 .export.rio_csv <- function(file, x, ...) {
     export_delim(x = x, file = file, sep = ",", dec = ".", ...)
 }
 
-.export.rio_csv2 <- function(file, x, ...){
+#' @export
+.export.rio_csv2 <- function(file, x, ...) {
     export_delim(x = x, file = file, sep =";", dec = ",", ...)
 }
 
+#' @importFrom csvy write_csvy
+#' @export
 .export.rio_csvy <- function(file, x, ...) {
     write_csvy(file = file, x = x, ...)
 }
 
-.export.rio_psv <- function(file, x, ...){
+#' @export
+.export.rio_psv <- function(file, x, ...) {
     export_delim(x = x, file = file, sep = "|", ...)
 }
 
-.export.rio_fwf <- function(file, x, verbose = TRUE, sep = "", row.names = FALSE, quote = FALSE, col.names = FALSE, digits = getOption("digits", 7), ...){
+#' @importFrom utils capture.output write.csv
+#' @export
+.export.rio_fwf <- function(file, x, verbose = TRUE, sep = "", row.names = FALSE, quote = FALSE, col.names = FALSE, digits = getOption("digits", 7), ...) {
     dat <- lapply(x, function(col) {
         if (is.character(col)) {
             col <- as.numeric(as.factor(col))
@@ -80,81 +91,125 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
                 col.names = col.names, ...)
 }
 
-.export.rio_r <- function(file, x, ...){
+#' @export
+.export.rio_r <- function(file, x, ...) {
     dput(x, file = file, ...)
 }
 
-.export.rio_dump <- function(file, x, ...){
+#' @export
+.export.rio_dump <- function(file, x, ...) {
     dump(as.character(substitute(x)), file = file, ...)
 }
 
-.export.rio_rds <- function(file, x, ...){
+#' @export
+.export.rio_rds <- function(file, x, ...) {
     saveRDS(object = x, file = file, ...)
 }
 
-.export.rio_rdata <- function(file, x, ...){
+#' @export
+.export.rio_rdata <- function(file, x, ...) {
     save(x, file = file, ...)
 }
 
-.export.rio_feather <- function(file, x, ...){
+#' @export
+.export.rio_feather <- function(file, x, ...) {
     requireNamespace("feather")
     feather::write_feather(x = x, path = file)
 }
-.export.rio_sav <- function(file, x, ...){
+
+#' @importFrom haven write_sav
+#' @export
+.export.rio_sav <- function(file, x, ...) {
     write_sav(data = x, path = file, ...)
 }
 
-.export.rio_dta <- function(file, x, ...){
+#' @importFrom haven write_dta
+#' @export
+.export.rio_dta <- function(file, x, ...) {
     write_dta(data = x, path = file, ...)
 }
 
-.export.rio_dbf <- function(file, x, ...){
+#' @importFrom haven write_sas
+#' @export
+.export.rio_sas7bdat <- function(file, x, ...) {
+    write_sas(data = x, path = file, ...)
+}
+
+#' @importFrom foreign write.dbf
+#' @export
+.export.rio_dbf <- function(file, x, ...) {
     write.dbf(dataframe = x, file = file, ...)
 }
 
-.export.rio_json <- function(file, x, ...){
+#' @importFrom jsonlite toJSON
+#' @export
+.export.rio_json <- function(file, x, ...) {
     cat(toJSON(x, ...), file = file)
 }
 
-.export.rio_arff <- function(file, x, ...){
+#' @importFrom foreign write.arff
+#' @export
+.export.rio_arff <- function(file, x, ...) {
     write.arff(x = x, file = file, ...)
 }
 
-.export.rio_xlsx <- function(file, x, ...){
+#' @importFrom openxlsx write.xlsx
+#' @export
+.export.rio_xlsx <- function(file, x, ...) {
     write.xlsx(x = x, file = file, ...)
 }
 
+#' @importFrom xml2 read_html read_xml xml_children xml_add_child write_xml
+#' @export
 .export.rio_html <- function(file, x, ...) {
     x[] <- lapply(x, as.character)
     out <- character(nrow(x))
-    for (i in 1:nrow(x)) {
-        out[i] <- twrap(paste0(twrap(unlist(x[i, , drop = TRUE]), "td"), collapse = ""), "tr")
+    html <- read_html("<!doctype html><html><head>\n<title>R Exported Data</title>\n</head><body>\n<table></table>\n</body>\n</html>")
+    tab <- xml_children(xml_children(html)[[2]])[[1]]
+    # add header row
+    invisible(xml_add_child(tab, read_xml(paste0(twrap(paste0(twrap(names(x), "th"), collapse = ""), "tr"), "\n"))))
+    # add data
+    for (i in seq_len(nrow(x))) {
+        xml_add_child(tab, read_xml(paste0(twrap(paste0(twrap(unlist(x[i, , drop = TRUE]), "td"), collapse = ""), "tr"), "\n")))
     }
-    nm <- twrap(paste0(twrap(names(x), "th"), collapse = ""), "tr")
-    tab <- twrap(paste0(c(nm, out), collapse = "\n"), "table")
-    bod <- paste0(twrap(paste0(tab, "\n", sep = ""), "body"), "\n", collapse = "")
-    hd <- paste0("<head>\n<title>R Exported Data</title>\n</head>")
-    html <- twrap(paste(hd, bod, sep = "\n"), "html")
-    doct <- "<!doctype html>"
-    cat(paste(doct, html, sep = "\n"), file = file, ...)
+    write_xml(html, file = file, ...)
 }
 
+#' @importFrom xml2 read_xml xml_children xml_add_child xml_add_sibling xml_attr<- write_xml
+#' @export
 .export.rio_xml <- function(file, x, ...) {
     root <- ""
-    for (i in 1:nrow(x)) {
-        out <- ""
-        for (j in seq_along(x)) {
-            out <- paste0(out, twrap(x[i,j], names(x)[j]))
-        }
-        root <- paste0(root, twrap(out, "Observation"))
+    xml <- read_xml(paste0("<",as.character(substitute(x)),">\n</",as.character(substitute(x)),">\n"))
+    att <- attributes(x)[!names(attributes(x)) %in% c("names", "row.names", "class")]
+    for (a in seq_along(att)) {
+        xml_attr(xml, names(att)[a]) <- att[[a]]
     }
-    cat(twrap(root, as.character(substitute(x))), file = file, ...)
+    # add data
+    for (i in seq_len(nrow(x))) {
+        thisrow <- xml_add_child(xml, "Observation")
+        xml_attr(thisrow, "row.name") <- row.names(x)[i]
+        for (j in seq_along(x)) {
+            xml_add_child(thisrow, read_xml(paste0(twrap(x[i, j, drop = TRUE], names(x)[j]), "\n")))
+        }
+    }
+    
+    write_xml(xml, file = file, ...)
 }
 
+# @importFrom readODS write_ods
+# @export
+#.export.rio_ods <- function(file, x, which = 1, ...) {
+#    write_ods(x = x, path = file, sheet = which, ...)
+#}
+
+#' @importFrom yaml as.yaml
+#' @export
 .export.rio_yml <- function(file, x, ...) {
   cat(as.yaml(x, ...), file = file)
 }
 
+#' @importFrom utils write.table
+#' @export
 .export.rio_clipboard <- function(file, x, row.names = FALSE, col.names = TRUE, sep = "\t", ...) {
     if (Sys.info()["sysname"] == "Darwin") {
         clip <- pipe("pbcopy", "w")
@@ -169,4 +224,3 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
         return(NULL)
     }
 }
-

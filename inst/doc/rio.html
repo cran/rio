@@ -208,7 +208,7 @@ hr {
 
 <h1>Import, Export, and Convert Data Files</h1>
 
-<p>The idea behind <strong>rio</strong> is to simplify the process of importing data into R and exporting data from R. This process is, probably unnecessarily, extremely complex for beginning R users. Indeed, R supplies <a href="http://cran.r-project.org/doc/manuals/r-release/R-data.html">an entire manual</a> describing the process of data import/export. And, despite all of that text, most of the packages described are (to varying degrees) out-of-date. Faster, simpler, packages with fewer dependencies have been created for many of the file types described in that document. <strong>rio</strong> aims to unify data I/O (importing and exporting) into two simple functions: <code>import</code> and <code>export</code> so that beginners (and experienced R users) never have to think twice (or even once) about the best way to read and write R data.</p>
+<p>The idea behind <strong>rio</strong> is to simplify the process of importing data into R and exporting data from R. This process is, probably unnecessarily, extremely complex for beginning R users. Indeed, R supplies <a href="https://cran.r-project.org/doc/manuals/r-release/R-data.html">an entire manual</a> describing the process of data import/export. And, despite all of that text, most of the packages described are (to varying degrees) out-of-date. Faster, simpler, packages with fewer dependencies have been created for many of the file types described in that document. <strong>rio</strong> aims to unify data I/O (importing and exporting) into two simple functions: <code>import</code> and <code>export</code> so that beginners (and experienced R users) never have to think twice (or even once) about the best way to read and write R data.</p>
 
 <p>The core advantage of <strong>rio</strong> is that it makes assumptions that the user is probably willing to make. Specifically, <strong>rio</strong> uses the file extension of a file name to determine what kind of file it is. This is the same logic used by Windows OS, for example, in determining what application is associated with a given file type. By taking away the need to manually match a file type (which a beginner may not recognize) to a particular import or export function, <strong>rio</strong> allows almost all common data formats to be read with the same function.</p>
 
@@ -286,6 +286,11 @@ hr {
 <td>Yes</td>
 </tr>
 <tr>
+<td>SPSS Portable (.por)</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
 <td>&ldquo;XBASE&rdquo; database files (.dbf)</td>
 <td>Yes</td>
 <td>Yes</td>
@@ -323,7 +328,7 @@ hr {
 <tr>
 <td>SAS (.sas7bdat)</td>
 <td>Yes</td>
-<td></td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>SAS XPORT (.xpt)</td>
@@ -375,35 +380,35 @@ hr {
 
 <pre><code class="r">library(&quot;rio&quot;)
 
-x &lt;- import(&quot;iris.csv&quot;)
-y &lt;- import(&quot;iris.rds&quot;)
-z &lt;- import(&quot;iris.dta&quot;)
+x &lt;- import(&quot;mtcars.csv&quot;)
+y &lt;- import(&quot;mtcars.rds&quot;)
+z &lt;- import(&quot;mtcars.dta&quot;)
 
 # confirm identical
 all.equal(x, y, check.attributes = FALSE)
 </code></pre>
 
-<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is factor&quot;
+<pre><code>## [1] TRUE
 </code></pre>
 
 <pre><code class="r">all.equal(x, z, check.attributes = FALSE)
 </code></pre>
 
-<pre><code>## [1] &quot;Component \&quot;Species\&quot;: target is character, current is numeric&quot;
+<pre><code>## [1] TRUE
 </code></pre>
 
 <p>If for some reason a file does not have an extension, or has a file extension that does not match its actual type, you can manually specify a file format to override the format inference step. For example, we can read in a CSV file that does not have a file extension by specifying <code>csv</code>:</p>
 
-<pre><code class="r">head(import(&quot;iris_noext&quot;, format = &quot;csv&quot;))
+<pre><code class="r">head(import(&quot;mtcars_noext&quot;, format = &quot;csv&quot;))
 </code></pre>
 
-<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1          5.1         3.5          1.4         0.2  setosa
-## 2          4.9         3.0          1.4         0.2  setosa
-## 3          4.7         3.2          1.3         0.2  setosa
-## 4          4.6         3.1          1.5         0.2  setosa
-## 5          5.0         3.6          1.4         0.2  setosa
-## 6          5.4         3.9          1.7         0.4  setosa
+<pre><code>##    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## 1 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## 2 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## 3 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 4 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 5 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 6 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
 </code></pre>
 
 <h3>Export</h3>
@@ -412,9 +417,9 @@ all.equal(x, y, check.attributes = FALSE)
 
 <pre><code class="r">library(&quot;rio&quot;)
 
-export(iris, &quot;iris.csv&quot;)
-export(iris, &quot;iris.rds&quot;)
-export(iris, &quot;iris.dta&quot;)
+export(mtcars, &quot;mtcars.csv&quot;)
+export(mtcars, &quot;mtcars.rds&quot;)
+export(mtcars, &quot;mtcars.dta&quot;)
 </code></pre>
 
 <p>It is also easy to use <code>export</code> as part of an R pipeline (from magrittr or dplyr). For example, the following code uses <code>export</code> to save the results of a simple data transformation:</p>
@@ -430,10 +435,10 @@ mtcars %&gt;% subset(hp &gt; 100) %&gt;%  aggregate(. ~ cyl + am, data = ., FUN 
 <p>Because <code>convert</code> is just a thin wrapper for <code>import</code> and <code>export</code>, it is very easy to use. For example, we can convert </p>
 
 <pre><code class="r"># create file to convert
-export(iris, &quot;iris.dta&quot;)
+export(mtcars, &quot;mtcars.dta&quot;)
 
 # convert Stata to SPSS
-convert(&quot;iris.dta&quot;, &quot;iris.sav&quot;)
+convert(&quot;mtcars.dta&quot;, &quot;mtcars.sav&quot;)
 </code></pre>
 
 <p><code>convert</code> also accepts lists of arguments for controlling import (<code>in_opts</code>) and export (<code>out_opts</code>). This can be useful for passing additional arguments to import or export methods. This could be useful, for example, for reading in a fixed-width format file and converting it to a comma-separated values file:</p>
@@ -461,7 +466,7 @@ import(&quot;fwf.csv&quot;) # check conversion
 
 <p>It is also possible to use <strong>rio</strong> on the command-line by calling <code>Rscript</code> with the <code>-e</code> (expression) argument. For example, to convert a file from Stata (.dta) to comma-separated values (.csv), simply do the following:</p>
 
-<pre><code>Rscript -e &quot;rio::convert(&#39;iris.dta&#39;, &#39;iris.csv&#39;)&quot;
+<pre><code>Rscript -e &quot;rio::convert(&#39;mtcars.dta&#39;, &#39;mtcars.csv&#39;)&quot;
 </code></pre>
 
 </body>

@@ -1,3 +1,25 @@
+# CHANGES TO v0.4.15 #
+
+ * Added support for importing from multi-table HTML files using the `which` argument. (#126)
+
+# CHANGES TO v0.4.15 #
+
+ * Improved behavior of `import()` and `export()` with respect to unrecognized file types. (#124, #125, h/t Jason Becker)
+ * Added explicit tests of the S3 extension mechanism for `.import()` and `.export()`.
+ * Attempt to recognize compressed but non-archived file formats (e.g., ".csv.gz"). (#123, h/t trevorld)
+
+# CHANGES TO v0.4.14 #
+
+ * Update import and export methods to use new xml2 for XML and HTML export. (#86)
+
+# CHANGES TO v0.4.13 #
+
+ * Fix failing tests related to stricter variable name handling for Stata files in development version of haven. (#113, h/t Hadley Wickham)
+ * Added support for export of .sas7bdat files via haven (#116)
+ * Restored support for import from SPSS portable via haven (#116)
+ * Updated import methods to reflect changed formal argument names in haven. (#116)
+ * Converted to roxygen2 documentation and made NEWS an explicit markdown file.
+
 # CHANGES TO v0.4.12 #
 
  * rio sets `options(datatable.fread.dec.experiment=FALSE)` during onLoad to address a Unix-specific locale issue.

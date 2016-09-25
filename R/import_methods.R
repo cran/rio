@@ -1,7 +1,14 @@
-import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "auto", header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
-    if (fread) {
-        fread(input = file, sep = sep, sep2 = sep2, header = header, stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
+#' @importFrom data.table fread
+import_delim <- 
+function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "auto", 
+         header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
+    if (fread & !inherits(file, "connection")) {
+        fread(input = file, sep = sep, sep2 = sep2, header = header, 
+              stringsAsFactors = stringsAsFactors, data.table = data.table, ...)
     } else {
+        if (inherits(file, "connection")) {
+            message("data.table::fread() does not support reading from connections. Using utils::read.table() instead.")
+        }
         dots <- list(...)
         dots[["file"]] <- file
         if (missing(sep) || is.null(sep) || sep == "auto") {
@@ -22,26 +29,34 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
     }
 }
 
-.import.rio_tsv <- function(file, sep, which = 1, fread = TRUE, ...){
+#' @export
+.import.rio_tsv <- function(file, sep, which = 1, fread = TRUE, ...) {
   import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
-.import.rio_txt <- function(file, sep, which = 1, fread = TRUE, ...){
+#' @export
+.import.rio_txt <- function(file, sep, which = 1, fread = TRUE, ...) {
   import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
-.import.rio_csv <- function(file, sep, which = 1, fread = TRUE, ...){
+#' @export
+.import.rio_csv <- function(file, sep, which = 1, fread = TRUE, ...) {
   import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
-.import.rio_csv2 <- function(file, sep, which = 1, fread = TRUE, ...){
+#' @export
+.import.rio_csv2 <- function(file, sep, which = 1, fread = TRUE, ...) {
   import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
-.import.rio_psv <- function(file, sep, which = 1, fread = TRUE, ...){
+#' @export
+.import.rio_psv <- function(file, sep, which = 1, fread = TRUE, ...) {
   import_delim(file = file, sep = if (missing(sep)) "auto" else sep, fread = fread, ...)
 }
 
+#' @importFrom utils read.fwf
+#' @importFrom readr read_fwf fwf_empty fwf_widths fwf_positions
+#' @export
 .import.rio_fwf <- function(file, which = 1, widths, header = FALSE, col.names, readr = FALSE, progress = FALSE, ...) {
   if (missing(widths)) {
     stop("Import of fixed-width format data requires a 'widths' argument. See ? read.fwf().")
@@ -95,18 +110,23 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
   }
 }
 
-.import.rio_r <- function(file, which = 1, ...){
+#' @export
+.import.rio_r <- function(file, which = 1, ...) {
   dget(file = file, ...)
 }
 
-.import.rio_rds <- function(file, which = 1, ...){
+#' @export
+.import.rio_rds <- function(file, which = 1, ...) {
   readRDS(file = file, ...)
 }
 
+#' @importFrom csvy read_csvy
+#' @export
 .import.rio_csvy <- function(file, which = 1, ...) {
     read_csvy(file = file, ...)
 }
 
+#' @export
 .import.rio_rdata <- function(file, which = 1, envir = new.env(), ...) {
   load(file = file, envir = envir, ...)
   if (missing(which)) {
@@ -122,11 +142,15 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
   }
 }
 
-.import.rio_feather <- function(file, which = 1, ...){
+#' @export
+.import.rio_feather <- function(file, which = 1, ...) {
     requireNamespace("feather")
     feather::read_feather(path = file)
 }
 
+#' @importFrom foreign read.dta
+#' @importFrom haven read_dta
+#' @export
 .import.rio_dta <- function(file, haven = TRUE, 
                             convert.dates = TRUE, 
                             convert.factors = FALSE, 
@@ -136,7 +160,7 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
     if (length(a)) {
       warning("File imported using haven. Arguments to '...' ignored.")
     }
-    convert_attributes(read_dta(path = file))
+    convert_attributes(read_dta(file = file))
   } else {
     out <- read.dta(file = file, 
                     convert.dates = convert.dates, 
@@ -148,55 +172,87 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
   }
 }
 
-.import.rio_dbf <- function(file, which = 1, ...){
+#' @importFrom foreign read.dbf
+#' @export
+.import.rio_dbf <- function(file, which = 1, ...) {
   read.dbf(file = file, ...)
 }
 
-.import.rio_dif <- function(file, which = 1, ...){
+#' @importFrom utils read.DIF
+#' @export
+.import.rio_dif <- function(file, which = 1, ...) {
   read.DIF(file = file, ...)
 }
 
+#' @importFrom haven read_sav
+#' @importFrom foreign read.spss
+#' @export
 .import.rio_sav <- function(file, which = 1, haven = TRUE, to.data.frame = TRUE, use.value.labels = FALSE, ...) {
   if (haven) {
-    convert_attributes(read_sav(path = file))
+    convert_attributes(read_sav(file = file))
   } else {
     convert_attributes(read.spss(file = file, to.data.frame = to.data.frame, 
                                  use.value.labels = use.value.labels, ...))
   }
 }
 
-.import.rio_sas7bdat <- function(file, which = 1, column.labels = FALSE, ...) {
-  convert_attributes(read_sas(b7dat = file, ...))
+#' @importFrom haven read_por
+#' @export
+.import.rio_spss <- function(file, which = 1, ...) {
+  convert_attributes(read_por(file = file))
 }
 
-.import.rio_xpt <- function(file, which = 1, ...){
+#' @importFrom haven read_sas
+#' @export
+.import.rio_sas7bdat <- function(file, which = 1, column.labels = FALSE, ...) {
+  convert_attributes(read_sas(data_file = file, ...))
+}
+
+#' @importFrom foreign read.xport
+#' @export
+.import.rio_xpt <- function(file, which = 1, ...) {
   read.xport(file = file, ...)
 }
 
-.import.rio_mtp <- function(file, which = 1, ...){
+#' @importFrom foreign read.mtp
+#' @export
+.import.rio_mtp <- function(file, which = 1, ...) {
   read.mtp(file = file, ...)
 }
 
-.import.rio_syd <- function(file, which = 1, ...){
+#' @importFrom foreign read.systat
+#' @export
+.import.rio_syd <- function(file, which = 1, ...) {
   read.systat(file = file, to.data.frame = TRUE, ...)
 }
 
-.import.rio_json <- function(file, which = 1, ...){
+#' @importFrom jsonlite fromJSON
+#' @export
+.import.rio_json <- function(file, which = 1, ...) {
   fromJSON(txt = file, ...)
 }
 
-.import.rio_rec <- function(file, which = 1, ...){
+#' @importFrom foreign read.epiinfo
+#' @export
+.import.rio_rec <- function(file, which = 1, ...) {
   read.epiinfo(file = file, ...)
 }
 
-.import.rio_arff <- function(file, which = 1, ...){
+#' @importFrom foreign read.arff
+#' @export
+.import.rio_arff <- function(file, which = 1, ...) {
   read.arff(file = file)
 }
 
-.import.rio_xls <- function(file, which = 1, ...){
+#' @importFrom readxl read_excel
+#' @export
+.import.rio_xls <- function(file, which = 1, ...) {
   read_excel(path = file, ...)
 }
 
+#' @importFrom readxl read_excel
+#' @importFrom openxlsx read.xlsx
+#' @export
 .import.rio_xlsx <- function(file, which = 1, readxl = TRUE, ...) {
   a <- list(...)
   if ("sheet" %in% names(a)) {
@@ -209,13 +265,17 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
   }
 }
 
+#' @importFrom utils read.fortran
+#' @export
 .import.rio_fortran <- function(file, which = 1, style, ...) {
     if (missing(style)) {
-        stop("Import of Fortran format data requires a 'style' argument. See ? foreign::read.fortran().")
+        stop("Import of Fortran format data requires a 'style' argument. See ? utils::read.fortran().")
     }
     read.fortran(file = file, format = style, ...)
 }
 
+#' @importFrom readODS read.ods getNrOfSheetsInODS
+#' @export
 .import.rio_ods <- function(file, which = NULL, header = TRUE, ...) {
     a <- list(...)
     if ("sheet" %in% names(a)) {
@@ -244,6 +304,8 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
     return(res)
 }
 
+#' @importFrom xml2 read_xml as_list
+#' @export
 .import.rio_xml <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
     x <- as_list(read_xml(unclass(file)))
     d <- do.call("rbind", c(lapply(x, unlist)))
@@ -265,8 +327,14 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
     d
 }
 
+#' @importFrom xml2 read_html as_list xml_find_all
+#' @export
 .import.rio_html <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
-    x <- as_list(read_html(unclass(file)))[["body"]][["table"]]
+    tables <- xml_find_all(read_html(unclass(file)), ".//table")
+    if (which > length(tables)) {
+        stop(paste0("Requested table exceeds number of tables found in file (", length(tables),")!"))
+    }
+    x <- as_list(tables[[which]])
     if ("th" %in% names(x[[1]])) {
         col_names <- unlist(x[[1]][names(x[[1]]) %in% "th"])
         out <- do.call("rbind", lapply(x[-1], function(y) {
@@ -283,10 +351,14 @@ import_delim <- function(file, which = 1, fread = TRUE, sep = "auto", sep2 = "au
     as.data.frame(out, ..., stringsAsFactors = stringsAsFactors)
 }
 
+#' @importFrom yaml yaml.load
+#' @export
 .import.rio_yml <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
   as.data.frame(yaml.load(file, ...), stringsAsFactors = stringsAsFactors)
 }
 
+#' @importFrom utils read.table
+#' @export
 .import.rio_clipboard <- function(file = "clipboard", which = 1, header = TRUE, sep = "\t", ...) {
     if (Sys.info()["sysname"] == "Darwin") {
         clip <- pipe("pbpaste")

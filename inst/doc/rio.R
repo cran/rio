@@ -1,54 +1,54 @@
 ## ---- echo=FALSE, results='hide'-----------------------------------------
 library("rio")
 
-export(iris, "iris.csv")
-export(iris, "iris.rds")
-export(iris, "iris.dta")
-export(iris, "iris_noext", format = "csv")
+export(mtcars, "mtcars.csv")
+export(mtcars, "mtcars.rds")
+export(mtcars, "mtcars.dta")
+export(mtcars, "mtcars_noext", format = "csv")
 
 ## ------------------------------------------------------------------------
 library("rio")
 
-x <- import("iris.csv")
-y <- import("iris.rds")
-z <- import("iris.dta")
+x <- import("mtcars.csv")
+y <- import("mtcars.rds")
+z <- import("mtcars.dta")
 
 # confirm identical
 all.equal(x, y, check.attributes = FALSE)
 all.equal(x, z, check.attributes = FALSE)
 
 ## ------------------------------------------------------------------------
-head(import("iris_noext", format = "csv"))
+head(import("mtcars_noext", format = "csv"))
 
 ## ---- echo=FALSE, results='hide'-----------------------------------------
-unlink("iris.csv")
-unlink("iris.rds")
-unlink("iris.dta")
-unlink("iris_noext")
+unlink("mtcars.csv")
+unlink("mtcars.rds")
+unlink("mtcars.dta")
+unlink("mtcars_noext")
 
 ## ------------------------------------------------------------------------
 library("rio")
 
-export(iris, "iris.csv")
-export(iris, "iris.rds")
-export(iris, "iris.dta")
+export(mtcars, "mtcars.csv")
+export(mtcars, "mtcars.rds")
+export(mtcars, "mtcars.dta")
 
 ## ------------------------------------------------------------------------
 library("magrittr")
 mtcars %>% subset(hp > 100) %>%  aggregate(. ~ cyl + am, data = ., FUN = mean) %>% export(file = "mtcars2.dta")
 
 ## ---- echo=FALSE, results='hide'-----------------------------------------
-unlink("iris.csv")
-unlink("iris.rds")
-unlink("iris.dta")
+unlink("mtcars.csv")
+unlink("mtcars.rds")
+unlink("mtcars.dta")
 unlink("mtcars2.dta")
 
 ## ------------------------------------------------------------------------
 # create file to convert
-export(iris, "iris.dta")
+export(mtcars, "mtcars.dta")
 
 # convert Stata to SPSS
-convert("iris.dta", "iris.sav")
+convert("mtcars.dta", "mtcars.sav")
 
 ## ------------------------------------------------------------------------
 # create an ambiguous file
@@ -63,8 +63,8 @@ convert(fwf, "fwf.csv", in_opts = list(widths = c(1,2,3)))
 import("fwf.csv") # check conversion
 
 ## ---- echo=FALSE, results='hide'-----------------------------------------
-unlink("iris.dta")
-unlink("iris.sav")
+unlink("mtcars.dta")
+unlink("mtcars.sav")
 unlink("fwf.csv")
 unlink(fwf)
 

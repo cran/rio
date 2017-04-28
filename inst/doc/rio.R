@@ -37,10 +37,24 @@ export(mtcars, "mtcars.dta")
 library("magrittr")
 mtcars %>% subset(hp > 100) %>%  aggregate(. ~ cyl + am, data = ., FUN = mean) %>% export(file = "mtcars2.dta")
 
+## ------------------------------------------------------------------------
+# export to sheets of an Excel workbook
+export(list(mtcars = mtcars, iris = iris), "multi.xlsx")
+
+## ------------------------------------------------------------------------
+# export to an .Rdata file
+## as a named list
+export(list(mtcars = mtcars, iris = iris), "multi.rdata")
+
+## as a character vector
+export(c("mtcars", "iris"), "multi.rdata")
+
 ## ---- echo=FALSE, results='hide'-----------------------------------------
 unlink("mtcars.csv")
 unlink("mtcars.rds")
+unlink("mtcars.rdata")
 unlink("mtcars.dta")
+unlink("multisheet.xlsx")
 unlink("mtcars2.dta")
 
 ## ------------------------------------------------------------------------

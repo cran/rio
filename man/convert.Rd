@@ -19,7 +19,7 @@ convert(in_file, out_file, in_opts = list(), out_opts = list())
 A character string containing the name of the output file (invisibly).
 }
 \description{
-This function constructs a data frame from a data file using code{\link{import}} and uses \code{\link{export}} to write the data to disk in the format indicated by the file extension.
+This function constructs a data frame from a data file using \code{\link{import}} and uses \code{\link{export}} to write the data to disk in the format indicated by the file extension.
 }
 \examples{
 # create a file to convert
@@ -51,4 +51,3 @@ Rscript -e "rio::convert('mtcars.dta', 'mtcars.csv')"
 \seealso{
 \href{https://lbraglia.github.io/}{Luca Braglia} has created a Shiny app called \href{https://github.com/lbraglia/rioweb}{rioweb} that provides access to the file conversion features of rio through a web browser. The app is featured in the \href{https://gallery.shinyapps.io/rioweb}{RStudio Shiny Gallery}.
 }
-

@@ -1,13 +1,17 @@
-# @importFrom data.table fwrite
+#' @importFrom data.table fwrite
 #' @importFrom utils write.table
-export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
+export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
                          col.names = TRUE, ...) {
-    if (fwrite) {
-        warning("data.table::fwrite() support is pending. 'fwrite = FALSE' ignored.")
-        # fwrite(x, file.path = file, sep = sep, col.name = col.names, ...)
+    if (isTRUE(fwrite) & !inherits(file, "connection")) {
+        fwrite(x, file = file, sep = sep, col.name = col.names,
+               row.names = row.names, ...)
+    } else {
+        if (isTRUE(fwrite) & inherits(file, "connection")) {
+            message("data.table::fwrite() does not support writing to connections. Using utils::write.table() instead.")
+        }
+        write.table(x, file = file, sep = sep, row.names = row.names,
+                    col.names = col.names, ...)
     }
-    write.table(x, file = file, sep = sep, row.names = row.names,
-                col.names = col.names, ...)
 }
 
 #' @export
@@ -20,7 +24,6 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
     export_delim(x = x, file = file, ...)
 }
 
-
 #' @export
 .export.rio_csv <- function(file, x, ...) {
     export_delim(x = x, file = file, sep = ",", dec = ".", ...)
@@ -31,10 +34,10 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
     export_delim(x = x, file = file, sep =";", dec = ",", ...)
 }
 
-#' @importFrom csvy write_csvy
 #' @export
 .export.rio_csvy <- function(file, x, ...) {
-    write_csvy(file = file, x = x, ...)
+    requireNamespace("csvy", quietly = TRUE)
+    csvy::write_csvy(file = file, x = x, ...)
 }
 
 #' @export
@@ -44,7 +47,7 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
 
 #' @importFrom utils capture.output write.csv
 #' @export
-.export.rio_fwf <- function(file, x, verbose = TRUE, sep = "", row.names = FALSE, quote = FALSE, col.names = FALSE, digits = getOption("digits", 7), ...) {
+.export.rio_fwf <- function(file, x, verbose = getOption("verbose", FALSE), sep = "", row.names = FALSE, quote = FALSE, col.names = FALSE, digits = getOption("digits", 7), ...) {
     dat <- lapply(x, function(col) {
         if (is.character(col)) {
             col <- as.numeric(as.factor(col))
@@ -70,9 +73,9 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
     n <- nchar(dat[1,]) + c(rep(nchar(sep), ncol(dat)-1), 0)
     col_classes <- sapply(x, class)
     col_classes[col_classes == "factor"] <- "integer"
-    dict <- cbind.data.frame(variable = names(n), 
-                             class = col_classes, 
-                             width = unname(n), 
+    dict <- cbind.data.frame(variable = names(n),
+                             class = col_classes,
+                             width = unname(n),
                              columns = paste0(c(1, cumsum(n)+1)[-length(n)], "-", cumsum(n)),
                              stringsAsFactors = FALSE)
     if (verbose) {
@@ -108,13 +111,39 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
 
 #' @export
 .export.rio_rdata <- function(file, x, ...) {
-    save(x, file = file, ...)
+    if (is.data.frame(x)) {
+        return(save(x, file = file, ...))
+    } else if (is.list(x)) {
+        e <- as.environment(x)
+        save(list = names(x), file = file, envir = e, ...)
+    } else if (is.environment(x)) {
+        save(list = ls(x), file = file, envir = x, ...)
+    } else if (is.character(x)) {
+        save(list = x, file = file, ...)
+    } else {
+        stop("'x' must be a data.frame, list, or environment")
+    }
 }
 
 #' @export
+.export.rio_rda <- .export.rio_rdata
+
+#' @export
 .export.rio_feather <- function(file, x, ...) {
-    requireNamespace("feather")
+    requireNamespace("feather", quietly = TRUE)
     feather::write_feather(x = x, path = file)
+}
+
+#' @export
+.export.rio_fst <- function(file, x, ...) {
+    requireNamespace("fst", quietly = TRUE)
+    fst::write.fst(x = x, path = file, ...)
+}
+
+#' @export
+.export.rio_matlab <- function(file, x, ...) {
+    requireNamespace("rmatio", quietly = TRUE)
+    rmatio::write.mat(object = x, filename = file, ...)
 }
 
 #' @importFrom haven write_sav
@@ -141,10 +170,10 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
     write.dbf(dataframe = x, file = file, ...)
 }
 
-#' @importFrom jsonlite toJSON
 #' @export
 .export.rio_json <- function(file, x, ...) {
-    cat(toJSON(x, ...), file = file)
+    requireNamespace("jsonlite", quietly = TRUE)
+    cat(jsonlite::toJSON(x, ...), file = file)
 }
 
 #' @importFrom foreign write.arff
@@ -155,72 +184,93 @@ export_delim <- function(file, x, fwrite = FALSE, sep = "\t", row.names = FALSE,
 
 #' @importFrom openxlsx write.xlsx
 #' @export
-.export.rio_xlsx <- function(file, x, ...) {
-    write.xlsx(x = x, file = file, ...)
-}
-
-#' @importFrom xml2 read_html read_xml xml_children xml_add_child write_xml
-#' @export
-.export.rio_html <- function(file, x, ...) {
-    x[] <- lapply(x, as.character)
-    out <- character(nrow(x))
-    html <- read_html("<!doctype html><html><head>\n<title>R Exported Data</title>\n</head><body>\n<table></table>\n</body>\n</html>")
-    tab <- xml_children(xml_children(html)[[2]])[[1]]
-    # add header row
-    invisible(xml_add_child(tab, read_xml(paste0(twrap(paste0(twrap(names(x), "th"), collapse = ""), "tr"), "\n"))))
-    # add data
-    for (i in seq_len(nrow(x))) {
-        xml_add_child(tab, read_xml(paste0(twrap(paste0(twrap(unlist(x[i, , drop = TRUE]), "td"), collapse = ""), "tr"), "\n")))
-    }
-    write_xml(html, file = file, ...)
-}
-
-#' @importFrom xml2 read_xml xml_children xml_add_child xml_add_sibling xml_attr<- write_xml
-#' @export
-.export.rio_xml <- function(file, x, ...) {
-    root <- ""
-    xml <- read_xml(paste0("<",as.character(substitute(x)),">\n</",as.character(substitute(x)),">\n"))
-    att <- attributes(x)[!names(attributes(x)) %in% c("names", "row.names", "class")]
-    for (a in seq_along(att)) {
-        xml_attr(xml, names(att)[a]) <- att[[a]]
-    }
-    # add data
-    for (i in seq_len(nrow(x))) {
-        thisrow <- xml_add_child(xml, "Observation")
-        xml_attr(thisrow, "row.name") <- row.names(x)[i]
-        for (j in seq_along(x)) {
-            xml_add_child(thisrow, read_xml(paste0(twrap(x[i, j, drop = TRUE], names(x)[j]), "\n")))
+.export.rio_xlsx <- function(file, x, overwrite = TRUE, which, ...) {
+    dots <- list(...)
+    if (isTRUE(overwrite) || !file.exists(file)) {
+        if (!missing(which)) {
+            openxlsx::write.xlsx(x = x, file = file, sheetName = which, ...)
+        } else {
+            openxlsx::write.xlsx(x = x, file = file, ...)
+        }
+    } else {
+        wb <- openxlsx::loadWorkbook(file = file)
+        sheets <- openxlsx::getSheetNames(file = file)
+        if (is.data.frame(x)) {
+            if (missing(which)) {
+                which <- paste("Sheet", length(sheets)+1)
+            }
+            if (!which %in% sheets) {
+                openxlsx::addWorksheet(wb, sheet = which)
+            }
+            openxlsx::writeData(wb, sheet = which, x = x)
+            openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+        } else {
+            wb <- openxlsx::loadWorkbook(file = file)
+            mapply(function(sheet, dat) {
+                openxlsx::addWorksheet(wb, sheet = sheet)
+                openxlsx::writeData(wb, sheet = sheet, x = dat)
+            }, names(x), x)
+            openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
         }
     }
-    
-    write_xml(xml, file = file, ...)
 }
 
-# @importFrom readODS write_ods
-# @export
-#.export.rio_ods <- function(file, x, which = 1, ...) {
-#    write_ods(x = x, path = file, sheet = which, ...)
-#}
+#' @export
+.export.rio_ods <- function(file, x, ...) {
+    requireNamespace("readODS", quietly = TRUE)
+    readODS::write_ods(x = x, path = file)
+}
 
-#' @importFrom yaml as.yaml
+#' @export
+.export.rio_html <- function(file, x, ...) {
+    requireNamespace("xml2", quietly = TRUE)
+    html <- xml2::read_html("<!doctype html><html><head>\n<title>R Exported Data</title>\n</head><body>\n</body>\n</html>")
+    bod <- xml2::xml_children(html)[[2]]
+    if (is.data.frame(x)) {
+        x <- list(x)
+    }
+    for (i in seq_along(x)) {
+        x[[i]][] <- lapply(x[[i]], as.character)
+        tab <- xml2::xml_add_child(bod, "table")
+        # add header row
+        invisible(xml2::xml_add_child(tab, xml2::read_xml(paste0(twrap(paste0(twrap(names(x[[i]]), "th"), collapse = ""), "tr"), "\n"))))
+        # add data
+        for (j in seq_len(nrow(x[[i]]))) {
+            xml2::xml_add_child(tab, xml2::read_xml(paste0(twrap(paste0(twrap(unlist(x[[i]][j, , drop = TRUE]), "td"), collapse = ""), "tr"), "\n")))
+        }
+    }
+    xml2::write_xml(html, file = file, ...)
+}
+
+#' @export
+.export.rio_xml <- function(file, x, ...) {
+    requireNamespace("xml2", quietly = TRUE)
+    root <- ""
+    xml <- xml2::read_xml(paste0("<",as.character(substitute(x)),">\n</",as.character(substitute(x)),">\n"))
+    att <- attributes(x)[!names(attributes(x)) %in% c("names", "row.names", "class")]
+    for (a in seq_along(att)) {
+        xml2::xml_attr(xml, names(att)[a]) <- att[[a]]
+    }
+    # add data
+    for (i in seq_len(nrow(x))) {
+        thisrow <- xml2::xml_add_child(xml, "Observation")
+        xml2::xml_attr(thisrow, "row.name") <- row.names(x)[i]
+        for (j in seq_along(x)) {
+            xml2::xml_add_child(thisrow, xml2::read_xml(paste0(twrap(x[i, j, drop = TRUE], names(x)[j]), "\n")))
+        }
+    }
+
+    xml2::write_xml(xml, file = file, ...)
+}
+
 #' @export
 .export.rio_yml <- function(file, x, ...) {
-  cat(as.yaml(x, ...), file = file)
+    requireNamespace("yaml", quietly = TRUE)
+    cat(yaml::as.yaml(x, ...), file = file)
 }
 
-#' @importFrom utils write.table
 #' @export
 .export.rio_clipboard <- function(file, x, row.names = FALSE, col.names = TRUE, sep = "\t", ...) {
-    if (Sys.info()["sysname"] == "Darwin") {
-        clip <- pipe("pbcopy", "w")
-        write.table(x, file = clip, sep = sep, row.names = row.names,
-                    col.names = col.names, ...)
-        close(clip)
-    } else if (Sys.info()["sysname"] == "Windows") {
-        write.table(x, file="clipboard", sep = sep, row.names = row.names,
-                    col.names = col.names, ...)
-    } else {
-        stop("Writing to clipboard is not supported on your OS.")
-        return(NULL)
-    }
+    requireNamespace("clipr", quietly = TRUE)
+    clipr::write_clip(content = x, row.names = row.names, col.names = col.names, sep = sep, ...)
 }

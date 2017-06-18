@@ -1,3 +1,28 @@
+# CHANGES TO v0.5.5
+
+ * Expanded test suite and increased test coverage, fixing a few tests that were failing on certain CRAN builds.
+
+# CHANGES TO v0.5.4
+
+ * New functions `characterize()` and `factorize()` provide methods for converting "labelled" variables (e.g., from Stata or SPSS) into character or factor variables using embedded metadata. This can also be useful for exporting a metadata-rich file format into a plain text file. (#153)
+
+# CHANGES TO v0.5.3
+
+ * Fixed a bug in writing to .zip and .tar archives related to absolute file paths.
+ * Fixed some small bugs in `import_list()` and added tests for behavior.
+ * Add .bib as known-unsupported format via `bib2df::bib2df()`.
+ * Expanded test coverage.
+
+# CHANGES TO v0.5.3
+
+ * Fixed a bug in `.import.rio_xlsx()` when `readxl = FALSE`. (#152, h/t Danny Parsons)
+ * Added a new function `spread_attrs()` that reverses the `gather_attrs()` operation.
+ * Expanded test coverage.
+
+# CHANGES TO v0.5.1
+
+ * `export()` now sets variables with a "labels" attribute to **haven**'s "labelled" class.
+
 # CHANGES TO v0.5.0
 
  * CRAN Release.

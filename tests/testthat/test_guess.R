@@ -1,10 +1,12 @@
 context("Get File Extension")
+library("datasets")
 
 test_that("File extension converted correctly", {
     expect_that(get_ext("hello.csv"), equals("csv"))
     expect_that(get_ext("hello.CSV"), equals("csv"))
     expect_that(get_ext("hello.sav.CSV"), equals("csv"))
     expect_that(get_ext("clipboard"), equals("clipboard"))
+    expect_error(get_ext(1L))
 })
 
 test_that("Format converted correctly", {
@@ -16,4 +18,9 @@ test_that("Format converted correctly", {
     expect_that(get_type("stata"), equals("dta"))
     expect_that(get_type("spss"), equals("sav"))
     expect_that(get_type("sas"), equals("sas7bdat"))
+})
+
+test_that("Export without file specified", {
+    expect_true(export(iris, format = "csv") %in% dir())
+    unlink("iris.csv")
 })

@@ -38,10 +38,6 @@ As of rio v0.5.0, `export()` can also write multiple data farmes to respective s
 export(list(mtcars = mtcars, iris = iris), file = "mtcars.xlsx")
 ```
 
-```
-## Loading required namespace: openxlsx
-```
-
 ### Import
 
 Importing data is handled with one function, `import()`:
@@ -179,15 +175,35 @@ The core advantage of **rio** is that it makes assumptions that the user is prob
  
  3. **rio**, wherever possible, does not import character strings as factors.
  
- 4. **rio** stores metadata from rich file formats (SPSS, Stata, etc.) in variable-level attributes in a consistent form regardless of file type or underlying import function. The `gather_attrs()` function makes it easy to move variable-level attributes to the data frame level.
+ 4. **rio** supports web-based imports natively, including from SSL (HTTPS) URLs, from shortened URLs, from URLs that lack proper extensions, and from (public) Google Documents Spreadsheets.
  
- 5. **rio** supports web-based imports natively, including from SSL (HTTPS) URLs, from shortened URLs, from URLs that lack proper extensions, and from (public) Google Documents Spreadsheets.
+ 5. **rio** imports from from single-file .zip and .tar archives automatically, without the need to explicitly decompress them. Export to compressed directories is also supported.
  
- 6. **rio** imports from from single-file .zip and .tar archives automatically, without the need to explicitly decompress them. Export to compressed directories is also supported.
+ 6. **rio** wraps a variety of faster, more stream-lined I/O packages than those provided by base R or the **foreign** package. It uses [**data.table**](https://cran.r-project.org/package=data.table) for delimited formats, [**haven**](https://cran.r-project.org/package=haven) for SAS, Stata, and SPSS files, smarter and faster fixed-width file import and export routines, and [**readxl**](https://cran.r-project.org/package=readxl) and [**openxlsx**](https://cran.r-project.org/package=openxlsx) for reading and writing Excel workbooks.
  
- 7. **rio** imports and exports files based on an internal S3 class infrastructure. This means that other packages can contain extensions to **rio** by registering S3 methods. These methods should take the form `.import.rio_X()` and `.export.rio_X()`, where `X` is the file extension of a file type. An example is provided in the [rio.db package](https://github.com/leeper/rio.db).
+ 7. **rio** stores metadata from rich file formats (SPSS, Stata, etc.) in variable-level attributes in a consistent form regardless of file type or underlying import function. These attributes are identified as:
+     
+     - `label`: a description of variable
+     - `labels`: a vector mapping numeric values to character strings those values represent
+     - `format`: a character string describing the variable storage type in the original file
+     
+      The `gather_attrs()` function makes it easy to move variable-level attributes to the data frame level (and `spread_attrs()` reverses that gathering process). These can be useful, especially, during file conversion to more easily modify attributes that are handled differently across file formats. As an example, the following idiom can be used to trim SPSS value labels to the 32-character maximum allowed by Stata:
+      
+      ```R
+      dat <- gather_attrs(rio::import("data.sav"))
+      attr(dat, "labels") <- lapply(attributes(dat)$labels, function(x) {
+          if (!is.null(x)) {
+              names(x) <- substring(names(x), 1, 32)
+          }
+          x
+      })
+      export(spread_attrs(dat), "data.dta")
+      ```
+      
+      In addition, two functions (added in v0.5.5) provide easy ways to create character and factor variables from these "labels" attributes. `characterize()` converts a single variable or all variables in a data frame that have "labels" attributes into character vectors based on the mapping of values to value labels. `factorize()` does the same but returns factor variables. This can be especially helpful for converting these rich file formats into open formats (e.g., `export(characterize(import("file.dta")), "file.csv")`.
  
- 8. **rio** wraps a variety of faster, more stream-lined I/O packages than those provided by base R or the **foreign** package. It uses [**data.table**](https://cran.r-project.org/package=data.table) for delimited formats, [**haven**](https://cran.r-project.org/package=haven) for SAS, Stata, and SPSS files, smarter and faster fixed-width file import and export routines, and [**readxl**](https://cran.r-project.org/package=readxl) and [**openxlsx**](https://cran.r-project.org/package=openxlsx) for reading and writing Excel workbooks.
+ 8. **rio** imports and exports files based on an internal S3 class infrastructure. This means that other packages can contain extensions to **rio** by registering S3 methods. These methods should take the form `.import.rio_X()` and `.export.rio_X()`, where `X` is the file extension of a file type. An example is provided in the [rio.db package](https://github.com/leeper/rio.db).
+ 
 
 ## Package Installation
 

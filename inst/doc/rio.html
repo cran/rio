@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2017-04-28" />
+<meta name="date" content="2017-06-17" />
 
 <title>Import, Export, and Convert Data Files</title>
 
@@ -221,7 +221,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Import, Export, and Convert Data Files</h1>
-<h4 class="date"><em>2017-04-28</em></h4>
+<h4 class="date"><em>2017-06-17</em></h4>
 
 </div>
 
@@ -556,8 +556,39 @@ import(&quot;fwf.csv&quot;) # check conversion</code></pre>
 <pre><code>##   V1 V2  V3
 ## 1  1 23 456
 ## 2  9 87 654</code></pre>
+<p>With metadata-rich file formats (e.g., Stata, SPSS, SAS), it can also be useful to pass imported data through <code>characterize()</code> or <code>factorize()</code> when converting to an open, text-delimited format: <code>characterize()</code> converts a single variable or all variables in a data frame that have “labels” attributes into character vectors based on the mapping of values to value labels (e.g., <code>export(characterize(import(&quot;file.dta&quot;)), &quot;file.csv&quot;)</code>). An alternative approach is exporting to CSVY format, which records metadata in a YAML-formatted header at the beginning of a CSV file.</p>
 <p>It is also possible to use <strong>rio</strong> on the command-line by calling <code>Rscript</code> with the <code>-e</code> (expression) argument. For example, to convert a file from Stata (.dta) to comma-separated values (.csv), simply do the following:</p>
 <pre><code>Rscript -e &quot;rio::convert('mtcars.dta', 'mtcars.csv')&quot;</code></pre>
+</div>
+<div id="package-philosophy" class="section level2">
+<h2>Package Philosophy</h2>
+<p>The core advantage of <strong>rio</strong> is that it makes assumptions that the user is probably willing to make. Eight of these are important:</p>
+<ol style="list-style-type: decimal">
+<li><strong>rio</strong> uses the file extension of a file name to determine what kind of file it is. This is the same logic used by Windows OS, for example, in determining what application is associated with a given file type. By removing the need to manually match a file type (which a beginner may not recognize) to a particular import or export function, <strong>rio</strong> allows almost all common data formats to be read with the same function. And if a file extension is incorrect, users can force a particular import method by specifying the <code>format</code> argument. Other packages do this as well, but <strong>rio</strong> aims to be more complete and more consistent than each:</li>
+</ol>
+<ul>
+<li><a href="https://cran.r-project.org/package=reader"><strong>reader</strong></a> handles certain text formats and R binary files</li>
+<li><a href="https://cran.r-project.org/package=io"><strong>io</strong></a> offers a set of custom formats</li>
+<li><a href="https://cran.r-project.org/package=ImportExport"><strong>ImportExport</strong></a> focuses on select binary formats (Excel, SPSS, and Access files) and provides a Shiny interface.</li>
+<li><a href="https://cran.r-project.org/package=SchemaOnRead"><strong>SchemaOnRead</strong></a> iterates through a large number of possible import methods until one works successfully</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><p><strong>rio</strong> uses <code>data.table::fread()</code> for text-delimited files to automatically determine the file format regardless of the extension. So, a CSV that is actually tab-separated will still be correctly imported. It’s also crazy fast.</p></li>
+<li><p><strong>rio</strong>, wherever possible, does not import character strings as factors.</p></li>
+<li><p><strong>rio</strong> supports web-based imports natively, including from SSL (HTTPS) URLs, from shortened URLs, from URLs that lack proper extensions, and from (public) Google Documents Spreadsheets.</p></li>
+<li><p><strong>rio</strong> imports from from single-file .zip and .tar archives automatically, without the need to explicitly decompress them. Export to compressed directories is also supported.</p></li>
+<li><p><strong>rio</strong> wraps a variety of faster, more stream-lined I/O packages than those provided by base R or the <strong>foreign</strong> package. It uses <a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a> for delimited formats, <a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a> for SAS, Stata, and SPSS files, smarter and faster fixed-width file import and export routines, and <a href="https://cran.r-project.org/package=readxl"><strong>readxl</strong></a> and <a href="https://cran.r-project.org/package=openxlsx"><strong>openxlsx</strong></a> for reading and writing Excel workbooks.</p></li>
+<li><p><strong>rio</strong> stores metadata from rich file formats (SPSS, Stata, etc.) in variable-level attributes in a consistent form regardless of file type or underlying import function. These attributes are identified as:</p>
+<ul>
+<li><code>label</code>: a description of variable</li>
+<li><code>labels</code>: a vector mapping numeric values to character strings those values represent</li>
+<li><code>format</code>: a character string describing the variable storage type in the original file</li>
+</ul>
+<p>The <code>gather_attrs()</code> function makes it easy to move variable-level attributes to the data frame level (and <code>spread_attrs()</code> reverses that gathering process). These can be useful, especially, during file conversion to more easily modify attributes that are handled differently across file formats. As an example, the following idiom can be used to trim SPSS value labels to the 32-character maximum allowed by Stata:</p>
+<p><code>R   dat &lt;- gather_attrs(rio::import(&quot;data.sav&quot;))   attr(dat, &quot;labels&quot;) &lt;- lapply(attributes(dat)$labels, function(x) {       if (!is.null(x)) {           names(x) &lt;- substring(names(x), 1, 32)       }       x   })   export(spread_attrs(dat), &quot;data.dta&quot;)</code></p>
+<p>In addition, two functions (added in v0.5.5) provide easy ways to create character and factor variables from these “labels” attributes. <code>characterize()</code> converts a single variable or all variables in a data frame that have “labels” attributes into character vectors based on the mapping of values to value labels. <code>factorize()</code> does the same but returns factor variables. This can be especially helpful for converting these rich file formats into open formats (e.g., <code>export(characterize(import(&quot;file.dta&quot;)), &quot;file.csv&quot;)</code>.</p></li>
+<li><p><strong>rio</strong> imports and exports files based on an internal S3 class infrastructure. This means that other packages can contain extensions to <strong>rio</strong> by registering S3 methods. These methods should take the form <code>.import.rio_X()</code> and <code>.export.rio_X()</code>, where <code>X</code> is the file extension of a file type. An example is provided in the <a href="https://github.com/leeper/rio.db">rio.db package</a>.</p></li>
+</ol>
 </div>
 </div>
 

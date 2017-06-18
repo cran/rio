@@ -198,21 +198,21 @@ function(file,
                             convert.dates = TRUE,
                             convert.factors = FALSE,
                             missing.type = FALSE, ...) {
-  if (haven) {
-    a <- list(...)
-    if (length(a)) {
-      warning("File imported using haven. Arguments to '...' ignored.")
-    }
-    standardize_attributes(read_dta(file = file))
-  } else {
-    out <- read.dta(file = file,
+    if (isTRUE(haven)) {
+        a <- list(...)
+        if (length(a)) {
+            warning("File imported using haven. Arguments to '...' ignored.")
+        }
+        standardize_attributes(read_dta(file = file))
+    } else {
+        out <- read.dta(file = file,
                     convert.dates = convert.dates,
                     convert.factors = convert.factors,
                     missing.type = missing.type, ...)
-    attr(out, "expansion.fields") <- NULL
-    attr(out, "time.stamp") <- NULL
-    standardize_attributes(out)
-  }
+        attr(out, "expansion.fields") <- NULL
+        attr(out, "time.stamp") <- NULL
+        standardize_attributes(out)
+    }
 }
 
 #' @importFrom foreign read.dbf
@@ -309,23 +309,21 @@ function(file,
 #' @export
 .import.rio_xlsx <- function(file, which = 1, readxl = TRUE, ...) {
 
-    Call <- match.call(expand.dots = TRUE)
-    if ("which" %in% names(Call)) {
-        Call$sheet <- Call$which
-        Call$which <- NULL
+    a <- list(...)
+    if ("sheet" %in% names(a)) {
+        which <- a[["sheet"]]
+        a[["sheet"]] <- NULL
     }
     if (isTRUE(readxl)) {
-        Call$path <- file
-        Call[[1L]] <- as.name("read_xlsx")
+        if ("rows" %in% names(a)) {
+            warning("'rows' argument ignored when readxl = TRUE. Use 'range' instead.")
+            a[["rows"]] <- NULL
+        }
+        do.call("read_xlsx", c(list(path = file, sheet = which), a))
     } else {
         requireNamespace("openxlsx", quietly = TRUE)
-        read.xlsx <- openxlsx::read.xlsx
-        Call$xlsxFile <- file
-        Call[[1L]] <- as.name("read.xlsx")
+        do.call("read.xlsx", c(list(xlsxFile = file, sheet = which), a))
     }
-    Call$file <- NULL
-    Call$readxl <- NULL
-    eval.parent(Call, n = 0)
 }
 
 #' @importFrom utils read.fortran
@@ -343,6 +341,7 @@ function(file,
     readODS::read_ods(path = file, sheet = which, col_names = header, ...)
 }
 
+#' @importFrom utils type.convert
 #' @export
 .import.rio_xml <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
     requireNamespace("xml2", quietly = TRUE)
@@ -351,7 +350,7 @@ function(file,
     row.names(d) <- 1:nrow(d)
     d <- as.data.frame(d, stringsAsFactors = stringsAsFactors)
     tc2 <- function(x) {
-        out <- type.convert(x)
+        out <- utils::type.convert(x)
         if (is.factor(out)) {
             x
         } else {
@@ -361,13 +360,15 @@ function(file,
     if (!isTRUE(stringsAsFactors)) {
         d[] <- lapply(d, tc2)
     } else {
-        d[] <- lapply(d, type.convert)
+        d[] <- lapply(d, utils::type.convert)
     }
     d
 }
 
+#' @importFrom utils type.convert
 #' @export
 .import.rio_html <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
+    # find all tables
     tables <- xml2::xml_find_all(xml2::read_html(unclass(file)), ".//table")
     if (which > length(tables)) {
         stop(paste0("Requested table exceeds number of tables found in file (", length(tables),")!"))
@@ -376,6 +377,8 @@ function(file,
     if ("tbody" %in% names(x)) {
         x <- x[["tbody"]]
     }
+    # loop row-wise over the table and then rbind()
+    ## check for table header to use as column names
     if ("th" %in% names(x[[1]])) {
         col_names <- unlist(x[[1]][names(x[[1]]) %in% "th"])
         out <- do.call("rbind", lapply(x[-1], function(y) {
@@ -388,8 +391,12 @@ function(file,
         }))
         colnames(out) <- paste0("V", seq_len(ncol(out)))
     }
-    row.names(out) <- 1:nrow(out)
-    as.data.frame(out, ..., stringsAsFactors = stringsAsFactors)
+    out <- as.data.frame(out, ..., stringsAsFactors = stringsAsFactors)
+    # set row names
+    rownames(out) <- 1:nrow(out)
+    # type.convert() to numeric, etc.
+    out[] <- lapply(out, utils::type.convert, as.is = TRUE)
+    out
 }
 
 #' @export

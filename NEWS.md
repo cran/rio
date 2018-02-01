@@ -1,3 +1,25 @@
+# CHANGES TO v0.5.9
+
+ * Removed longstanding warnings from the tests of `export()` to fixed-width format.
+
+# CHANGES TO v0.5.8
+
+ * Export the `get_ext()` function. (#169)
+ * Fix a bug related to an xml2 bug (#168, h/t Jim Hester)
+ * `import_list()` gains improved file name handling. (#164, h/t Ruaridh Williamson)
+ * Removed the `overwrite` argument from `export()` method for xlsx files. Instead, existing workbooks are always overwritten unless which is specified, in which case only the specified sheet (if it exists) is overwritten. If the file exists but the `which` sheet does not, the data are added as a new sheet to the existing workbook. (#156)
+
+# CHANGES TO v0.5.7
+
+ * Import of files with the ambiguous .dat extension, which are typically text-delimited files, are now passed to `data.table::fread()` with a message. Export to the format remains unsupported. (#98, #155)
+ * Added support for export to SAS XPORT format (via `haven::write_xpt()`). (#157)
+ * Switched default import package for SAS XPORT format to `haven::read_xpt()` with a `haven = FALSE` toggle restoring the previous default behavior using `foreign::read.xpt()`. (#157)
+
+# CHANGES TO v0.5.6
+
+ * Fixed a bug in `import()` from compressed files wherein the `which` argument did not necessarily return the correct file if >=2 files in the compressed folder.
+ * Tweak handling of `export()` to xlsx workbooks when `which` is specified. (#156)
+
 # CHANGES TO v0.5.5
 
  * Expanded test suite and increased test coverage, fixing a few tests that were failing on certain CRAN builds.

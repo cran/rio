@@ -36,9 +36,23 @@ test_that("Using setclass in import_list()", {
     expect_true(inherits(dat1, "data.table"))
     dat2 <- import_list(rep("mtcars.rds", 2), setclass = "tbl", rbind = TRUE)
     expect_true(inherits(dat2, "tbl"))
-    expect_warning(dat3 <- import_list(rep("mtcars.rds", 2), setclass = "data.frame", rbind = TRUE, data.table = TRUE))
-    expect_true(inherits(dat3, "data.frame"))
+})
+
+test_that("Object names are preserved by import_list()", {
+    export(list(mtcars1 = mtcars[1:10,],
+                mtcars2 = mtcars[11:20,],
+                mtcars3 = mtcars[21:32,]), "mtcars.xlsx")
+    export(mtcars[1:10,],  "mtcars1.csv")
+    export(mtcars[11:20,], "mtcars2.tsv")
+    export(mtcars[21:32,], "mtcars3.csv")
+    expected_names <- c("mtcars1", "mtcars2", "mtcars3")
+    dat_xls <- import_list("mtcars.xlsx")
+    dat_csv <- import_list(c("mtcars1.csv","mtcars2.tsv","mtcars3.csv"))
     
+    expect_identical(names(dat_xls), expected_names)
+    expect_identical(names(dat_csv), expected_names)
+    
+    unlink(c("mtcars.xlsx", "mtcars1.csv","mtcars2.tsv","mtcars3.csv"))
 })
 
 unlink("data.rdata")

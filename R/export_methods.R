@@ -36,7 +36,7 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 
 #' @export
 .export.rio_csvy <- function(file, x, ...) {
-    requireNamespace("csvy", quietly = TRUE)
+    requireNamespace("csvy")
     csvy::write_csvy(file = file, x = x, ...)
 }
 
@@ -58,9 +58,15 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
             return(sprintf("%i",col))
         }
         if (is.numeric(col)) {
-            s <- strsplit(as.character(col), ".", fixed = TRUE)
-            m1 <- max(nchar(sapply(s, `[`, 1)), na.rm = TRUE)
-            m2 <- max(nchar(sapply(s, `[`, 2)), na.rm = TRUE)
+            decimals <- strsplit(as.character(col), ".", fixed = TRUE)
+            m1 <- max(nchar(unlist(lapply(decimals, `[`, 1))), na.rm = TRUE)
+            decimals_2 <- unlist(lapply(decimals, `[`, 2))
+            decimals_2_nchar <- nchar(decimals_2[!is.na(decimals_2)])
+            if (length(decimals_2_nchar)) {
+                m2 <- max(decimals_2_nchar, na.rm = TRUE)
+            } else {
+                m2 <- 0
+            }
             if (!is.finite(m2)) {
                 m2 <- digits
             }
@@ -130,19 +136,19 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 
 #' @export
 .export.rio_feather <- function(file, x, ...) {
-    requireNamespace("feather", quietly = TRUE)
+    requireNamespace("feather")
     feather::write_feather(x = x, path = file)
 }
 
 #' @export
 .export.rio_fst <- function(file, x, ...) {
-    requireNamespace("fst", quietly = TRUE)
+    requireNamespace("fst")
     fst::write.fst(x = x, path = file, ...)
 }
 
 #' @export
 .export.rio_matlab <- function(file, x, ...) {
-    requireNamespace("rmatio", quietly = TRUE)
+    requireNamespace("rmatio")
     rmatio::write.mat(object = x, filename = file, ...)
 }
 
@@ -167,6 +173,13 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
     write_sas(data = x, path = file, ...)
 }
 
+#' @importFrom haven write_xpt
+#' @export
+.export.rio_xpt <- function(file, x, ...) {
+    x <- restore_labelled(x)
+    haven::write_xpt(data = x, path = file, ...)
+}
+
 #' @importFrom foreign write.dbf
 #' @export
 .export.rio_dbf <- function(file, x, ...) {
@@ -175,7 +188,7 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 
 #' @export
 .export.rio_json <- function(file, x, ...) {
-    requireNamespace("jsonlite", quietly = TRUE)
+    requireNamespace("jsonlite")
     cat(jsonlite::toJSON(x, ...), file = file)
 }
 
@@ -187,46 +200,45 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 
 #' @importFrom openxlsx write.xlsx
 #' @export
-.export.rio_xlsx <- function(file, x, overwrite = TRUE, which, ...) {
+.export.rio_xlsx <- function(file, x, which, ...) {
     dots <- list(...)
-    if (isTRUE(overwrite) || !file.exists(file)) {
-        if (!missing(which)) {
-            openxlsx::write.xlsx(x = x, file = file, sheetName = which, ...)
-        } else {
-            openxlsx::write.xlsx(x = x, file = file, ...)
-        }
-    } else {
-        wb <- openxlsx::loadWorkbook(file = file)
-        sheets <- openxlsx::getSheetNames(file = file)
-        if (is.data.frame(x)) {
-            if (missing(which)) {
-                which <- paste("Sheet", length(sheets)+1)
+    if (!missing(which)) {
+        if (file.exists(file)) {
+            wb <- openxlsx::loadWorkbook(file = file)
+            sheets <- openxlsx::getSheetNames(file = file)
+            if (is.numeric(which)) {
+                if (which <= length(sheets)) {
+                    which <- sheets[which]
+                } else {
+                    which <- paste("Sheet", length(sheets) + 1L)
+                }
             }
             if (!which %in% sheets) {
                 openxlsx::addWorksheet(wb, sheet = which)
+            } else {
+                openxlsx::removeWorksheet(wb, sheet = which)
+                openxlsx::addWorksheet(wb, sheet = which)
+                openxlsx::worksheetOrder(wb) <- sheets
             }
             openxlsx::writeData(wb, sheet = which, x = x)
             openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
         } else {
-            wb <- openxlsx::loadWorkbook(file = file)
-            mapply(function(sheet, dat) {
-                openxlsx::addWorksheet(wb, sheet = sheet)
-                openxlsx::writeData(wb, sheet = sheet, x = dat)
-            }, names(x), x)
-            openxlsx::saveWorkbook(wb, file = file, overwrite = TRUE)
+            openxlsx::write.xlsx(x = x, file = file, sheetName = which, ...)
         }
+    } else {
+        openxlsx::write.xlsx(x = x, file = file, ...)
     }
 }
 
 #' @export
 .export.rio_ods <- function(file, x, ...) {
-    requireNamespace("readODS", quietly = TRUE)
+    requireNamespace("readODS")
     readODS::write_ods(x = x, path = file)
 }
 
 #' @export
 .export.rio_html <- function(file, x, ...) {
-    requireNamespace("xml2", quietly = TRUE)
+    requireNamespace("xml2")
     html <- xml2::read_html("<!doctype html><html><head>\n<title>R Exported Data</title>\n</head><body>\n</body>\n</html>")
     bod <- xml2::xml_children(html)[[2]]
     if (is.data.frame(x)) {
@@ -247,7 +259,7 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 
 #' @export
 .export.rio_xml <- function(file, x, ...) {
-    requireNamespace("xml2", quietly = TRUE)
+    requireNamespace("xml2")
     root <- ""
     xml <- xml2::read_xml(paste0("<",as.character(substitute(x)),">\n</",as.character(substitute(x)),">\n"))
     att <- attributes(x)[!names(attributes(x)) %in% c("names", "row.names", "class")]
@@ -268,12 +280,12 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 
 #' @export
 .export.rio_yml <- function(file, x, ...) {
-    requireNamespace("yaml", quietly = TRUE)
+    requireNamespace("yaml")
     cat(yaml::as.yaml(x, ...), file = file)
 }
 
 #' @export
 .export.rio_clipboard <- function(file, x, row.names = FALSE, col.names = TRUE, sep = "\t", ...) {
-    requireNamespace("clipr", quietly = TRUE)
+    requireNamespace("clipr")
     clipr::write_clip(content = x, row.names = row.names, col.names = col.names, sep = sep, ...)
 }

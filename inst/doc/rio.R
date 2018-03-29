@@ -49,14 +49,6 @@ export(list(mtcars = mtcars, iris = iris), "multi.rdata")
 ## as a character vector
 export(c("mtcars", "iris"), "multi.rdata")
 
-## ---- echo=FALSE, results='hide'-----------------------------------------
-unlink("mtcars.csv")
-unlink("mtcars.rds")
-unlink("mtcars.rdata")
-unlink("mtcars.dta")
-unlink("multisheet.xlsx")
-unlink("mtcars2.dta")
-
 ## ------------------------------------------------------------------------
 # create file to convert
 export(mtcars, "mtcars.dta")
@@ -81,4 +73,13 @@ unlink("mtcars.dta")
 unlink("mtcars.sav")
 unlink("fwf.csv")
 unlink(fwf)
+
+## ---- echo=FALSE, results='hide'-----------------------------------------
+unlink("mtcars.csv")
+unlink("mtcars.rds")
+unlink("mtcars.rdata")
+unlink("mtcars.dta")
+unlink("multi.xlsx")
+unlink("multi.rdata")
+unlink("mtcars2.dta")
 

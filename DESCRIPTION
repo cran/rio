@@ -1,8 +1,8 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 0.5.9
-Date: 2018-02-01
+Version: 0.5.10
+Date: 2018-03-29
 Authors@R: c(person("Jason", "Becker", role = "ctb", email = "jason@jbecker.co"),
              person("Chung-hong", "Chan", role = "aut", email = "chainsawtiney@gmail.com"),
              person("Geoffrey CH", "Chan", role = "ctb", email = "gefchchan@gmail.com"),
@@ -35,7 +35,7 @@ License: GPL-2
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2018-02-01 13:51:00 UTC; THOMAS
+Packaged: 2018-03-29 13:26:22 UTC; THOMAS
 Author: Jason Becker [ctb],
   Chung-hong Chan [aut],
   Geoffrey CH Chan [ctb],
@@ -47,4 +47,4 @@ Author: Jason Becker [ctb],
   Ruaridh Williamson [ctb]
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-02-01 22:46:10 UTC
+Date/Publication: 2018-03-29 15:33:35 UTC

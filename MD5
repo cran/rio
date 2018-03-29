@@ -1,6 +1,6 @@
-4014a7d3df82e9f7a52b57499ded802c *DESCRIPTION
+8b762d743429fb032fd0d05c82e1ec54 *DESCRIPTION
 15cb8ee7a64cd3b48fed5553d2528c04 *NAMESPACE
-a3f9adfbf23e5688528685cc191cac1c *NEWS.md
+2be1e40af1c769b380386bf775c25d14 *NEWS.md
 047d38091d45f9bcfc2de79495904b56 *R/characterize.R
 eb96c9e96be8342f7a2196da1bff6d85 *R/compression.R
 ece71400f346a3819319159d31c31528 *R/convert.R
@@ -20,11 +20,10 @@ fe54cc4852e42b207bbc9b35d6f91826 *R/import_list.R
 fc9cea730cf67b171eb73bbc854a0db9 *R/standardize_attributes.R
 5c9b821b5ffb606d73669fc628fe9ccf *R/suggestions.R
 2027a6067949e1c11ce32277836881b4 *R/utils.R
-c69a7dda45abb54e18b00cc961f434d4 *README.md
-c5b3f4ac363fa655cebf7fe65f35fc68 *build/vignette.rds
+32b3f7a9e6aed28a30b5f9ee94a216df *README.md
+9dd09b19c729a6c654e1d84e5bc774a3 *build/vignette.rds
 14c89f2f803b3e165ef08455992f1b13 *inst/CITATION
-58942874dad77a54dfa839a27ac45829 *inst/doc/rio.R
-587aec845cbfbf4f98fdb371ca9cfdf2 *inst/doc/rio.Rmd
+40226e37d2a8d67a16c83972910cad72 *inst/doc/rio.R
 9a94744252b2f492f80c3b94fdb8d220 *inst/doc/rio.html
 ac82e5ea6d23f3b50f69d07b5f5afb77 *inst/examples/example.csvy
 d939406722129d3bed0bb2c7f9ffd715 *inst/examples/mtcars.ods
@@ -51,7 +50,7 @@ d4a551ae76ef27ab803bed3aa5b84fec *tests/testthat/test_format_R.R
 8bbca02a695deb56ac769120af97e989 *tests/testthat/test_format_arff.R
 44a96d1a12c3d9091cce7d784ed9c186 *tests/testthat/test_format_csv.R
 e298ca2a83849c7863e172f07173d85b *tests/testthat/test_format_csv_gz.R
-82f998490ddd2fcb9c1e2bee637393b9 *tests/testthat/test_format_csvy.R
+0d03799f35da12c798afbe70d85a1464 *tests/testthat/test_format_csvy.R
 be299e41160073b4fcf3f4310816d2a1 *tests/testthat/test_format_dbf.R
 316cbcce32fefe11b940cf781961855f *tests/testthat/test_format_dif.R
 b28a193c9d8a867050d83f8a28548f71 *tests/testthat/test_format_dta.R
@@ -81,6 +80,6 @@ b0a4f35560ea366ac1f114df14b3d048 *tests/testthat/test_format_json.R
 69a9707882034aa55867550689b80d8c *tests/testthat/test_import_list.R
 09f840ac0065851a918c24005246aa0b *tests/testthat/test_install_formats.R
 2aa8667e47a80911af08bfcb4fde6e6e *tests/testthat/test_matrix.R
-0f65938c7ca6b43ad264d10bc8817eea *tests/testthat/test_remote.R
+7912f2a4e5d8e48b5839548bf37211b0 *tests/testthat/test_remote.R
 72df21c812b9396938fdd5918a9cf03a *tests/testthat/test_set_class.R
-587aec845cbfbf4f98fdb371ca9cfdf2 *vignettes/rio.Rmd
+ac229c7b7bf3b6d6b0a18a42f60651c0 *vignettes/rio.Rmd

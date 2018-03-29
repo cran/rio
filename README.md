@@ -75,7 +75,7 @@ str(import_list("mtcars.xlsx"))
 
 ```
 ## List of 2
-##  $ :'data.frame':	32 obs. of  11 variables:
+##  $ mtcars:'data.frame':	32 obs. of  11 variables:
 ##   ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
 ##   ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...
 ##   ..$ disp: num [1:32] 160 160 108 258 360 ...
@@ -87,7 +87,7 @@ str(import_list("mtcars.xlsx"))
 ##   ..$ am  : num [1:32] 1 1 1 0 0 0 0 0 0 0 ...
 ##   ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...
 ##   ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...
-##  $ :'data.frame':	150 obs. of  5 variables:
+##  $ iris  :'data.frame':	150 obs. of  5 variables:
 ##   ..$ Sepal.Length: num [1:150] 5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 ##   ..$ Sepal.Width : num [1:150] 3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
 ##   ..$ Petal.Length: num [1:150] 1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
@@ -207,11 +207,11 @@ The core advantage of **rio** is that it makes assumptions that the user is prob
 
 ## Package Installation
 
-[![CRAN Version](http://www.r-pkg.org/badges/version/rio)](https://cran.r-project.org/package=rio)
-![Downloads](http://cranlogs.r-pkg.org/badges/rio)
+[![CRAN Version](https://www.r-pkg.org/badges/version/rio)](https://cran.r-project.org/package=rio)
+![Downloads](https://cranlogs.r-pkg.org/badges/rio)
 [![Travis-CI Build Status](https://travis-ci.org/leeper/rio.png?branch=master)](https://travis-ci.org/leeper/rio)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/40ua5l06jw0gjyjb?svg=true)](https://ci.appveyor.com/project/leeper/rio)
-[![codecov.io](http://codecov.io/github/leeper/rio/coverage.svg?branch=master)](http://codecov.io/github/leeper/rio?branch=master)
+[![codecov.io](https://codecov.io/github/leeper/rio/coverage.svg?branch=master)](https://codecov.io/github/leeper/rio?branch=master)
 
 The package is available on [CRAN](https://cran.r-project.org/package=rio) and can be installed directly in R using `install.packages()`. You may want to run `install_formats()` after the first installation.
 

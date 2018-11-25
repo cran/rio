@@ -1,4 +1,9 @@
-# rio: A Swiss-Army Knife for Data I/O
+---
+title: 'rio: A Swiss-Army Knife for Data I/O'
+output: github_document
+---
+
+<img src="man/figures/logo.png" align="right" />
 
 The aim of **rio** is to make data file I/O in R as easy as possible by implementing four simple functions in Swiss-army knife style:
 
@@ -147,6 +152,7 @@ The full list of supported formats is below:
 | Fixed-width format data | .fwf | **utils** | **utils** | Yes |
 | gzip comma-separated data | .csv.gz | **utils** | **utils** | Yes |
 | CSVY (CSV + YAML metadata header) | .csvy | [**csvy**](https://cran.r-project.org/package=csvy) | [**csvy**](https://cran.r-project.org/package=csvy) | No |
+| EViews | .wf1 | [**hexView**](https://cran.r-project.org/package=hexView) |  | No |
 | Feather R/Python interchange format | .feather | [**feather**](https://cran.r-project.org/package=feather) | [**feather**](https://cran.r-project.org/package=feather) | No |
 | Fast Storage | .fst | [**fst**](https://cran.r-project.org/package=fst) | [**fst**](https://cran.r-project.org/package=fst) | No |
 | JSON | .json | [**jsonlite**](https://cran.r-project.org/package=jsonlite) | [**jsonlite**](https://cran.r-project.org/package=jsonlite) | No |
@@ -203,7 +209,6 @@ The core advantage of **rio** is that it makes assumptions that the user is prob
       In addition, two functions (added in v0.5.5) provide easy ways to create character and factor variables from these "labels" attributes. `characterize()` converts a single variable or all variables in a data frame that have "labels" attributes into character vectors based on the mapping of values to value labels. `factorize()` does the same but returns factor variables. This can be especially helpful for converting these rich file formats into open formats (e.g., `export(characterize(import("file.dta")), "file.csv")`.
  
  8. **rio** imports and exports files based on an internal S3 class infrastructure. This means that other packages can contain extensions to **rio** by registering S3 methods. These methods should take the form `.import.rio_X()` and `.export.rio_X()`, where `X` is the file extension of a file type. An example is provided in the [rio.db package](https://github.com/leeper/rio.db).
- 
 
 ## Package Installation
 
@@ -220,13 +225,11 @@ install.packages("rio")
 install_formats()
 ```
 
-The latest development version on GitHub can be installed using [**ghit**](https://github.com/cloudyr/ghit), a lightweight alternative to `devtools::install_github()`:
+The latest development version on GitHub can be installed using:
 
 ```R
-if(!require("ghit")){
-    install.packages("ghit")
+if (!require("remotes")){
+    install.packages("remotes")
 }
-ghit::install_github("leeper/rio")
+remotes::install_github("leeper/rio")
 ```
-
-Because of how **ghit** handles Suggests packages, you do not need to run `install_formats()` when installing directly from GitHub.

@@ -23,8 +23,8 @@
 #'     \item SPSS Portable Files (.por), using \code{\link[haven]{read_por}}.
 #'     \item Excel (.xls and .xlsx), using \code{\link[readxl]{read_excel}}. Use \code{which} to specify a sheet number. For .xlsx files, it is possible to set \code{readxl = FALSE}, so that \code{\link[openxlsx]{read.xlsx}} can be used instead of readxl (the default).
 #'     \item R syntax object (.R), using \code{\link[base]{dget}}
-#'     \item Saved R objects (.RData,.rda), using \code{\link[base]{load}} for single-object .Rdata files. Use \code{which} to specify an object name for multi-object .Rdata files.
-#'     \item Serialized R objects (.rds), using \code{\link[base]{readRDS}}
+#'     \item Saved R objects (.RData,.rda), using \code{\link[base]{load}} for single-object .Rdata files. Use \code{which} to specify an object name for multi-object .Rdata files. This can be any R object (not just a data frame).
+#'     \item Serialized R objects (.rds), using \code{\link[base]{readRDS}}. This can be any R object (not just a data frame).
 #'     \item Epiinfo (.rec), using \code{\link[foreign]{read.epiinfo}}
 #'     \item Minitab (.mtp), using \code{\link[foreign]{read.mtp}}
 #'     \item Systat (.syd), using \code{\link[foreign]{read.systat}}
@@ -39,6 +39,7 @@
 #'     \item Fast storage (.fst), using \code{\link[fst]{read.fst}}
 #'     \item JSON (.json), using \code{\link[jsonlite]{fromJSON}}
 #'     \item Matlab (.mat), using \code{\link[rmatio]{read.mat}}
+#'     \item EViews (.wf1), using \code{\link[hexView]{readEViews}}
 #'     \item OpenDocument Spreadsheet (.ods), using \code{\link[readODS]{read_ods}}.  Use \code{which} to specify a sheet number.
 #'     \item Single-table HTML documents (.html), using \code{\link[xml2]{read_html}}. The data structure will only be read correctly if the HTML file can be converted to a list via \code{\link[xml2]{as_list}}.
 #'     \item Shallow XML documents (.xml), using \code{\link[xml2]{read_xml}}. The data structure will only be read correctly if the XML file can be converted to a list via \code{\link[xml2]{as_list}}.
@@ -110,29 +111,37 @@ import <- function(file, format, setclass, which, ...) {
     if (missing(format)) {
         fmt <- get_ext(file)
         if (fmt %in% c("gz", "gzip")) {
-            fmt <- file_ext(file_path_sans_ext(file, compression = FALSE))
+            fmt <- tools::file_ext(tools::file_path_sans_ext(file, compression = FALSE))
             file <- gzfile(file)
+        } else {
+            fmt <- get_type(fmt)
         }
     } else {
         fmt <- get_type(format)
     }
-
+    
+    args_list <- list(...)
+    
     class(file) <- c(paste0("rio_", fmt), class(file))
     if (missing(which)) {
         x <- .import(file = file, ...)
     } else {
         x <- .import(file = file, which = which, ...)
     }
-
-    a <- list(...)
+    
+    # if R serialized object, just return it without setting object class
+    if (inherits(file, "rio_rdata") || inherits(file, "rio_rds")) {
+        return(x)
+    }
+    # otherwise, make sure it's a data frame (or requested class)
     if (missing(setclass) || is.null(setclass)) {
-        if ("data.table" %in% names(a) && isTRUE(a[["data.table"]])) {
+        if ("data.table" %in% names(args_list) && isTRUE(args_list[["data.table"]])) {
             return(set_class(x, class = "data.table"))
         } else {
             return(set_class(x, class = "data.frame"))
         }
     } else {
-        if ("data.table" %in% names(a) && isTRUE(a[["data.table"]])) {
+        if ("data.table" %in% names(args_list) && isTRUE(args_list[["data.table"]])) {
             if (setclass != "data.table") {
                 warning(sprintf("'data.table = TRUE' argument overruled. Using setclass = '%s'", setclass))
                 return(set_class(x, class = setclass))
@@ -143,5 +152,4 @@ import <- function(file, format, setclass, which, ...) {
             return(set_class(x, class = setclass))
         }
     }
-
 }

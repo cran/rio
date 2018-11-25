@@ -40,8 +40,8 @@ This function imports a data frame or matrix from a data file with the file form
     \item SPSS Portable Files (.por), using \code{\link[haven]{read_por}}.
     \item Excel (.xls and .xlsx), using \code{\link[readxl]{read_excel}}. Use \code{which} to specify a sheet number. For .xlsx files, it is possible to set \code{readxl = FALSE}, so that \code{\link[openxlsx]{read.xlsx}} can be used instead of readxl (the default).
     \item R syntax object (.R), using \code{\link[base]{dget}}
-    \item Saved R objects (.RData,.rda), using \code{\link[base]{load}} for single-object .Rdata files. Use \code{which} to specify an object name for multi-object .Rdata files.
-    \item Serialized R objects (.rds), using \code{\link[base]{readRDS}}
+    \item Saved R objects (.RData,.rda), using \code{\link[base]{load}} for single-object .Rdata files. Use \code{which} to specify an object name for multi-object .Rdata files. This can be any R object (not just a data frame).
+    \item Serialized R objects (.rds), using \code{\link[base]{readRDS}}. This can be any R object (not just a data frame).
     \item Epiinfo (.rec), using \code{\link[foreign]{read.epiinfo}}
     \item Minitab (.mtp), using \code{\link[foreign]{read.mtp}}
     \item Systat (.syd), using \code{\link[foreign]{read.systat}}
@@ -56,6 +56,7 @@ This function imports a data frame or matrix from a data file with the file form
     \item Fast storage (.fst), using \code{\link[fst]{read.fst}}
     \item JSON (.json), using \code{\link[jsonlite]{fromJSON}}
     \item Matlab (.mat), using \code{\link[rmatio]{read.mat}}
+    \item EViews (.wf1), using \code{\link[hexView]{readEViews}}
     \item OpenDocument Spreadsheet (.ods), using \code{\link[readODS]{read_ods}}.  Use \code{which} to specify a sheet number.
     \item Single-table HTML documents (.html), using \code{\link[xml2]{read_html}}. The data structure will only be read correctly if the HTML file can be converted to a list via \code{\link[xml2]{as_list}}.
     \item Shallow XML documents (.xml), using \code{\link[xml2]{read_xml}}. The data structure will only be read correctly if the XML file can be converted to a list via \code{\link[xml2]{as_list}}.

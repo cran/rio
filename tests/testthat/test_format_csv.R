@@ -14,8 +14,12 @@ test_that("Import from CSV", {
 test_that("Import from (European-style) CSV with semicolon separator", {
     write.table(iris, "iris2.csv", dec = ",", sep = ";", row.names = FALSE)
     expect_true("iris2.csv" %in% dir())
-    expect_true(is.data.frame(import("iris2.csv", dec = ",", sep = ";", fread = TRUE, header = TRUE)))
-    expect_true(is.data.frame(import("iris2.csv", dec = ",", sep = ";", fread = FALSE, header = TRUE)))
+    # import works (even if column classes are incorrect)
+    expect_true(is.data.frame(import("iris2.csv", fread = TRUE, header = TRUE)))
+    iris_imported <- import("iris2.csv", format = ";", fread = TRUE, header = TRUE)
+    # import works with correct, numeric column classes
+    expect_true(is.data.frame(iris_imported))
+    expect_true(is.numeric(iris_imported[["Sepal.Length"]]))
 })
 
 
@@ -41,7 +45,7 @@ test_that("Import from TSV with CSV extension", {
     expect_true(ncol(import("iris.csv")) == 5L)
     expect_true(ncol(import("iris.csv", format = "tsv")) == 5L)
     expect_true(ncol(import("iris.csv", format = "tsv", sep = "\t")) == 5L)
-    expect_true(ncol(import("iris.csv", sep = ",")) == 1L)
+    expect_true(ncol(import("iris.csv", sep = ",")) == 5L) # use `data.table::fread(sep = "auto")` even if `sep` set explicitly to ","
     expect_true(ncol(import("iris.csv", format = "csv")) == 5L)
     expect_true(ncol(import("iris.csv", sep = "auto")) == 5L)
 })

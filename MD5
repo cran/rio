@@ -1,6 +1,6 @@
-98573b49a341eb93caec5c19cd6d74ea *DESCRIPTION
+7eedc1d4db696f355c6353b51fe09200 *DESCRIPTION
 6ec4bfac4ed9a68e6486c3f790ce1de4 *NAMESPACE
-7eda9e2d59baa7b85cff7f5a506befda *NEWS.md
+d2c3a081a490eda7d087646b1085cc66 *NEWS.md
 047d38091d45f9bcfc2de79495904b56 *R/characterize.R
 d42c68d5d3da2d2e7b4e7f06bc02cf1f *R/compression.R
 ece71400f346a3819319159d31c31528 *R/convert.R
@@ -17,7 +17,7 @@ fe54cc4852e42b207bbc9b35d6f91826 *R/import_list.R
 fc76fbc9642538df62dc1c962d9d78bb *R/remote_to_local.R
 70fa904a0f4ff34abebc618a51fc99fa *R/rio.R
 ddbb7c668d70897889488d7e6c72911c *R/set_class.R
-80c7444c400acdad3fa238cf9ba6e42d *R/standardize_attributes.R
+06e85968e4e0743f838de222bd1b7966 *R/standardize_attributes.R
 f0fc2bf7d08ecf609f325e98ddde0654 *R/suggestions.R
 c191b7c5ffeaae5af78cbc8a2972d8c6 *R/utils.R
 ca032b066dd88ca773ac242e3ccc31e4 *README.md

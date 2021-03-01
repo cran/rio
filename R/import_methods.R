@@ -1,43 +1,34 @@
 #' @importFrom data.table fread
-import_delim <-
-function(file, which = 1, fread = TRUE, sep = "auto", 
-         header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
+import_delim <-  
+  function(file, which = 1, fread = TRUE, sep = "auto", 
+           header = "auto", stringsAsFactors = FALSE, data.table = FALSE, ...) {
     if (isTRUE(fread) & !inherits(file, "connection")) {
-        dots <- list(...)
-        dots[["input"]] <- file
-        dots[["sep"]] <- sep
-        dots[["header"]] <- header
-        dots[["stringsAsFactors"]] <- stringsAsFactors
-        dots[["data.table"]] <- data.table
-        do.call("fread", dots)
+      arg_reconcile(data.table::fread, input = file, sep = sep, header = header,
+                    stringsAsFactors = stringsAsFactors, 
+                    data.table = data.table, ..., .docall = TRUE)
     } else {
-        if (isTRUE(fread) & inherits(file, "connection")) {
-            message("data.table::fread() does not support reading from connections. Using utils::read.table() instead.")
-        }
-        dots <- list(...)
-        dots[["file"]] <- file
-        if (missing(sep) || is.null(sep) || sep == "auto") {
-            if (inherits(file, "rio_csv")) {
-                dots[["sep"]] <- ","
-            } else if (inherits(file, "rio_csv2")) {
-                dots[["sep"]] <- ";"
-            } else if (inherits(file, "rio_psv")) {
-                dots[["sep"]] <- "|"
-            } else {
-                dots[["sep"]] <- "\t"
-            }
+      if (isTRUE(fread) & inherits(file, "connection")) {
+        message("data.table::fread() does not support reading from connections. Using utils::read.table() instead.")
+      }
+      if (missing(sep) || is.null(sep) || sep == "auto") {
+        if (inherits(file, "rio_csv")) {
+          sep <- ","
+        } else if (inherits(file, "rio_csv2")) {
+          sep <- ";"
+        } else if (inherits(file, "rio_psv")) {
+          sep <- "|"
         } else {
-            dots[["sep"]] <- sep
+          sep <- "\t"
         }
-        if (missing(header) || is.null(header) || header == "auto") {
-            dots[["header"]] <- TRUE
-        } else {
-            dots[["header"]] <- header
-        }
-        dots[["stringsAsFactors"]] <- stringsAsFactors
-        do.call("read.table", dots)
+      }
+      if (missing(header) || is.null(header) || header == "auto") {
+        header <- TRUE
+      }
+      arg_reconcile(utils::read.table, file=file, sep=sep, header=header, 
+                    stringsAsFactors = stringsAsFactors, ..., .docall = TRUE)
     }
-}
+  }
+
 
 #' @export
 .import.rio_dat <- function(file, which = 1, ...) {
@@ -63,6 +54,11 @@ function(file, which = 1, fread = TRUE, sep = "auto",
 #' @export
 .import.rio_csv2 <- function(file, sep = ";", which = 1, fread = TRUE, dec = if (sep %in% c(";", "auto")) "," else ".", ...) {
     import_delim(file = file, sep = if (sep == ";") "auto" else sep, fread = fread, dec = dec, ...)
+}
+
+#' @export
+.import.rio_csvy <- function(file, sep = ",", which = 1, fread = TRUE, dec = if (sep %in% c(",", "auto")) "." else ",", yaml = TRUE, ...) {
+    import_delim(file = file, sep = if (sep == ",") "auto" else sep, fread = fread, dec = dec, yaml = yaml, ...)
 }
 
 #' @export
@@ -143,19 +139,38 @@ function(file,
 }
 
 #' @export
-.import.rio_rds <- function(file, which = 1, ...) {
-    readRDS(file = file, ...)
+.import.rio_dump <- function(file, which = 1, envir = new.env(), ...) {
+    source(file = file, local = envir)
+    if (length(list(...)) > 0) {
+      warning("File imported using load. Arguments to '...' ignored.")
+    }
+    if (missing(which)) {
+        if (length(ls(envir)) > 1) {
+            warning("Dump file contains multiple objects. Returning first object.")
+        }
+        which <- 1
+    }
+    if (is.numeric(which)) {
+        get(ls(envir)[which], envir)
+    } else {
+        get(ls(envir)[grep(which, ls(envir))[1]], envir)
+    }
 }
 
 #' @export
-.import.rio_csvy <- function(file, which = 1, ...) {
-    requireNamespace("csvy")
-    csvy::read_csvy(file = file, ...)
+.import.rio_rds <- function(file, which = 1, ...) {
+  if (length(list(...))>0) {
+    warning("File imported using readRDS. Arguments to '...' ignored.")
+  }
+  readRDS(file = file)
 }
 
 #' @export
 .import.rio_rdata <- function(file, which = 1, envir = new.env(), ...) {
-    load(file = file, envir = envir, ...)
+    load(file = file, envir = envir)
+    if (length(list(...)) > 0) {
+      warning("File imported using load. Arguments to '...' ignored.")
+    }
     if (missing(which)) {
         if (length(ls(envir)) > 1) {
             warning("Rdata file contains multiple objects. Returning first object.")
@@ -194,30 +209,23 @@ function(file,
 #' @importFrom haven read_dta
 #' @export
 .import.rio_dta <- function(file, haven = TRUE,
-                            convert.dates = TRUE,
-                            convert.factors = FALSE,
-                            missing.type = FALSE, ...) {
-    if (isTRUE(haven)) {
-        a <- list(...)
-        if (length(a)) {
-            warning("File imported using haven. Arguments to '...' ignored.")
-        }
-        standardize_attributes(haven::read_dta(file = file))
-    } else {
-        out <- foreign::read.dta(file = file,
-                    convert.dates = convert.dates,
-                    convert.factors = convert.factors,
-                    missing.type = missing.type, ...)
-        attr(out, "expansion.fields") <- NULL
-        attr(out, "time.stamp") <- NULL
-        standardize_attributes(out)
-    }
+                               convert.factors = FALSE,...) {
+  if (isTRUE(haven)) {
+    arg_reconcile(haven::read_dta, file = file, ..., .docall = TRUE,
+                  .finish = standardize_attributes)
+  } else {
+    out <- arg_reconcile(foreign::read.dta, file = file,
+                         convert.factors = convert.factors, ..., .docall = TRUE)
+    attr(out, "expansion.fields") <- NULL
+    attr(out, "time.stamp") <- NULL
+    standardize_attributes(out)
+  }
 }
 
 #' @importFrom foreign read.dbf
 #' @export
-.import.rio_dbf <- function(file, which = 1, ...) {
-    foreign::read.dbf(file = file, ...)
+.import.rio_dbf <- function(file, which = 1, as.is = TRUE, ...) {
+    foreign::read.dbf(file = file, as.is = as.is)
 }
 
 #' @importFrom utils read.DIF
@@ -236,6 +244,12 @@ function(file,
         standardize_attributes(foreign::read.spss(file = file, to.data.frame = to.data.frame,
                                          use.value.labels = use.value.labels, ...))
     }
+}
+
+#' @importFrom haven read_sav
+#' @export
+.import.rio_zsav <- function(file, which = 1, ...) {
+    standardize_attributes(haven::read_sav(file = file))
 }
 
 #' @importFrom haven read_por
@@ -294,40 +308,26 @@ function(file,
 #' @importFrom readxl read_xls
 #' @export
 .import.rio_xls <- function(file, which = 1, ...) {
-
-    Call <- match.call(expand.dots = TRUE)
-    if ("which" %in% names(Call)) {
-        Call$sheet <- Call$which
-        Call$which <- NULL
-    }
-
-    Call$path <- file
-    Call$file <- NULL
-    Call$readxl <- NULL
-    Call[[1L]] <- as.name("read_xls")
-    eval.parent(Call)
+  requireNamespace("readxl")
+  arg_reconcile(read_xls, path = file, ..., sheet = which,
+                .docall = TRUE,
+                .remap = c(colNames = 'col_names', na.strings = 'na'))
 }
 
 #' @importFrom readxl read_xlsx
 #' @importFrom openxlsx read.xlsx
 #' @export
 .import.rio_xlsx <- function(file, which = 1, readxl = TRUE, ...) {
-
-    a <- list(...)
-    if ("sheet" %in% names(a)) {
-        which <- a[["sheet"]]
-        a[["sheet"]] <- NULL
-    }
     if (isTRUE(readxl)) {
         requireNamespace("readxl")
-        if ("rows" %in% names(a)) {
-            warning("'rows' argument ignored when readxl = TRUE. Use 'range' instead.")
-            a[["rows"]] <- NULL
-        }
-        do.call("read_xlsx", c(list(path = file, sheet = which), a))
+        arg_reconcile(read_xlsx, path = file, ..., sheet = which,
+                      .docall = TRUE,
+                      .remap = c(colNames = 'col_names', na.strings = 'na'))
     } else {
         requireNamespace("openxlsx")
-        do.call("read.xlsx", c(list(xlsxFile = file, sheet = which), a))
+        arg_reconcile(read.xlsx, xlsxFile = file, ..., sheet = which,
+        .docall = TRUE,
+        .remap = c(col_names = 'colNames', na = 'na.strings'))
     }
 }
 
@@ -343,7 +343,29 @@ function(file,
 #' @export
 .import.rio_ods <- function(file, which = 1, header = TRUE, ...) {
     requireNamespace("readODS")
-    readODS::read_ods(path = file, sheet = which, col_names = header, ...)
+    "read_ods" <- readODS::read_ods
+    a <- list(...)
+    if ("sheet" %in% names(a)) {
+        which <- a[["sheet"]]
+        a[["sheet"]] <- NULL
+    }
+    if ("col_names" %in% names(a)) {
+        header <- a[["col_names"]]
+        a[["col_names"]] <- NULL
+    }
+    frml <- formals(readODS::read_ods)
+    unused <- setdiff(names(a), names(frml))
+    if ("path" %in% names(a)) {
+        unused <- c(unused, 'path')
+        a[["path"]] <- NULL
+    }
+    if (length(unused)>0) {
+        warning("The following arguments were ignored for read_ods:\n",
+                paste(unused, collapse = ', '))
+    }
+    a <- a[intersect(names(a), names(frml))]
+    do.call("read_ods",
+            c(list(path = file, sheet = which, col_names = header),a))
 }
 
 #' @importFrom utils type.convert
@@ -370,9 +392,27 @@ function(file,
     d
 }
 
+# This is a helper function for .import.rio_html
+extract_html_row <- function(x, empty_value) {
+  # Both <th> and <td> are valid for table data, and <th> may be used when
+  # there is an accented element (e.g. the first row of the table)
+  to_extract <- x[names(x) %in% c("th", "td")]
+  # Insert a value into cells that eventually will become empty cells (or they
+  # will be dropped and the table will not be generated).  Note that this more
+  # complex code for finding the length is required because of html like
+  # <td><br/></td>
+  unlist_length <-
+    sapply(
+      lapply(to_extract, unlist),
+      length
+    )
+  to_extract[unlist_length == 0] <- list(empty_value)
+  unlist(to_extract)
+}
+
 #' @importFrom utils type.convert
 #' @export
-.import.rio_html <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
+.import.rio_html <- function(file, which = 1, stringsAsFactors = FALSE, ..., empty_value = "") {
     # find all tables
     tables <- xml2::xml_find_all(xml2::read_html(unclass(file)), ".//table")
     if (which > length(tables)) {
@@ -380,22 +420,24 @@ function(file,
     }
     x <- xml2::as_list(tables[[which]])
     if ("tbody" %in% names(x)) {
-        x <- x[["tbody"]]
+        # Note that "tbody" may be specified multiple times in a valid html table
+        x <- unlist(x[names(x) %in% "tbody"], recursive=FALSE)
     }
     # loop row-wise over the table and then rbind()
     ## check for table header to use as column names
+    col_names <- NULL
     if ("th" %in% names(x[[1]])) {
-        col_names <- unlist(x[[1]][names(x[[1]]) %in% "th"])
-        out <- do.call("rbind", lapply(x[-1], function(y) {
-            unlist(y[names(y) %in% "td"])
-        }))
-        colnames(out) <- col_names
-    } else {
-        out <- do.call("rbind", lapply(x, function(y) {
-            unlist(y[names(y) %in% "td"])
-        }))
-        colnames(out) <- paste0("V", seq_len(ncol(out)))
+      col_names <- extract_html_row(x[[1]], empty_value=empty_value)
+      # Drop the first row since column names have already been extracted from it.
+      x <- x[-1]
     }
+    out <- do.call("rbind", lapply(x, extract_html_row, empty_value=empty_value))
+    colnames(out) <-
+      if (is.null(col_names)) {
+        paste0("V", seq_len(ncol(out)))
+      } else {
+        col_names
+      }
     out <- as.data.frame(out, ..., stringsAsFactors = stringsAsFactors)
     # set row names
     rownames(out) <- 1:nrow(out)
@@ -407,7 +449,7 @@ function(file,
 #' @export
 .import.rio_yml <- function(file, which = 1, stringsAsFactors = FALSE, ...) {
     requireNamespace("yaml")
-    as.data.frame(yaml::yaml.load(file, ...), stringsAsFactors = stringsAsFactors)
+    as.data.frame(yaml::read_yaml(file, ...), stringsAsFactors = stringsAsFactors)
 }
 
 #' @export
@@ -420,4 +462,16 @@ function(file,
 .import.rio_clipboard <- function(file = "clipboard", which = 1, header = TRUE, sep = "\t", ...) {
     requireNamespace("clipr")
     clipr::read_clip_tbl(x = clipr::read_clip(), header = header, sep = sep, ...)
+}
+
+#' @export
+.import.rio_pzfx <- function(file, which=1, ...) {
+    requireNamespace("pzfx")
+    pzfx::read_pzfx(path=file, table=which, ...)
+}
+
+#' @export
+.import.rio_parquet <- function(file, which = 1, as_data_frame = TRUE, ...) {
+    requireNamespace("arrow")
+    arrow::read_parquet(file = file, as_data_frame = TRUE, ...)
 }

@@ -26,10 +26,10 @@ gather_attrs <- function(x) {
         a <- attributes(x[[i]])
         varattrs[[i]] <- a[!names(a) %in% c("levels", "class")]
         attr(x[[i]], "label") <- NULL
-        if (grepl("labelled", class(x[[i]]))) {
+        if (any(grepl("labelled", class(x[[i]])))) {
             x[[i]] <- haven::zap_labels(x[[i]])
         }
-        f <- grep("^format", names(attributes(x$foreign)), value = TRUE)
+        f <- grep("^format", names(attributes(x[[i]])), value = TRUE)
         if (length(f)) {
             attr(x[[i]], f) <- NULL
         }

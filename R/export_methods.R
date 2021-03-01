@@ -1,16 +1,26 @@
 #' @importFrom data.table fwrite
 #' @importFrom utils write.table
 export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
-                         col.names = TRUE, ...) {
+                         col.names = TRUE, append = FALSE, ...) {
     if (isTRUE(fwrite) & !inherits(file, "connection")) {
-        data.table::fwrite(x, file = file, sep = sep, col.name = col.names,
-                           row.names = row.names, ...)
+        if (isTRUE(append)) {
+            data.table::fwrite(x, file = file, sep = sep, row.names = row.names, 
+                               col.names = FALSE, append = TRUE, ...)
+        } else {
+            data.table::fwrite(x, file = file, sep = sep, row.names = row.names,
+                               col.names = col.names, append = FALSE, ...)
+        }
     } else {
         if (isTRUE(fwrite) & inherits(file, "connection")) {
             message("data.table::fwrite() does not support writing to connections. Using utils::write.table() instead.")
         }
-        write.table(x, file = file, sep = sep, row.names = row.names,
-                    col.names = col.names, ...)
+        if (isTRUE(append)) {
+            write.table(x, file = file, sep = sep, row.names = row.names,
+                        col.names = FALSE, append = TRUE, ...)
+        } else {
+            write.table(x, file = file, sep = sep, row.names = row.names,
+                        col.names = col.names, append = FALSE, ...)
+        }
     }
 }
 
@@ -35,9 +45,8 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 }
 
 #' @export
-.export.rio_csvy <- function(file, x, ...) {
-    requireNamespace("csvy")
-    csvy::write_csvy(file = file, x = x, ...)
+.export.rio_csvy <- function(file, x, sep = ",", dec = ".", yaml = TRUE, ...) {
+    export_delim(x = x, file = file, sep = sep, dec = dec, yaml = TRUE, ...)
 }
 
 #' @export
@@ -159,6 +168,13 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
     haven::write_sav(data = x, path = file, ...)
 }
 
+#' @importFrom haven write_sav
+#' @export
+.export.rio_zsav <- function(file, x, compress = TRUE, ...) {
+    x <- restore_labelled(x)
+    haven::write_sav(data = x, path = file, compress = compress, ...)
+}
+
 #' @importFrom haven write_dta
 #' @export
 .export.rio_dta <- function(file, x, ...) {
@@ -246,6 +262,8 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
     }
     for (i in seq_along(x)) {
         x[[i]][] <- lapply(x[[i]], as.character)
+        x[[i]][] <- lapply(x[[i]], function(v) gsub('&','&amp;',v))
+        names(x[[i]]) <- gsub('&','&amp;',names(x[[i]]))
         tab <- xml2::xml_add_child(bod, "table")
         # add header row
         invisible(xml2::xml_add_child(tab, xml2::read_xml(paste0(twrap(paste0(twrap(names(x[[i]]), "th"), collapse = ""), "tr"), "\n"))))
@@ -266,6 +284,10 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
     for (a in seq_along(att)) {
         xml2::xml_attr(xml, names(att)[a]) <- att[[a]]
     }
+    # remove illegal characters
+    row.names(x) <- gsub('&', '&amp;', row.names(x))
+    colnames(x) <- gsub('[ &]', '.', colnames(x))
+    x[] <- lapply(x, function(v) gsub('&', '&amp;', v))
     # add data
     for (i in seq_len(nrow(x))) {
         thisrow <- xml2::xml_add_child(xml, "Observation")
@@ -288,4 +310,16 @@ export_delim <- function(file, x, fwrite = TRUE, sep = "\t", row.names = FALSE,
 .export.rio_clipboard <- function(file, x, row.names = FALSE, col.names = TRUE, sep = "\t", ...) {
     requireNamespace("clipr")
     clipr::write_clip(content = x, row.names = row.names, col.names = col.names, sep = sep, ...)
+}
+
+#' @export
+.export.rio_pzfx <- function(file, x, ..., row_names=FALSE) {
+    requireNamespace("pzfx")
+    pzfx::write_pzfx(x=x, path=file, ..., row_names=row_names)
+}
+
+#' @export
+.export.rio_parquet <- function(file, x, ...) {
+    requireNamespace("arrow")
+    arrow::write_parquet(x=x, sink=file, ...)
 }

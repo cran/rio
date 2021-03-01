@@ -29,6 +29,8 @@
            beancount = sprintf(xA, fmt, "ledger", "ledger"),
            bib = sprintf(x, fmt, "bib2df::bib2df"),
            bmp = sprintf(x, fmt, "bmp::read.bmp"),
+           doc = sprintf(x, fmt, "docxtractr::docx_extract_all_tbls"),
+           docx = sprintf(x, fmt, "docxtractr::docx_extract_all_tbls"),
            gexf = sprintf(x, fmt, "rgexf::read.gexf"),
            gnumeric = sprintf(x, fmt, "gnumeric::read.gnumeric.sheet"),
            hledger = sprintf(xA, fmt, "ledger", "ledger"),
@@ -36,12 +38,14 @@
            jpg = sprintf(x, fmt, "jpeg::readJPEG"),
            ledger = sprintf(xA, fmt, "ledger", "ledger"),
            npy = sprintf(x, fmt, "RcppCNPy::npyLoad"),
+           qs = sprintf(x, fmt, "qs::qread"),
+           pdf = sprintf(x, fmt, "tabulizer::extract_tables"),
            png = sprintf(x, fmt, "png::readPNG"),
            sdmx = sprintf(x, fmt, "sdmx::readSDMX"),
            sss = sprintf(x, fmt, "sss::read.sss"),
            tiff = sprintf(x, fmt, "tiff::readTIFF"),
            gettext("Format not supported"))
-    stop(out)
+    stop(out, call. = FALSE)
 }
 
 #' @rdname extensions
@@ -57,13 +61,13 @@
     x <- gettext("%s format not supported. Consider using the '%s()' function")
     fmt <- tools::file_ext(file)
     out <- switch(fmt,
+           gexf = sprintf(x, fmt, "rgexf::write.gexf"),
            jpg = sprintf(x, fmt, "jpeg::writeJPEG"),
            npy = sprintf(x, fmt, "RcppCNPy::npySave"),
            png = sprintf(x, fmt, "png::writePNG"),
+           qs = sprintf(x, fmt, "qs::qsave"),
            tiff = sprintf(x, fmt, "tiff::writeTIFF"),
            xpt = sprintf(x, fmt, "SASxport::write.xport"),
-           gexf = sprintf(x, fmt, "rgexf::write.gexf"),
-           npy = sprintf(x, fmt, "RcppCNPy::npySave"),
            gettext("Format not supported"))
-    stop(out)
+    stop(out, call. = FALSE)
 }

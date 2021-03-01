@@ -34,7 +34,7 @@
 #' unlink("mtcars.csv")
 #' unlink("iris.csv")
 #' 
-#' @seealso \code{\link{import}}
+#' @seealso \code{\link{import}}, \code{\link{export_list}}, \code{\link{export}}
 #' @export
 import_list <- 
 function(file, 
@@ -60,34 +60,51 @@ function(file,
             } else if (isTRUE(rbind)) {
                 out[[rbind_label]] <- thisfile
             }
-            out
+            structure(out, filename = thisfile)
         })
+        names(x) <- names(file)
     } else {
         if (get_ext(file) == "rdata") {
             e <- new.env()
             load(file, envir = e)
             x <- as.list(e)
         } else {
-            if (missing(which)) {
-                if (get_ext(file) == "html") {
-                    requireNamespace("xml2", quietly = TRUE)
-                    tables <- xml2::xml_find_all(xml2::read_html(unclass(file)), ".//table")
+            if (get_ext(file) == "html") {
+                requireNamespace("xml2", quietly = TRUE)
+                tables <- xml2::xml_find_all(xml2::read_html(unclass(file)), ".//table")
+                if (missing(which)) {
                     which <- seq_along(tables)
-                    names(which) <- sapply(xml2::xml_attrs(tables),
-                      function(x) if ("class" %in% names(x)) x["class"] else ""
-                      )
-                } else if (get_ext(file) %in% c("xls","xlsx")) {
-                    requireNamespace("readxl", quietly = TRUE)
-                    whichnames <- readxl::excel_sheets(path = file)
+                }
+                whichnames <- sapply(xml2::xml_attrs(tables[which]),
+                  function(x) if ("class" %in% names(x)) x["class"] else ""
+                )
+                names(which) <- whichnames
+            } else if (get_ext(file) %in% c("xls","xlsx")) {
+                requireNamespace("readxl", quietly = TRUE)
+                whichnames <- readxl::excel_sheets(path = file)
+                if (missing(which)) {
                     which <- seq_along(whichnames)
                     names(which) <- whichnames
-                } else if (get_ext(file) %in% c("zip")) {
+                } else if (is.character(which)) {
+                    whichnames <- which
+                } else {
+                    whichnames <- whichnames[which]
+                }
+            } else if (get_ext(file) %in% c("zip")) {
+                if (missing(which)) {
                     whichnames <- utils::unzip(file, list = TRUE)[, "Name"]
                     which <- seq_along(whichnames)
                     names(which) <- strip_exts(whichnames)
+                } else if (is.character(which)) {
+                    whichnames <- utils::unzip(file, list = TRUE)[, "Name"]
+                    whichnames <- whichnames[whichnames %in% which]
                 } else {
-                    which <- 1
+                    whichnames <- utils::unzip(file, list = TRUE)[, "Name"]
+                    names(which) <- strip_exts(whichnames)
                 }
+            } else {
+                which <- 1
+                whichnames <- NULL
             }
             x <- lapply(which, function(thiswhich) {
                 out <- try(import(file, setclass = setclass, which = thiswhich, ...), silent = TRUE)
@@ -99,6 +116,7 @@ function(file,
                 }
                 out
             })
+            names(x) <- whichnames
         }
     }
     
@@ -109,7 +127,7 @@ function(file,
         } else {
             x2 <- try(data.table::rbindlist(x, fill = rbind_fill), silent = TRUE)
             if (inherits(x2, "try-error")) {
-                warnings("Attempt to rbindlist() the data did not succeed. List returned instead.")
+                warning("Attempt to rbindlist() the data did not succeed. List returned instead.")
                 return(x)
             } else {
                 x <- x2

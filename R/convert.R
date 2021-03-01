@@ -27,11 +27,12 @@
 #' unlink("mtcars.rds")
 #' unlink("mtcars.json")
 #' 
-#' \dontrun{
+#' \dontrun{\donttest{
 #' # convert from the command line:
-#' Rscript -e "rio::convert('mtcars.dta', 'mtcars.csv')"
-#' }
-#' @seealso \href{https://lbraglia.github.io/}{Luca Braglia} has created a Shiny app called \href{https://github.com/lbraglia/rioweb}{rioweb} that provides access to the file conversion features of rio through a web browser. The app is featured in the \href{https://gallery.shinyapps.io/rioweb}{RStudio Shiny Gallery}.
+#' ## Rscript -e "rio::convert('mtcars.dta', 'mtcars.csv')"
+#' }}
+#' 
+#' @seealso \href{https://lbraglia.github.io/}{Luca Braglia} has created a Shiny app called \href{https://github.com/lbraglia/rioweb}{rioweb} that provides access to the file conversion features of rio through a web browser.
 #' @export
 convert <- function(in_file, out_file, in_opts=list(), out_opts=list()) {
     if (missing(out_file)) {

@@ -7,13 +7,13 @@
 export(x, file, format, ...)
 }
 \arguments{
-\item{x}{A data frame or matrix to be written into a file. (An exception to this is that \code{x} can be a list of data frames if the output file format is an Excel .xlsx workbook, .Rdata file, or HTML file. See examples.)}
+\item{x}{A data frame or matrix to be written into a file. Exceptions to this rule are that \code{x} can be a list of data frames if the output file format is an Excel .xlsx workbook, .Rdata file, or HTML file, or a variety of R objects if the output file format is RDS or JSON. See examples.) To export a list of data frames to multiple files, use \code{\link{export_list}} instead.}
 
 \item{file}{A character string naming a file. Must specify \code{file} and/or \code{format}.}
 
 \item{format}{An optional character string containing the file format, which can be used to override the format inferred from \code{file} or, in lieu of specifying \code{file}, a file with the symbol name of \code{x} and the specified file extension will be created. Must specify \code{file} and/or \code{format}. Shortcuts include: \dQuote{,} (for comma-separated values), \dQuote{;} (for semicolon-separated values), \dQuote{|} (for pipe-separated values), and \dQuote{dump} for \code{\link[base]{dump}}.}
 
-\item{\dots}{Additional arguments for the underlying export functions. See examples.}
+\item{\dots}{Additional arguments for the underlying export functions. This can be used to specify non-standard arguments. See examples.}
 }
 \value{
 The name of the output file as a character string (invisibly).
@@ -35,6 +35,7 @@ The output file can be to a compressed directory, simply by adding an appropriat
     \item SAS (.sas7bdat), using \code{\link[haven]{write_sas}}.
     \item SAS XPORT (.xpt), using \code{\link[haven]{write_xpt}}.
     \item SPSS (.sav), using \code{\link[haven]{write_sav}}
+    \item SPSS compressed (.zsav), using \code{\link[haven]{write_sav}}
     \item Stata (.dta), using \code{\link[haven]{write_dta}}. Note that variable/column names containing dots (.) are not allowed and will produce an error.
     \item Excel (.xlsx), using \code{\link[openxlsx]{write.xlsx}}. Existing workbooks are overwritten unless \code{which} is specified, in which case only the specified sheet (if it exists) is overwritten. If the file exists but the \code{which} sheet does not, data are added as a new sheet to the existing workbook. \code{x} can also be a list of data frames; the list entry names are used as sheet names.
     \item R syntax object (.R), using \code{\link[base]{dput}} (by default) or \code{\link[base]{dump}} (if \code{format = 'dump'})
@@ -44,10 +45,11 @@ The output file can be to a compressed directory, simply by adding an appropriat
     \item Weka Attribute-Relation File Format (.arff), using \code{\link[foreign]{write.arff}}
     \item Fixed-width format data (.fwf), using \code{\link[utils]{write.table}} with \code{row.names = FALSE}, \code{quote = FALSE}, and \code{col.names = FALSE}
     \item gzip comma-separated data (.csv.gz), using \code{\link[utils]{write.table}} with \code{row.names = FALSE}
-    \item \href{https://github.com/csvy}{CSVY} (CSV with a YAML metadata header) using \code{\link[csvy]{write_csvy}}. The YAML header lines are preceded by R comment symbols (#) by default; this can be turned off by passing a \code{comment_header = FALSE} argument to \code{export}. Setting \code{fwrite = TRUE} (the default) will rely on \code{\link[data.table]{fwrite}} for much faster export.
+    \item \href{https://github.com/csvy}{CSVY} (CSV with a YAML metadata header) using \code{\link[data.table]{fwrite}}.
+    \item Apache Arrow Parquet (.parquet), using \code{\link[arrow]{write_parquet}}
     \item Feather R/Python interchange format (.feather), using \code{\link[feather]{write_feather}}
     \item Fast storage (.fst), using \code{\link[fst]{write.fst}}
-    \item JSON (.json), using \code{\link[jsonlite]{toJSON}}
+    \item JSON (.json), using \code{\link[jsonlite]{toJSON}}. In this case, \code{x} can be a variety of R objects, based on class mapping conventions in this paper: \href{https://arxiv.org/abs/1403.2805}{https://arxiv.org/abs/1403.2805}. 
     \item Matlab (.mat), using \code{\link[rmatio]{write.mat}}
     \item OpenDocument Spreadsheet (.ods), using \code{\link[readODS]{write_ods}}. (Currently only single-sheet exports are supported.)
     \item HTML (.html), using a custom method based on \code{\link[xml2]{xml_add_child}} to create a simple HTML table and \code{\link[xml2]{write_xml}} to write to disk.
@@ -57,6 +59,8 @@ The output file can be to a compressed directory, simply by adding an appropriat
 }
 
 When exporting a data set that contains label attributes (e.g., if imported from an SPSS or Stata file) to a plain text file, \code{\link{characterize}} can be a useful pre-processing step that records value labels into the resulting file (e.g., \code{export(characterize(x), "file.csv")}) rather than the numeric values.
+
+Use \code{\link{export_list}} to export a list of dataframes to separate files.
 }
 \examples{
 library("datasets")
@@ -80,8 +84,9 @@ export(mtcars, file = "mtcars.txt", format = "csv")
 export(list(mtcars = mtcars, iris = iris), "mtcars.rdata")
 export(c("mtcars", "iris"), "mtcars.rdata")
 
-# export to JSON
-export(mtcars, "mtcars.json")
+# export to non-data frame R object to RDS or JSON
+export(mtcars$cyl, "mtcars_cyl.rds")
+export(list(iris, mtcars), "list.json")
 
 # pass arguments to underlying export function
 export(mtcars, "mtcars.csv", col.names = FALSE)
@@ -96,6 +101,10 @@ source("data.R", echo = TRUE)
   ## export a single data frame
   export(mtcars, "mtcars.xlsx")
   
+  ## export NAs to Excel as missing via args passed to `...`
+  mtcars$drat <- NA_real_
+  mtcars \%>\% export("tst2.xlsx", keepNA = TRUE)
+  
   ## export a list of data frames as worksheets
   export(list(a = mtcars, b = iris), "multisheet.xlsx")
 
@@ -109,11 +118,13 @@ export(mtcars, "mtcars.csv.zip")
 # cleanup
 unlink("mtcars.csv")
 unlink("mtcars.dta")
-unlink("mtcars.json")
+unlink("mtcars.txt")
+unlink("mtcars_cyl.rds")
 unlink("mtcars.rdata")
 unlink("data.R")
 unlink("mtcars.csv.zip")
+unlink("list.json")
 }
 \seealso{
-\code{\link{.export}}, \code{\link{characterize}}, \code{\link{import}}, \code{\link{convert}}
+\code{\link{.export}}, \code{\link{characterize}}, \code{\link{import}}, \code{\link{convert}}, \code{\link{export_list}}
 }

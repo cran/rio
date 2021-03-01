@@ -21,7 +21,7 @@ The idea behind **rio** is to simplify the process of importing data into R and 
 
 The core advantage of **rio** is that it makes assumptions that the user is probably willing to make. Specifically, **rio** uses the file extension of a file name to determine what kind of file it is. This is the same logic used by Windows OS, for example, in determining what application is associated with a given file type. By taking away the need to manually match a file type (which a beginner may not recognize) to a particular import or export function, **rio** allows almost all common data formats to be read with the same function.
 
-By making import and export easy, it's an obvious next step to also use R as a simple data conversion utility. Transferring data files between various proprietary formats is always a pain and often expensive. The `convert` function therefore combines `import` and `export` to easily convert between file formats (thus providing a FOSS replacement for programs like [Stat/Transfer](https://www.stattransfer.com/) or [Sledgehammer](https://www.mtna.us/#/products/sledgehammer)).
+By making import and export easy, it's an obvious next step to also use R as a simple data conversion utility. Transferring data files between various proprietary formats is always a pain and often expensive. The `convert` function therefore combines `import` and `export` to easily convert between file formats (thus providing a FOSS replacement for programs like [Stat/Transfer](https://stattransfer.com/) or [Sledgehammer](https://www.mtna.us/#/products/sledgehammer)).
 
 ## Supported file formats
 
@@ -38,8 +38,10 @@ The full list of supported formats is below:
 | Comma-separated data | .csv | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
 | Pipe-separated data | .psv | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
 | Tab-separated data | .tsv | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
+| CSVY (CSV + YAML metadata header) | .csvy | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
 | SAS | .sas7bdat | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | SPSS | .sav | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
+| SPSS (compressed) | .zsav | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | Stata | .dta | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | SAS XPORT | .xpt | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | SPSS Portable | .por | [**haven**](https://cran.r-project.org/package=haven) |  | Yes |
@@ -57,7 +59,7 @@ The full list of supported formats is below:
 | Fortran data | no recognized extension | **utils** |  | Yes |
 | Fixed-width format data | .fwf | **utils** | **utils** | Yes |
 | gzip comma-separated data | .csv.gz | **utils** | **utils** | Yes |
-| CSVY (CSV + YAML metadata header) | .csvy | [**csvy**](https://cran.r-project.org/package=csvy) | [**csvy**](https://cran.r-project.org/package=csvy) | No |
+| Apache Arrow (Parquet) | .parquet | [**arrow**](https://cran.r-project.org/package=arrow) | [**arrow**](https://cran.r-project.org/package=arrow) | No |
 | EViews | .wf1 | [**hexView**](https://cran.r-project.org/package=hexView) |  | No |
 | Feather R/Python interchange format | .feather | [**feather**](https://cran.r-project.org/package=feather) | [**feather**](https://cran.r-project.org/package=feather) | No |
 | Fast Storage | .fst | [**fst**](https://cran.r-project.org/package=fst) | [**fst**](https://cran.r-project.org/package=fst) | No |
@@ -158,6 +160,12 @@ export(list(mtcars = mtcars, iris = iris), "multi.rdata")
 export(c("mtcars", "iris"), "multi.rdata")
 ```
 
+It is also possible to use the new (as of v0.6.0) function `export_list()` to write a list of data frames to multiple files using either a vector of file names or a file pattern:
+
+```{r}
+export_list(list(mtcars = mtcars, iris = iris), "%s.tsv")
+```
+
 
 ## File Conversion
 
@@ -256,4 +264,6 @@ unlink("mtcars.dta")
 unlink("multi.xlsx")
 unlink("multi.rdata")
 unlink("mtcars2.dta")
+unlink("mtcars.tsv")
+unlink("iris.tsv")
 ```

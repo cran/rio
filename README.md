@@ -10,7 +10,7 @@ The aim of **rio** is to make data file I/O in R as easy as possible by implemen
  - `import()` provides a painless data import experience by automatically choosing the appropriate import/read function based on file extension (or a specified `format` argument)
  - `import_list()` imports a list of data frames from a multi-object file (Excel workbook, .Rdata files, zip directory, or HTML file)
  - `export()` provides the same painless file recognition for data export/write functionality
- - `convert()` wraps `import()` and `export()` to allow the user to easily convert between file formats (thus providing a FOSS replacement for programs like [Stat/Transfer](https://www.stattransfer.com/) or [Sledgehammer](https://www.mtna.us/#/products/sledgehammer)). Relatedly, [Luca Braglia](https://lbraglia.github.io/) has created a Shiny app called [rioweb](https://github.com/lbraglia/rioweb) that provides access to the file conversion features of rio. [GREA](https://github.com/Stan125/GREA/) is an RStudio add-in that provides an interactive interface for reading in data using rio.
+ - `convert()` wraps `import()` and `export()` to allow the user to easily convert between file formats (thus providing a FOSS replacement for programs like [Stat/Transfer](https://stattransfer.com/) or [Sledgehammer](https://www.mtna.us/#/products/sledgehammer)). Relatedly, [Luca Braglia](https://lbraglia.github.io/) has created a Shiny app called [rioweb](https://github.com/lbraglia/rioweb) that provides access to the file conversion features of rio. [GREA](https://github.com/Stan125/GREA/) is an RStudio add-in that provides an interactive interface for reading in data using rio.
 
 ## Examples
 
@@ -36,7 +36,7 @@ A particularly useful feature of rio is the ability to import from and export to
 export(mtcars, "mtcars.tsv.zip")
 ```
 
-As of rio v0.5.0, `export()` can also write multiple data farmes to respective sheets of an Excel workbook or an HTML file:
+As of rio v0.5.0, `export()` can also write multiple data frames to respective sheets of an Excel workbook or an HTML file:
 
 
 ```r
@@ -75,7 +75,7 @@ In rio v0.5.0, a new list-based import function was added. This allows users to 
 
 
 ```r
-str(import_list("mtcars.xlsx"))
+str(m <- import_list("mtcars.xlsx"))
 ```
 
 ```
@@ -99,6 +99,26 @@ str(import_list("mtcars.xlsx"))
 ##   ..$ Petal.Width : num [1:150] 0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
 ##   ..$ Species     : chr [1:150] "setosa" "setosa" "setosa" "setosa" ...
 ```
+
+And for rio v0.6.0, a new list-based export function was added. This makes it easy to export a list of (possibly named) data frames to multiple files:
+
+
+```r
+export_list(m, "%s.tsv")
+```
+
+```
+## Error in export_list(m, "%s.tsv"): could not find function "export_list"
+```
+
+```r
+c("mtcars.tsv", "iris.tsv") %in% dir()
+```
+
+```
+## [1] FALSE FALSE
+```
+
 
 ### Convert
 
@@ -132,8 +152,10 @@ The full list of supported formats is below:
 | Comma-separated data | .csv | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
 | Pipe-separated data | .psv | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
 | Tab-separated data | .tsv | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
+| CSVY (CSV + YAML metadata header) | .csvy | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table) | Yes |
 | SAS | .sas7bdat | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | SPSS | .sav | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
+| SPSS (compressed) | .zsav | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | Stata | .dta | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | SAS XPORT | .xpt | [**haven**](https://cran.r-project.org/package=haven) | [**haven**](https://cran.r-project.org/package=haven) | Yes |
 | SPSS Portable | .por | [**haven**](https://cran.r-project.org/package=haven) |  | Yes |
@@ -151,7 +173,7 @@ The full list of supported formats is below:
 | Fortran data | no recognized extension | **utils** |  | Yes |
 | Fixed-width format data | .fwf | **utils** | **utils** | Yes |
 | gzip comma-separated data | .csv.gz | **utils** | **utils** | Yes |
-| CSVY (CSV + YAML metadata header) | .csvy | [**csvy**](https://cran.r-project.org/package=csvy) | [**csvy**](https://cran.r-project.org/package=csvy) | No |
+| Apache Arrow (Parquet) | .parquet | [**arrow**](https://cran.r-project.org/package=arrow) | [**arrow**](https://cran.r-project.org/package=arrow) | No |
 | EViews | .wf1 | [**hexView**](https://cran.r-project.org/package=hexView) |  | No |
 | Feather R/Python interchange format | .feather | [**feather**](https://cran.r-project.org/package=feather) | [**feather**](https://cran.r-project.org/package=feather) | No |
 | Fast Storage | .fst | [**fst**](https://cran.r-project.org/package=fst) | [**fst**](https://cran.r-project.org/package=fst) | No |
@@ -163,6 +185,7 @@ The full list of supported formats is below:
 | YAML | .yml | [**yaml**](https://cran.r-project.org/package=yaml) | [**yaml**](https://cran.r-project.org/package=yaml) | No |
 | Clipboard | default is tsv | [**clipr**](https://cran.r-project.org/package=clipr) | [**clipr**](https://cran.r-project.org/package=clipr) | No |
 | [Google Sheets](https://www.google.com/sheets/about/) | as Comma-separated data |  |  |  |
+| Graphpad Prism | .pzfx | [**pzfx**](https://cran.r-project.org/package=pzfx) | [**pzfx**](https://cran.r-project.org/package=pzfx) | No |
 
 Additionally, any format that is not supported by **rio** but that has a known R implementation will produce an informative error message pointing to a package and import or export function. Unrecognized formats will yield a simple "Unrecognized file format" error.
 

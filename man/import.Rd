@@ -21,7 +21,7 @@ import(file, format, setclass, which, ...)
 A data frame. If \code{setclass} is used, this data frame may have additional class attribute values, such as \dQuote{tibble} or \dQuote{data.table}.
 }
 \description{
-Read in a data.frame from a file
+Read in a data.frame from a file. Exceptions to this rule are Rdata, RDS, and JSON input file formats, which return the originally saved object without changing its class.
 }
 \details{
 This function imports a data frame or matrix from a data file with the file format based on the file extension (or the manually specified format, if \code{format} is specified).
@@ -35,8 +35,8 @@ This function imports a data frame or matrix from a data file with the file form
     \item SAS (.sas7bdat), using \code{\link[haven]{read_sas}}.
     \item SAS XPORT (.xpt), using \code{\link[haven]{read_xpt}} or, if \code{haven = FALSE}, \code{\link[foreign]{read.xport}}.
     \item SPSS (.sav), using \code{\link[haven]{read_sav}}. If \code{haven = FALSE}, \code{\link[foreign]{read.spss}} can be used.
+    \item SPSS compressed (.zsav), using \code{\link[haven]{read_sav}}.
     \item Stata (.dta), using \code{\link[haven]{read_dta}}. If \code{haven = FALSE}, \code{\link[foreign]{read.dta}} can be used.
-    \item SAS XPORT (.xpt), using \code{\link[foreign]{read.xport}}.
     \item SPSS Portable Files (.por), using \code{\link[haven]{read_por}}.
     \item Excel (.xls and .xlsx), using \code{\link[readxl]{read_excel}}. Use \code{which} to specify a sheet number. For .xlsx files, it is possible to set \code{readxl = FALSE}, so that \code{\link[openxlsx]{read.xlsx}} can be used instead of readxl (the default).
     \item R syntax object (.R), using \code{\link[base]{dget}}
@@ -51,7 +51,8 @@ This function imports a data frame or matrix from a data file with the file form
     \item Fortran data (no recognized extension), using \code{\link[utils]{read.fortran}}
     \item Fixed-width format data (.fwf), using a faster version of \code{\link[utils]{read.fwf}} that requires a \code{widths} argument and by default in rio has \code{stringsAsFactors = FALSE}. If \code{readr = TRUE}, import will be performed using \code{\link[readr]{read_fwf}}, where \code{widths} should be: \code{NULL}, a vector of column widths, or the output of \code{\link[readr]{fwf_empty}}, \code{\link[readr]{fwf_widths}}, or \code{\link[readr]{fwf_positions}}.
     \item gzip comma-separated data (.csv.gz), using \code{\link[utils]{read.table}} with \code{row.names = FALSE} and \code{stringsAsFactors = FALSE}
-    \item \href{https://github.com/csvy}{CSVY} (CSV with a YAML metadata header) using \code{\link[csvy]{read_csvy}}.
+    \item \href{https://github.com/csvy}{CSVY} (CSV with a YAML metadata header) using \code{\link[data.table]{fread}}.
+    \item Apache Arrow Parquet (.parquet), using \code{\link[arrow]{read_parquet}}
     \item Feather R/Python interchange format (.feather), using \code{\link[feather]{read_feather}}
     \item Fast storage (.fst), using \code{\link[fst]{read.fst}}
     \item JSON (.json), using \code{\link[jsonlite]{fromJSON}}
@@ -63,6 +64,7 @@ This function imports a data frame or matrix from a data file with the file form
     \item YAML (.yml), using \code{\link[yaml]{yaml.load}}
     \item Clipboard import (on Windows and Mac OS), using \code{\link[utils]{read.table}} with \code{row.names = FALSE}
     \item Google Sheets, as Comma-separated data (.csv)
+    \item GraphPad Prism (.pzfx) using \code{\link[pzfx]{read_pzfx}}
 }
 
 \code{import} attempts to standardize the return value from the various import functions to the extent possible, thus providing a uniform data structure regardless of what import package or function is used. It achieves this by storing any optional variable-related attributes at the variable level (i.e., an attribute for \code{mtcars$mpg} is stored in \code{attributes(mtcars$mpg)} rather than \code{attributes(mtcars)}). If you would prefer these attributes to be stored at the data.frame-level (i.e., in \code{attributes(mtcars)}), see \code{\link{gather_attrs}}.
@@ -82,7 +84,6 @@ stopifnot(identical(import("iris1.csv"), import("iris.tsv", format = "csv")))
 
 # import CSV as a `data.table`
 stopifnot(inherits(import("iris1.csv", setclass = "data.table"), "data.table"))
-stopifnot(inherits(import("iris1.csv", setclass = "data.table"), "data.table"))
 
 # pass arguments to underlying import function
 iris1 <- import("iris1.csv")
@@ -95,10 +96,16 @@ identical(names(iris), names(iris2))
 # set class for the response data.frame as "tbl_df" (from dplyr)
 stopifnot(inherits(import("iris1.csv", setclass = "tbl_df"), "tbl_df"))
 
+# non-data frame formats supported for RDS, Rdata, and JSON
+export(list(mtcars, iris), "list.rds")
+li <- import("list.rds")
+identical(names(mtcars), names(li[[1]]))
+
 # cleanup
 unlink("iris.tsv")
 unlink("iris1.csv")
 unlink("iris2.csv")
+unlink("list.rds")
 
 }
 \seealso{

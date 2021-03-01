@@ -27,8 +27,29 @@ test_that("Import multiple HTML tables in import_list()", {
     expect_true(identical(names(dat[[2]]), names(iris)))
 })
 
+test_that("import_list() preserves 'which' names when specified", {
+    export(list(a = mtcars, b = iris), "foo.xlsx")
+    expect_true(identical(names(import_list("foo.xlsx")), c("a", "b")))
+    expect_true(identical(names(import_list("foo.xlsx", which = 1)), "a"))
+    expect_true(identical(names(import_list("foo.xlsx", which = "a")), "a"))
+    expect_true(identical(names(import_list("foo.xlsx", which = 2)), "b"))
+    expect_true(identical(names(import_list("foo.xlsx", which = "b")), "b"))
+    expect_true(identical(names(import_list("foo.xlsx", which = 1:2)), c("a", "b")))
+    expect_true(identical(names(import_list("foo.xlsx", which = 2:1)), c("b", "a")))
+    expect_true(identical(names(import_list("foo.xlsx", which = c("a", "b"))), c("a", "b")))
+    expect_true(identical(names(import_list("foo.xlsx", which = c("b", "a"))), c("b", "a")))
+    unlink("foo.xlsx")
+})
+
 test_that("Import single file via import_list()", {
     expect_true(identical(import_list("mtcars.rds", rbind = TRUE), mtcars))
+})
+
+test_that("Import single file from zip via import_list()", {
+    export(mtcars, "mtcars.csv.zip", format = "csv")
+    expect_true(inherits(import_list("mtcars.csv.zip")[[1L]], "data.frame"))
+    expect_true(inherits(import_list("mtcars.csv.zip", which = 1)[[1L]], "data.frame"))
+    expect_true(inherits(import_list("mtcars.csv.zip", which = "mtcars.csv")[[1L]], "data.frame"))
 })
 
 test_that("Using setclass in import_list()", {
@@ -55,5 +76,19 @@ test_that("Object names are preserved by import_list()", {
     unlink(c("mtcars.xlsx", "mtcars1.csv","mtcars2.tsv","mtcars3.csv"))
 })
 
+test_that("File names are added as attributes by import_list()", {
+    export(mtcars[1:10,],  "mtcars.csv")
+    export(mtcars[11:20,], "mtcars.tsv")
+    expected_names <- c("mtcars", "mtcars")
+    expected_attrs <- c(mtcars = "mtcars.csv", mtcars = "mtcars.tsv")
+    dat <- import_list(c("mtcars.csv","mtcars.tsv"))
+    
+    expect_identical(names(dat), expected_names)
+    expect_identical(unlist(lapply(dat, attr, "filename")), expected_attrs)
+    
+    unlink(c("mtcars.csv", "mtcars.tsv"))
+})
+
 unlink("data.rdata")
 unlink("mtcars.rds")
+unlink("mtcars.csv.zip")

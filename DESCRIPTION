@@ -1,8 +1,8 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 0.5.27
-Date: 2021-06-18
+Version: 0.5.29
+Date: 2021-11-08
 Authors@R: c(person("Jason", "Becker", role = "ctb", email = "jason@jbecker.co"),
              person("Chung-hong", "Chan", role = "aut", email = "chainsawtiney@gmail.com",
 	     	     comment = c(ORCID = "0000-0002-6232-7530")),
@@ -46,9 +46,9 @@ Suggests: datasets, bit64, testthat, knitr, magrittr, arrow, clipr,
 License: GPL-2
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2021-06-18 08:54:20 UTC; THOMAS
+Packaged: 2021-11-08 13:36:39 UTC; THOMAS
 Author: Jason Becker [ctb],
   Chung-hong Chan [aut] (<https://orcid.org/0000-0002-6232-7530>),
   Geoffrey CH Chan [ctb],
@@ -66,4 +66,4 @@ Author: Jason Becker [ctb],
   Alex Bokov [ctb] (<https://orcid.org/0000-0002-0511-9815>)
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-06-21 07:10:01 UTC
+Date/Publication: 2021-11-22 07:40:02 UTC

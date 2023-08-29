@@ -1,14 +1,13 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 0.5.29
-Date: 2021-11-08
+Version: 0.5.30
 Authors@R: c(person("Jason", "Becker", role = "ctb", email = "jason@jbecker.co"),
-             person("Chung-hong", "Chan", role = "aut", email = "chainsawtiney@gmail.com",
+             person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com",
 	     	     comment = c(ORCID = "0000-0002-6232-7530")),
              person("Geoffrey CH", "Chan", role = "ctb", email = "gefchchan@gmail.com"),
              person("Thomas J.", "Leeper",
-                    role = c("aut", "cre"), 
+                    role = "aut", 
                     email = "thosjleeper@gmail.com",
                     comment = c(ORCID = "0000-0003-4097-6326")),
              person("Christopher", "Gandrud", role = "ctb"),
@@ -35,9 +34,9 @@ Description: Streamlined data import and export by making assumptions that
     directly without explicit decompression, and fast import packages are used where
     appropriate. An additional convenience function, 'convert()', provides a simple
     method for converting between file types.
-URL: https://github.com/leeper/rio
-BugReports: https://github.com/leeper/rio/issues
-Depends: R (>= 2.15.0)
+URL: https://github.com/chainsawriot/rio
+BugReports: https://github.com/chainsawriot/rio/issues
+Depends: R (>= 3.6)
 Imports: tools, stats, utils, foreign, haven (>= 1.1.2), curl (>= 0.6),
         data.table (>= 1.9.8), readxl (>= 0.1.1), openxlsx, tibble
 Suggests: datasets, bit64, testthat, knitr, magrittr, arrow, clipr,
@@ -46,13 +45,13 @@ Suggests: datasets, bit64, testthat, knitr, magrittr, arrow, clipr,
 License: GPL-2
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2021-11-08 13:36:39 UTC; THOMAS
+Packaged: 2023-08-29 13:52:21 UTC; chainsawriot
 Author: Jason Becker [ctb],
-  Chung-hong Chan [aut] (<https://orcid.org/0000-0002-6232-7530>),
+  Chung-hong Chan [aut, cre] (<https://orcid.org/0000-0002-6232-7530>),
   Geoffrey CH Chan [ctb],
-  Thomas J. Leeper [aut, cre] (<https://orcid.org/0000-0003-4097-6326>),
+  Thomas J. Leeper [aut] (<https://orcid.org/0000-0003-4097-6326>),
   Christopher Gandrud [ctb],
   Andrew MacDonald [ctb],
   Ista Zahn [ctb],
@@ -64,6 +63,6 @@ Author: Jason Becker [ctb],
   Nathan Day [ctb],
   Bill Denney [ctb] (<https://orcid.org/0000-0002-5759-428X>),
   Alex Bokov [ctb] (<https://orcid.org/0000-0002-0511-9815>)
-Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
+Maintainer: Chung-hong Chan <chainsawtiney@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-11-22 07:40:02 UTC
+Date/Publication: 2023-08-29 17:20:02 UTC

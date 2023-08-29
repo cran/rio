@@ -17,5 +17,4 @@ test_that("Import from pzfx", {
   expect_true(identical(dim(import("iris.pzfx")), dim(iris_numeric)))
 })
 
-rm(iris_numeric)
 unlink("iris.pzfx")

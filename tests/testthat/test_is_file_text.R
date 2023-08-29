@@ -42,8 +42,7 @@ test_that("yml recognized as text", {
 })
 
 test_that("pzfx recognized as text", {
-  skip("failing mysteriously")
-  # skip_if_not_installed(pkg = "pzfx")
+  skip_if_not_installed(pkg = "pzfx")
   expect_true(is_file_text(export(iris[,-5], "iris.pzfx")))
 })
 

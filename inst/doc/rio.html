@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2023-08-29" />
+<meta name="date" content="2023-09-14" />
 
 <title>Import, Export, and Convert Data Files</title>
 
@@ -1503,7 +1503,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Import, Export, and Convert Data Files</h1>
-<h4 class="date">2023-08-29</h4>
+<h4 class="date">2023-09-14</h4>
 
 </div>
 
@@ -1521,265 +1521,358 @@ div.tocify {
 <table>
 <thead>
 <tr class="header">
-<th>Format</th>
-<th>Typical Extension</th>
-<th>Import Package</th>
-<th>Export Package</th>
-<th>Installed by Default</th>
+<th align="left">Name</th>
+<th align="left">Extensions / “format”</th>
+<th align="left">Import Package</th>
+<th align="left">Export Package</th>
+<th align="left">Type</th>
+<th align="left">Note</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Comma-separated data</td>
-<td>.csv</td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td>Yes</td>
+<td align="left">Archive files (handled by tar)</td>
+<td align="left">bzip2 / xz / tar</td>
+<td align="left">utils</td>
+<td align="left">utils</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Pipe-separated data</td>
-<td>.psv</td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td>Yes</td>
+<td align="left">Gzip files</td>
+<td align="left">gz / gzip</td>
+<td align="left">base</td>
+<td align="left">base</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Tab-separated data</td>
-<td>.tsv</td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td>Yes</td>
+<td align="left">Zip files</td>
+<td align="left">zip</td>
+<td align="left">utils</td>
+<td align="left">utils</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>CSVY (CSV + YAML metadata header)</td>
-<td>.csvy</td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td><a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a></td>
-<td>Yes</td>
+<td align="left">Apache Arrow (Parquet)</td>
+<td align="left">parquet</td>
+<td align="left">arrow</td>
+<td align="left">arrow</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>SAS</td>
-<td>.sas7bdat</td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td>Yes</td>
+<td align="left">CSVY (CSV + YAML metadata header)</td>
+<td align="left">csvy</td>
+<td align="left">data.table</td>
+<td align="left">data.table</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>SPSS</td>
-<td>.sav</td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td>Yes</td>
+<td align="left">Comma-separated data</td>
+<td align="left">csv</td>
+<td align="left">data.table</td>
+<td align="left">data.table</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>SPSS (compressed)</td>
-<td>.zsav</td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td>Yes</td>
+<td align="left">Comma-separated data (European)</td>
+<td align="left">csv2</td>
+<td align="left">data.table</td>
+<td align="left">data.table</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Stata</td>
-<td>.dta</td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td>Yes</td>
+<td align="left">Data Interchange Format</td>
+<td align="left">dif</td>
+<td align="left">utils</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>SAS XPORT</td>
-<td>.xpt</td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td>Yes</td>
+<td align="left">Epiinfo</td>
+<td align="left">epiinfo / rec</td>
+<td align="left">foreign</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>SPSS Portable</td>
-<td>.por</td>
-<td><a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a></td>
-<td></td>
-<td>Yes</td>
+<td align="left">Excel</td>
+<td align="left">excel / xlsx</td>
+<td align="left">readxl</td>
+<td align="left">writexl</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Excel</td>
-<td>.xls</td>
-<td><a href="https://cran.r-project.org/package=readxl"><strong>readxl</strong></a></td>
-<td></td>
-<td>Yes</td>
+<td align="left">Excel (Legacy)</td>
+<td align="left">xls</td>
+<td align="left">readxl</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Excel</td>
-<td>.xlsx</td>
-<td><a href="https://cran.r-project.org/package=readxl"><strong>readxl</strong></a></td>
-<td><a href="https://cran.r-project.org/package=openxlsx"><strong>openxlsx</strong></a></td>
-<td>Yes</td>
+<td align="left">Feather R/Python interchange format</td>
+<td align="left">feather</td>
+<td align="left">arrow</td>
+<td align="left">arrow</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>R syntax</td>
-<td>.R</td>
-<td><strong>base</strong></td>
-<td><strong>base</strong></td>
-<td>Yes</td>
+<td align="left">Fixed-width format data</td>
+<td align="left">fwf</td>
+<td align="left">utils</td>
+<td align="left">utils</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Saved R objects</td>
-<td>.RData, .rda</td>
-<td><strong>base</strong></td>
-<td><strong>base</strong></td>
-<td>Yes</td>
+<td align="left">Fortran data</td>
+<td align="left">fortran</td>
+<td align="left">utils</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left">No recognized extension</td>
 </tr>
 <tr class="odd">
-<td>Serialized R objects</td>
-<td>.rds</td>
-<td><strong>base</strong></td>
-<td><strong>base</strong></td>
-<td>Yes</td>
+<td align="left">Google Sheets</td>
+<td align="left">googlesheets</td>
+<td align="left">data.table</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left">As comma-separated data</td>
 </tr>
 <tr class="even">
-<td>Epiinfo</td>
-<td>.rec</td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td></td>
-<td>Yes</td>
+<td align="left">Minitab</td>
+<td align="left">minitab / mtp</td>
+<td align="left">foreign</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Minitab</td>
-<td>.mtp</td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td></td>
-<td>Yes</td>
+<td align="left">Pipe-separated data</td>
+<td align="left">psv</td>
+<td align="left">data.table</td>
+<td align="left">data.table</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Systat</td>
-<td>.syd</td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td></td>
-<td>Yes</td>
+<td align="left">R syntax</td>
+<td align="left">r</td>
+<td align="left">base</td>
+<td align="left">base</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>“XBASE” database files</td>
-<td>.dbf</td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td>Yes</td>
+<td align="left">SAS</td>
+<td align="left">sas / sas7bdat</td>
+<td align="left">haven</td>
+<td align="left">haven</td>
+<td align="left">Default</td>
+<td align="left">Export is deprecated</td>
 </tr>
 <tr class="even">
-<td>Weka Attribute-Relation File Format</td>
-<td>.arff</td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td><a href="https://cran.r-project.org/package=foreign"><strong>foreign</strong></a></td>
-<td>Yes</td>
+<td align="left">SAS XPORT</td>
+<td align="left">xport / xpt</td>
+<td align="left">haven</td>
+<td align="left">haven</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Data Interchange Format</td>
-<td>.dif</td>
-<td><strong>utils</strong></td>
-<td></td>
-<td>Yes</td>
+<td align="left">SPSS</td>
+<td align="left">sav / spss</td>
+<td align="left">haven</td>
+<td align="left">haven</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Fortran data</td>
-<td>no recognized extension</td>
-<td><strong>utils</strong></td>
-<td></td>
-<td>Yes</td>
+<td align="left">SPSS (compressed)</td>
+<td align="left">zsav</td>
+<td align="left">haven</td>
+<td align="left">haven</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Fixed-width format data</td>
-<td>.fwf</td>
-<td><strong>utils</strong></td>
-<td><strong>utils</strong></td>
-<td>Yes</td>
+<td align="left">SPSS Portable</td>
+<td align="left">por</td>
+<td align="left">haven</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>gzip comma-separated data</td>
-<td>.csv.gz</td>
-<td><strong>utils</strong></td>
-<td><strong>utils</strong></td>
-<td>Yes</td>
+<td align="left">Saved R objects</td>
+<td align="left">rda / rdata</td>
+<td align="left">base</td>
+<td align="left">base</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Apache Arrow (Parquet)</td>
-<td>.parquet</td>
-<td><a href="https://cran.r-project.org/package=arrow"><strong>arrow</strong></a></td>
-<td><a href="https://cran.r-project.org/package=arrow"><strong>arrow</strong></a></td>
-<td>No</td>
+<td align="left">Serialized R objects</td>
+<td align="left">rds</td>
+<td align="left">base</td>
+<td align="left">base</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>EViews</td>
-<td>.wf1</td>
-<td><a href="https://cran.r-project.org/package=hexView"><strong>hexView</strong></a></td>
-<td></td>
-<td>No</td>
+<td align="left">Stata</td>
+<td align="left">dta / stata</td>
+<td align="left">haven</td>
+<td align="left">haven</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Feather R/Python interchange format</td>
-<td>.feather</td>
-<td><a href="https://cran.r-project.org/package=feather"><strong>feather</strong></a></td>
-<td><a href="https://cran.r-project.org/package=feather"><strong>feather</strong></a></td>
-<td>No</td>
+<td align="left">Systat</td>
+<td align="left">syd / systat</td>
+<td align="left">foreign</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Fast Storage</td>
-<td>.fst</td>
-<td><a href="https://cran.r-project.org/package=fst"><strong>fst</strong></a></td>
-<td><a href="https://cran.r-project.org/package=fst"><strong>fst</strong></a></td>
-<td>No</td>
+<td align="left">Tab-separated data</td>
+<td align="left">/ tsv / txt</td>
+<td align="left">data.table</td>
+<td align="left">data.table</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>JSON</td>
-<td>.json</td>
-<td><a href="https://cran.r-project.org/package=jsonlite"><strong>jsonlite</strong></a></td>
-<td><a href="https://cran.r-project.org/package=jsonlite"><strong>jsonlite</strong></a></td>
-<td>No</td>
+<td align="left">Text Representations of R Objects</td>
+<td align="left">dump</td>
+<td align="left">base</td>
+<td align="left">base</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>Matlab</td>
-<td>.mat</td>
-<td><a href="https://cran.r-project.org/package=rmatio"><strong>rmatio</strong></a></td>
-<td><a href="https://cran.r-project.org/package=rmatio"><strong>rmatio</strong></a></td>
-<td>No</td>
+<td align="left">Weka Attribute-Relation File Format</td>
+<td align="left">arff / weka</td>
+<td align="left">foreign</td>
+<td align="left">foreign</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>OpenDocument Spreadsheet</td>
-<td>.ods</td>
-<td><a href="https://cran.r-project.org/package=readODS"><strong>readODS</strong></a></td>
-<td><a href="https://cran.r-project.org/package=readODS"><strong>readODS</strong></a></td>
-<td>No</td>
+<td align="left">XBASE database files</td>
+<td align="left">dbf</td>
+<td align="left">foreign</td>
+<td align="left">foreign</td>
+<td align="left">Default</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>HTML Tables</td>
-<td>.html</td>
-<td><a href="https://cran.r-project.org/package=xml2"><strong>xml2</strong></a></td>
-<td><a href="https://cran.r-project.org/package=xml2"><strong>xml2</strong></a></td>
-<td>No</td>
+<td align="left">Clipboard</td>
+<td align="left">clipboard</td>
+<td align="left">clipr</td>
+<td align="left">clipr</td>
+<td align="left">Suggest</td>
+<td align="left">default is tsv</td>
 </tr>
 <tr class="odd">
-<td>Shallow XML documents</td>
-<td>.xml</td>
-<td><a href="https://cran.r-project.org/package=xml2"><strong>xml2</strong></a></td>
-<td><a href="https://cran.r-project.org/package=xml2"><strong>xml2</strong></a></td>
-<td>No</td>
+<td align="left">EViews</td>
+<td align="left">eviews / wf1</td>
+<td align="left">hexView</td>
+<td align="left"></td>
+<td align="left">Suggest</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td>YAML</td>
-<td>.yml</td>
-<td><a href="https://cran.r-project.org/package=yaml"><strong>yaml</strong></a></td>
-<td><a href="https://cran.r-project.org/package=yaml"><strong>yaml</strong></a></td>
-<td>No</td>
+<td align="left">Fast Storage</td>
+<td align="left">fst</td>
+<td align="left">fst</td>
+<td align="left">fst</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
-<td>Clipboard</td>
-<td>default is tsv</td>
-<td><a href="https://cran.r-project.org/package=clipr"><strong>clipr</strong></a></td>
-<td><a href="https://cran.r-project.org/package=clipr"><strong>clipr</strong></a></td>
-<td>No</td>
+<td align="left">Graphpad Prism</td>
+<td align="left">pzfx</td>
+<td align="left">pzfx</td>
+<td align="left">pzfx</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
-<td><a href="https://www.google.com/sheets/about/">Google Sheets</a></td>
-<td>as Comma-separated data</td>
-<td></td>
-<td></td>
-<td></td>
+<td align="left">HTML Tables</td>
+<td align="left">htm / html</td>
+<td align="left">xml2</td>
+<td align="left">xml2</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">JSON</td>
+<td align="left">json</td>
+<td align="left">jsonlite</td>
+<td align="left">jsonlite</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Matlab</td>
+<td align="left">mat / matlab</td>
+<td align="left">rmatio</td>
+<td align="left">rmatio</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">OpenDocument Spreadsheet</td>
+<td align="left">ods</td>
+<td align="left">readODS</td>
+<td align="left">readODS</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">OpenDocument Spreadsheet (Flat)</td>
+<td align="left">fods</td>
+<td align="left">readODS</td>
+<td align="left">readODS</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Serialized R objects (Quick)</td>
+<td align="left">qs</td>
+<td align="left">qs</td>
+<td align="left">qs</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Shallow XML documents</td>
+<td align="left">xml</td>
+<td align="left">xml2</td>
+<td align="left">xml2</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">YAML</td>
+<td align="left">yaml / yml</td>
+<td align="left">yaml</td>
+<td align="left">yaml</td>
+<td align="left">Suggest</td>
+<td align="left"></td>
 </tr>
 </tbody>
 </table>
@@ -1825,7 +1918,10 @@ export(mtcars, &quot;mtcars.rds&quot;)
 export(mtcars, &quot;mtcars.dta&quot;)</code></pre>
 <p>It is also easy to use <code>export()</code> as part of an R pipeline (from magrittr or dplyr). For example, the following code uses <code>export()</code> to save the results of a simple data transformation:</p>
 <pre class="r"><code>library(&quot;magrittr&quot;)
-mtcars %&gt;% subset(hp &gt; 100) %&gt;%  aggregate(. ~ cyl + am, data = ., FUN = mean) %&gt;% export(file = &quot;mtcars2.dta&quot;)</code></pre>
+mtcars %&gt;%
+  subset(hp &gt; 100) %&gt;%
+  aggregate(. ~ cyl + am, data = ., FUN = mean) %&gt;%
+  export(file = &quot;mtcars2.dta&quot;)</code></pre>
 <p>Some file formats (e.g., Excel workbooks, Rdata files) can support multiple data objects in a single file. <code>export()</code> natively supports output of multiple objects to these types of files:</p>
 <pre class="r"><code># export to sheets of an Excel workbook
 export(list(mtcars = mtcars, iris = iris), &quot;multi.xlsx&quot;)</code></pre>
@@ -1853,10 +1949,10 @@ fwf &lt;- tempfile(fileext = &quot;.fwf&quot;)
 cat(file = fwf, &quot;123456&quot;, &quot;987654&quot;, sep = &quot;\n&quot;)
 
 # see two ways to read in the file
-identical(import(fwf, widths = c(1,2,3)), import(fwf, widths = c(1,-2,3)))</code></pre>
+identical(import(fwf, widths = c(1, 2, 3)), import(fwf, widths = c(1, -2, 3)))</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code># convert to CSV
-convert(fwf, &quot;fwf.csv&quot;, in_opts = list(widths = c(1,2,3)))
+convert(fwf, &quot;fwf.csv&quot;, in_opts = list(widths = c(1, 2, 3)))
 import(&quot;fwf.csv&quot;) # check conversion</code></pre>
 <pre><code>##   V1 V2  V3
 ## 1  1 23 456
@@ -1864,43 +1960,6 @@ import(&quot;fwf.csv&quot;) # check conversion</code></pre>
 <p>With metadata-rich file formats (e.g., Stata, SPSS, SAS), it can also be useful to pass imported data through <code>characterize()</code> or <code>factorize()</code> when converting to an open, text-delimited format: <code>characterize()</code> converts a single variable or all variables in a data frame that have “labels” attributes into character vectors based on the mapping of values to value labels (e.g., <code>export(characterize(import(&quot;file.dta&quot;)), &quot;file.csv&quot;)</code>). An alternative approach is exporting to CSVY format, which records metadata in a YAML-formatted header at the beginning of a CSV file.</p>
 <p>It is also possible to use <strong>rio</strong> on the command-line by calling <code>Rscript</code> with the <code>-e</code> (expression) argument. For example, to convert a file from Stata (.dta) to comma-separated values (.csv), simply do the following:</p>
 <pre><code>Rscript -e &quot;rio::convert(&#39;mtcars.dta&#39;, &#39;mtcars.csv&#39;)&quot;</code></pre>
-</div>
-<div id="package-philosophy" class="section level2">
-<h2>Package Philosophy</h2>
-<p>The core advantage of <strong>rio</strong> is that it makes assumptions that the user is probably willing to make. Eight of these are important:</p>
-<ol style="list-style-type: decimal">
-<li><strong>rio</strong> uses the file extension of a file name to determine what kind of file it is. This is the same logic used by Windows OS, for example, in determining what application is associated with a given file type. By removing the need to manually match a file type (which a beginner may not recognize) to a particular import or export function, <strong>rio</strong> allows almost all common data formats to be read with the same function. And if a file extension is incorrect, users can force a particular import method by specifying the <code>format</code> argument. Other packages do this as well, but <strong>rio</strong> aims to be more complete and more consistent than each:</li>
-</ol>
-<ul>
-<li><a href="https://cran.r-project.org/package=reader"><strong>reader</strong></a> handles certain text formats and R binary files</li>
-<li><a href="https://cran.r-project.org/package=io"><strong>io</strong></a> offers a set of custom formats</li>
-<li><a href="https://cran.r-project.org/package=ImportExport"><strong>ImportExport</strong></a> focuses on select binary formats (Excel, SPSS, and Access files) and provides a Shiny interface.</li>
-<li><a href="https://cran.r-project.org/package=SchemaOnRead"><strong>SchemaOnRead</strong></a> iterates through a large number of possible import methods until one works successfully</li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li><p><strong>rio</strong> uses <code>data.table::fread()</code> for text-delimited files to automatically determine the file format regardless of the extension. So, a CSV that is actually tab-separated will still be correctly imported. It’s also crazy fast.</p></li>
-<li><p><strong>rio</strong>, wherever possible, does not import character strings as factors.</p></li>
-<li><p><strong>rio</strong> supports web-based imports natively, including from SSL (HTTPS) URLs, from shortened URLs, from URLs that lack proper extensions, and from (public) Google Documents Spreadsheets.</p></li>
-<li><p><strong>rio</strong> imports from from single-file .zip and .tar archives automatically, without the need to explicitly decompress them. Export to compressed directories is also supported.</p></li>
-<li><p><strong>rio</strong> wraps a variety of faster, more stream-lined I/O packages than those provided by base R or the <strong>foreign</strong> package. It uses <a href="https://cran.r-project.org/package=data.table"><strong>data.table</strong></a> for delimited formats, <a href="https://cran.r-project.org/package=haven"><strong>haven</strong></a> for SAS, Stata, and SPSS files, smarter and faster fixed-width file import and export routines, and <a href="https://cran.r-project.org/package=readxl"><strong>readxl</strong></a> and <a href="https://cran.r-project.org/package=openxlsx"><strong>openxlsx</strong></a> for reading and writing Excel workbooks.</p></li>
-<li><p><strong>rio</strong> stores metadata from rich file formats (SPSS, Stata, etc.) in variable-level attributes in a consistent form regardless of file type or underlying import function. These attributes are identified as:</p>
-<ul>
-<li><code>label</code>: a description of variable</li>
-<li><code>labels</code>: a vector mapping numeric values to character strings those values represent</li>
-<li><code>format</code>: a character string describing the variable storage type in the original file</li>
-</ul>
-<p>The <code>gather_attrs()</code> function makes it easy to move variable-level attributes to the data frame level (and <code>spread_attrs()</code> reverses that gathering process). These can be useful, especially, during file conversion to more easily modify attributes that are handled differently across file formats. As an example, the following idiom can be used to trim SPSS value labels to the 32-character maximum allowed by Stata:</p>
-<pre class="r"><code>dat &lt;- gather_attrs(rio::import(&quot;data.sav&quot;))
-attr(dat, &quot;labels&quot;) &lt;- lapply(attributes(dat)$labels, function(x) {
-    if (!is.null(x)) {
-        names(x) &lt;- substring(names(x), 1, 32)
-    }
-    x
-})
-export(spread_attrs(dat), &quot;data.dta&quot;)</code></pre>
-<p>In addition, two functions (added in v0.5.5) provide easy ways to create character and factor variables from these “labels” attributes. <code>characterize()</code> converts a single variable or all variables in a data frame that have “labels” attributes into character vectors based on the mapping of values to value labels. <code>factorize()</code> does the same but returns factor variables. This can be especially helpful for converting these rich file formats into open formats (e.g., <code>export(characterize(import(&quot;file.dta&quot;)), &quot;file.csv&quot;)</code>.</p></li>
-<li><p><strong>rio</strong> imports and exports files based on an internal S3 class infrastructure. This means that other packages can contain extensions to <strong>rio</strong> by registering S3 methods. These methods should take the form <code>.import.rio_X()</code> and <code>.export.rio_X()</code>, where <code>X</code> is the file extension of a file type. An example is provided in the <a href="https://github.com/leeper/rio.db">rio.db package</a>.</p></li>
-</ol>
 </div>
 </div>
 

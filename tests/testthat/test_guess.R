@@ -10,17 +10,22 @@ test_that("File extension converted correctly", {
 })
 
 test_that("Format converted correctly", {
-    expect_that(get_type(","), equals("csv"))
-    expect_that(get_type(";"), equals("csv2"))
-    expect_that(get_type("|"), equals("psv"))
-    expect_that(get_type("\t"), equals("tsv"))
-    expect_that(get_type("excel"), equals("xlsx"))
-    expect_that(get_type("stata"), equals("dta"))
-    expect_that(get_type("spss"), equals("sav"))
-    expect_that(get_type("sas"), equals("sas7bdat"))
+    expect_that(.standardize_format(","), equals("csv"))
+    expect_that(.standardize_format(";"), equals("csv2"))
+    expect_that(.standardize_format("|"), equals("psv"))
+    expect_that(.standardize_format("\t"), equals("tsv"))
+    expect_that(.standardize_format("excel"), equals("xlsx"))
+    expect_that(.standardize_format("stata"), equals("dta"))
+    expect_that(.standardize_format("spss"), equals("sav"))
+    expect_that(.standardize_format("sas"), equals("sas7bdat"))
 })
 
 test_that("Export without file specified", {
     expect_true(export(iris, format = "csv") %in% dir())
     unlink("iris.csv")
+})
+
+test_that(".check_pkg_availability", {
+    expect_error(.check_pkg_availability("nonexistingpkg1233222"), "Suggested package `nonexisting")
+    expect_error(.check_pkg_availability("rio"), NA)
 })

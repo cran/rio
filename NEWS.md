@@ -1,3 +1,39 @@
+# rio 1.0.0
+
+* Stop loading the entire namespace of a suggested package when it is available #296
+* Unexport objects: `.import`, `.export`, `is_file_text`; remove documentation for `arg_reconcile` #321
+* Update Examples to make them more realistic #327
+* Add support for `qs` #275 h/t David Schoch
+* Use `arrow` to import / export `feather` #340
+* `export_list` can write multiple data frames to a single archive file (e.g. zip, tar) or a directory #346 h/t David Schoch
+* `get_info` is added #350
+* POTENTIALLY BREAKING: `setclass` parameter is now authoritative. Therefore: `import("starwars.csv", data.table = TRUE, setclass = "tibble")` will return a tibble (unlike previous versions where a data.table is returned). The default class is data frame. You can either explicitly use the `setclass` parameter; or set the option: `options(rio.import.class = "data.table")`. h/t David Schoch #336
+* Parquet and feather are now formats supported out of the box; Possible to setclass to `arrow` / `arrow_table`; ArrowTabular class can be exported #315
+* Add "extension", "labelled" vignettes
+* Support readODS 2.1.0 features such as reading and writing Flat ODS; export Multiple data frames #358
+* POTENTIALLY BREAKING: Use `writexl` instead of `openxlsx`. Option to read xlsx with `openxlsx` (i.e. `import("starwars.xlsx", readxl = FALSE)`) is always `TRUE`. The ability to overwrite an existing sheet in an existing xlsx file is also removed. It is against the design principle of `rio`.
+* POTENTIALLY BREAKING: The following options are deprecated: `import(fread)`, `import(readr = TRUE)`, `import(haven)`, `import(readxl)` and `export(fwrite)`. import will almost use `data.table`, `haven`, `readxl`, and internal function (for fwf) to import and export data. Currently, those options stay for backward compatibility but will be removed in v2.0.0. #343 h/t David Schoch 
+* POTENTIALLY BREAKING: `...` is handled differently. Underlying functions using "Tidy" convention (e.g. `readxl::read_xlsx()`) can use "Base Convention" (See the new vignette: `remap`). Unused arguments passed to the underlying function as `...` are silently ignored by default. A new option `rio.ignoreunusedargs` is added to control this behavior. #326
+* Bug fixes
+   - ... is correctly passed for exporting ODS and feather #318
+   - POTENTIALLY BREAKING: JSON are exported in UTF-8 by default; solved encoding issues on
+     Windows R < 4.2. This won't affect any modern R installation where UTF-8 is the default. #318
+   - POTENTIALLY BREAKING: YAML are exported using yaml::write_yaml(). But it can't pass the UTF-8 check on older systems.
+     Disclaimer added. #318
+   - More check for the `file` argument #301
+   - `import_list` works with single Excel/HTML/Zip online #294
+   - Correct XML/HTML escaping #303
+   - Create directory if it doesn't exist #347
+* Declutter
+   - remove the obsolete data.table option #323
+   - write all documentation blocks in markdown #311
+   - remove all @importFrom #325 h/t David Schoch
+   - rearrange "Package Philosophy" as a Vignette #320
+   - Create a single source of truth about all import and export functions #313
+   - Clarify all concepts: now there is only `format` #351
+* New authors
+   - David Schoch @schochastics 
+
 # rio 0.5.30
 
 * Maintenance release: new maintainer
@@ -7,6 +43,7 @@
 # rio 0.5.29
 
 * fixes for CRAN
+
 
 # rio 0.5.28
 

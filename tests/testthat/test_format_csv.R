@@ -25,8 +25,8 @@ test_that("Import from (European-style) CSV with semicolon separator", {
     write.table(iris, "iris2.csv", dec = ",", sep = ";", row.names = FALSE)
     expect_true("iris2.csv" %in% dir())
     # import works (even if column classes are incorrect)
-    expect_true(is.data.frame(import("iris2.csv", fread = TRUE, header = TRUE)))
-    iris_imported <- import("iris2.csv", format = ";", fread = TRUE, header = TRUE)
+    expect_true(is.data.frame(import("iris2.csv", header = TRUE)))
+    iris_imported <- import("iris2.csv", format = ";", header = TRUE)
     # import works with correct, numeric column classes
     expect_true(is.data.frame(iris_imported))
     expect_true(is.numeric(iris_imported[["Sepal.Length"]]))
@@ -44,7 +44,7 @@ test_that("Import from CSV (read.csv)", {
 })
 
 test_that("Import from CSV (fread)", {
-    expect_true(is.data.frame(import("iris.csv", format = "csv2", fread = TRUE)))
+    expect_true(is.data.frame(import("iris.csv", format = "csv2")))
 })
 
 test_that("Export to TSV with CSV extension", {
@@ -59,6 +59,12 @@ test_that("Import from TSV with CSV extension", {
     expect_true(ncol(import("iris.csv", format = "csv")) == 5L)
     expect_true(ncol(import("iris.csv", sep = "auto")) == 5L)
 })
+
+test_that("fread is deprecated", {
+    lifecycle::expect_deprecated(import("iris.csv", fread = TRUE))
+    lifecycle::expect_deprecated(import("iris.csv", fread = FALSE))
+})
+
 
 unlink("iris.csv")
 unlink("iris2.csv")

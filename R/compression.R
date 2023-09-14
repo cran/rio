@@ -1,18 +1,14 @@
 find_compress <- function(f) {
     if (grepl("zip$", f)) {
-        file <- sub("\\.zip$", "", f)
-        compress <- "zip"
-    } else if (grepl("tar\\.gz$", f)) {
-        file <- sub("\\.tar\\.gz$", "", f)
-        compress <- "tar"
-    } else if (grepl("tar$", f)) {
-        file <- sub("\\.tar$", "", f)
-        compress <- "tar"
-    } else {
-        file <- f
-        compress <- NA_character_
+        return(list(file = sub("\\.zip$", "", f), compress = "zip"))
     }
-    return(list(file = file, compress = compress))
+    if (grepl("tar\\.gz$", f)) {
+        return(list(file = sub("\\.tar\\.gz$", "", f), compress = "tar"))
+    }
+    if (grepl("tar$", f)) {
+        return(list(file = sub("\\.tar$", "", f), compress = "tar"))
+    }
+    return(list(file = f, compress = NA_character_))
 }
 
 compress_out <- function(cfile, filename, type = c("zip", "tar", "gzip", "bzip2", "xz")) {
@@ -35,12 +31,12 @@ compress_out <- function(cfile, filename, type = c("zip", "tar", "gzip", "bzip2"
     on.exit(setwd(wd), add = TRUE)
     setwd(tmp)
     if (type == "zip") {
-        o <- zip(cfile2, files = basename(filename))
+        o <- utils::zip(cfile2, files = basename(filename))
     } else {
         if (type == "tar") {
             type <- "none"
         }
-        o <- tar(cfile2, files = basename(filename), compression = type)
+        o <- utils::tar(cfile2, files = basename(filename), compression = type)
     }
     setwd(wd)
     if (o != 0) {
@@ -51,48 +47,34 @@ compress_out <- function(cfile, filename, type = c("zip", "tar", "gzip", "bzip2"
     return(cfile)
 }
 
-
-parse_zip <- function(file, which, ...) {
-    d <- tempfile()
-    dir.create(d)
-    file_list <- utils::unzip(file, list = TRUE)
-    if (missing(which)) {
-        which <- 1
-        if (nrow(file_list) > 1) {
-            warning(sprintf("Zip archive contains multiple files. Attempting first file."))
-        }
-    }
-    if (is.numeric(which)) {
-        utils::unzip(file, files = file_list$Name[which], exdir = d)
-        file.path(d, file_list$Name[which])
+parse_archive <- function(file, which, file_type, ...) {
+    if (file_type == "zip") {
+        file_list <- utils::unzip(file, list = TRUE)$Name
+        extract_func <- utils::unzip
+    } else if (file_type == "tar") {
+        file_list <- utils::untar(file, list = TRUE)
+        extract_func <- utils::untar
     } else {
-        if (substring(which, 1,1) != "^") {
-            which2 <- paste0("^", which)
-        }
-        utils::unzip(file, files = file_list$Name[grep(which2, file_list$Name)[1]], exdir = d)
-        file.path(d, which)
+        stop("Unsupported file_type. Use 'zip' or 'tar'.")
     }
-}
 
-parse_tar <- function(file, which, ...) {
     d <- tempfile()
     dir.create(d)
-    on.exit(unlink(d))
-    file_list <- utils::untar(file, list = TRUE)
+
     if (missing(which)) {
-        which <- 1
         if (length(file_list) > 1) {
-            warning(sprintf("Tar archive contains multiple files. Attempting first file."))
+            warning(sprintf("%s archive contains multiple files. Attempting first file.", file_type))
         }
+        which <- 1
     }
+
     if (is.numeric(which)) {
-        utils::untar(file, files = file_list[which], exdir = d)
-        file.path(d, file_list[which])
-    } else {
-        if (substring(which, 1,1) != "^") {
-            which2 <- paste0("^", which)
-        }
-        utils::untar(file, files = file_list[grep(which2, file_list)[1]], exdir = d)
-        file.path(d, which)
+        extract_func(file, files = file_list[which], exdir = d)
+        return(file.path(d, file_list[which]))
     }
+    if (substring(which, 1, 1) != "^") {
+        which2 <- paste0("^", which)
+    }
+    extract_func(file, files = file_list[grep(which2, file_list)[1]], exdir = d)
+    return(file.path(d, which))
 }

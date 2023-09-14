@@ -10,7 +10,7 @@ Version](https://www.r-pkg.org/badges/version/rio)](https://cran.r-project.org/p
 ## Overview
 
 The aim of **rio** is to make data file I/O in R as easy as possible by
-implementing four simple functions in Swiss-army knife style:
+implementing two main functions in Swiss-army knife style:
 
   - `import()` provides a painless data import experience by
     automatically choosing the appropriate import/read function based on
@@ -34,7 +34,7 @@ The latest development version on GitHub can be installed using:
 if (!require("remotes")){
     install.packages("remotes")
 }
-remotes::install_github("chainsawriot/rio")
+remotes::install_github("gesistsa/rio")
 ```
 
 Optional: Installation of additional formats (see below: **Supported
@@ -130,45 +130,51 @@ install_formats()
 
 The full list of supported formats is below:
 
-| Format                                                | Typical Extension       | Import Package                                                  | Export Package                                                                                                          | Installed by Default |
-| ----------------------------------------------------- | ----------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| Comma-separated data                                  | .csv                    | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table)                                                         | Yes                  |
-| Pipe-separated data                                   | .psv                    | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table)                                                         | Yes                  |
-| Tab-separated data                                    | .tsv                    | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table)                                                         | Yes                  |
-| CSVY (CSV + YAML metadata header)                     | .csvy                   | [**data.table**](https://cran.r-project.org/package=data.table) | [**data.table**](https://cran.r-project.org/package=data.table)                                                         | Yes                  |
-| SAS                                                   | .sas7bdat               | [**haven**](https://cran.r-project.org/package=haven)           | [**haven**](https://cran.r-project.org/package=haven) (but [deprecated](https://github.com/tidyverse/haven/issues/224)) | Yes                  |
-| SPSS                                                  | .sav                    | [**haven**](https://cran.r-project.org/package=haven)           | [**haven**](https://cran.r-project.org/package=haven)                                                                   | Yes                  |
-| SPSS (compressed)                                     | .zsav                   | [**haven**](https://cran.r-project.org/package=haven)           | [**haven**](https://cran.r-project.org/package=haven)                                                                   | Yes                  |
-| Stata                                                 | .dta                    | [**haven**](https://cran.r-project.org/package=haven)           | [**haven**](https://cran.r-project.org/package=haven)                                                                   | Yes                  |
-| SAS XPORT                                             | .xpt                    | [**haven**](https://cran.r-project.org/package=haven)           | [**haven**](https://cran.r-project.org/package=haven)                                                                   | Yes                  |
-| SPSS Portable                                         | .por                    | [**haven**](https://cran.r-project.org/package=haven)           |                                                                                                                         | Yes                  |
-| Excel                                                 | .xls                    | [**readxl**](https://cran.r-project.org/package=readxl)         |                                                                                                                         | Yes                  |
-| Excel                                                 | .xlsx                   | [**readxl**](https://cran.r-project.org/package=readxl)         | [**openxlsx**](https://cran.r-project.org/package=openxlsx)                                                             | Yes                  |
-| R syntax                                              | .R                      | **base**                                                        | **base**                                                                                                                | Yes                  |
-| Saved R objects                                       | .RData, .rda            | **base**                                                        | **base**                                                                                                                | Yes                  |
-| Serialized R objects                                  | .rds                    | **base**                                                        | **base**                                                                                                                | Yes                  |
-| Epiinfo                                               | .rec                    | [**foreign**](https://cran.r-project.org/package=foreign)       |                                                                                                                         | Yes                  |
-| Minitab                                               | .mtp                    | [**foreign**](https://cran.r-project.org/package=foreign)       |                                                                                                                         | Yes                  |
-| Systat                                                | .syd                    | [**foreign**](https://cran.r-project.org/package=foreign)       |                                                                                                                         | Yes                  |
-| “XBASE” database files                                | .dbf                    | [**foreign**](https://cran.r-project.org/package=foreign)       | [**foreign**](https://cran.r-project.org/package=foreign)                                                               | Yes                  |
-| Weka Attribute-Relation File Format                   | .arff                   | [**foreign**](https://cran.r-project.org/package=foreign)       | [**foreign**](https://cran.r-project.org/package=foreign)                                                               | Yes                  |
-| Data Interchange Format                               | .dif                    | **utils**                                                       |                                                                                                                         | Yes                  |
-| Fortran data                                          | no recognized extension | **utils**                                                       |                                                                                                                         | Yes                  |
-| Fixed-width format data                               | .fwf                    | **utils**                                                       | **utils**                                                                                                               | Yes                  |
-| gzip comma-separated data                             | .csv.gz                 | **utils**                                                       | **utils**                                                                                                               | Yes                  |
-| Apache Arrow (Parquet)                                | .parquet                | [**arrow**](https://cran.r-project.org/package=arrow)           | [**arrow**](https://cran.r-project.org/package=arrow)                                                                   | No                   |
-| EViews                                                | .wf1                    | [**hexView**](https://cran.r-project.org/package=hexView)       |                                                                                                                         | No                   |
-| Feather R/Python interchange format                   | .feather                | [**feather**](https://cran.r-project.org/package=feather)       | [**feather**](https://cran.r-project.org/package=feather)                                                               | No                   |
-| Fast Storage                                          | .fst                    | [**fst**](https://cran.r-project.org/package=fst)               | [**fst**](https://cran.r-project.org/package=fst)                                                                       | No                   |
-| JSON                                                  | .json                   | [**jsonlite**](https://cran.r-project.org/package=jsonlite)     | [**jsonlite**](https://cran.r-project.org/package=jsonlite)                                                             | No                   |
-| Matlab                                                | .mat                    | [**rmatio**](https://cran.r-project.org/package=rmatio)         | [**rmatio**](https://cran.r-project.org/package=rmatio)                                                                 | No                   |
-| OpenDocument Spreadsheet                              | .ods                    | [**readODS**](https://cran.r-project.org/package=readODS)       | [**readODS**](https://cran.r-project.org/package=readODS)                                                               | No                   |
-| HTML Tables                                           | .html                   | [**xml2**](https://cran.r-project.org/package=xml2)             | [**xml2**](https://cran.r-project.org/package=xml2)                                                                     | No                   |
-| Shallow XML documents                                 | .xml                    | [**xml2**](https://cran.r-project.org/package=xml2)             | [**xml2**](https://cran.r-project.org/package=xml2)                                                                     | No                   |
-| YAML                                                  | .yml                    | [**yaml**](https://cran.r-project.org/package=yaml)             | [**yaml**](https://cran.r-project.org/package=yaml)                                                                     | No                   |
-| Clipboard                                             | default is tsv          | [**clipr**](https://cran.r-project.org/package=clipr)           | [**clipr**](https://cran.r-project.org/package=clipr)                                                                   | No                   |
-| [Google Sheets](https://www.google.com/sheets/about/) | as Comma-separated data |                                                                 |                                                                                                                         |                      |
-| Graphpad Prism                                        | .pzfx                   | [**pzfx**](https://cran.r-project.org/package=pzfx)             | [**pzfx**](https://cran.r-project.org/package=pzfx)                                                                     | No                   |
+| Name                                | Extensions / “format” | Import Package | Export Package | Type    | Note                    |
+| :---------------------------------- | :-------------------- | :------------- | :------------- | :------ | :---------------------- |
+| Archive files (handled by tar)      | bzip2 / xz / tar      | utils          | utils          | Default |                         |
+| Gzip files                          | gz / gzip             | base           | base           | Default |                         |
+| Zip files                           | zip                   | utils          | utils          | Default |                         |
+| Apache Arrow (Parquet)              | parquet               | arrow          | arrow          | Default |                         |
+| CSVY (CSV + YAML metadata header)   | csvy                  | data.table     | data.table     | Default |                         |
+| Comma-separated data                | csv                   | data.table     | data.table     | Default |                         |
+| Comma-separated data (European)     | csv2                  | data.table     | data.table     | Default |                         |
+| Data Interchange Format             | dif                   | utils          |                | Default |                         |
+| Epiinfo                             | epiinfo / rec         | foreign        |                | Default |                         |
+| Excel                               | excel / xlsx          | readxl         | writexl        | Default |                         |
+| Excel (Legacy)                      | xls                   | readxl         |                | Default |                         |
+| Feather R/Python interchange format | feather               | arrow          | arrow          | Default |                         |
+| Fixed-width format data             | fwf                   | utils          | utils          | Default |                         |
+| Fortran data                        | fortran               | utils          |                | Default | No recognized extension |
+| Google Sheets                       | googlesheets          | data.table     |                | Default | As comma-separated data |
+| Minitab                             | minitab / mtp         | foreign        |                | Default |                         |
+| Pipe-separated data                 | psv                   | data.table     | data.table     | Default |                         |
+| R syntax                            | r                     | base           | base           | Default |                         |
+| SAS                                 | sas / sas7bdat        | haven          | haven          | Default | Export is deprecated    |
+| SAS XPORT                           | xport / xpt           | haven          | haven          | Default |                         |
+| SPSS                                | sav / spss            | haven          | haven          | Default |                         |
+| SPSS (compressed)                   | zsav                  | haven          | haven          | Default |                         |
+| SPSS Portable                       | por                   | haven          |                | Default |                         |
+| Saved R objects                     | rda / rdata           | base           | base           | Default |                         |
+| Serialized R objects                | rds                   | base           | base           | Default |                         |
+| Stata                               | dta / stata           | haven          | haven          | Default |                         |
+| Systat                              | syd / systat          | foreign        |                | Default |                         |
+| Tab-separated data                  | / tsv / txt           | data.table     | data.table     | Default |                         |
+| Text Representations of R Objects   | dump                  | base           | base           | Default |                         |
+| Weka Attribute-Relation File Format | arff / weka           | foreign        | foreign        | Default |                         |
+| XBASE database files                | dbf                   | foreign        | foreign        | Default |                         |
+| Clipboard                           | clipboard             | clipr          | clipr          | Suggest | default is tsv          |
+| EViews                              | eviews / wf1          | hexView        |                | Suggest |                         |
+| Fast Storage                        | fst                   | fst            | fst            | Suggest |                         |
+| Graphpad Prism                      | pzfx                  | pzfx           | pzfx           | Suggest |                         |
+| HTML Tables                         | htm / html            | xml2           | xml2           | Suggest |                         |
+| JSON                                | json                  | jsonlite       | jsonlite       | Suggest |                         |
+| Matlab                              | mat / matlab          | rmatio         | rmatio         | Suggest |                         |
+| OpenDocument Spreadsheet            | ods                   | readODS        | readODS        | Suggest |                         |
+| OpenDocument Spreadsheet (Flat)     | fods                  | readODS        | readODS        | Suggest |                         |
+| Serialized R objects (Quick)        | qs                    | qs             | qs             | Suggest |                         |
+| Shallow XML documents               | xml                   | xml2           | xml2           | Suggest |                         |
+| YAML                                | yaml / yml            | yaml           | yaml           | Suggest |                         |
 
 Additionally, any format that is not supported by **rio** but that has a
 known R implementation will produce an informative error message
@@ -234,95 +240,6 @@ c("mtcars.tsv", "iris.tsv") %in% dir()
 ```
 
     ## [1] TRUE TRUE
-
-## Package Philosophy
-
-The core advantage of **rio** is that it makes assumptions that the user
-is probably willing to make. Eight of these are important:
-
-1.  **rio** uses the file extension of a file name to determine what
-    kind of file it is. This is the same logic used by Windows OS, for
-    example, in determining what application is associated with a given
-    file type. By removing the need to manually match a file type (which
-    a beginner may not recognize) to a particular import or export
-    function, **rio** allows almost all common data formats to be read
-    with the same function. And if a file extension is incorrect, users
-    can force a particular import method by specifying the `format`
-    argument.
-
-2.  **rio** uses `data.table::fread()` for text-delimited files to
-    automatically determine the file format regardless of the extension.
-    So, a CSV that is actually tab-separated will still be correctly
-    imported. It’s also crazy fast.
-
-3.  **rio**, wherever possible, does not import character strings as
-    factors.
-
-4.  **rio** supports web-based imports natively, including from SSL
-    (HTTPS) URLs, from shortened URLs, from URLs that lack proper
-    extensions, and from (public) Google Documents Spreadsheets.
-
-5.  **rio** imports from from single-file .zip and .tar archives
-    automatically, without the need to explicitly decompress them.
-    Export to compressed directories is also supported.
-
-6.  **rio** wraps a variety of faster, more stream-lined I/O packages
-    than those provided by base R or the **foreign** package. It uses
-    [**data.table**](https://cran.r-project.org/package=data.table) for
-    delimited formats,
-    [**haven**](https://cran.r-project.org/package=haven) for SAS,
-    Stata, and SPSS files, smarter and faster fixed-width file import
-    and export routines, and
-    [**readxl**](https://cran.r-project.org/package=readxl) and
-    [**openxlsx**](https://cran.r-project.org/package=openxlsx) for
-    reading and writing Excel workbooks.
-
-7.  **rio** stores metadata from rich file formats (SPSS, Stata, etc.)
-    in variable-level attributes in a consistent form regardless of file
-    type or underlying import function. These attributes are identified
-    as:
-    
-      - `label`: a description of variable
-      - `labels`: a vector mapping numeric values to character strings
-        those values represent
-      - `format`: a character string describing the variable storage
-        type in the original file
-    
-    The `gather_attrs()` function makes it easy to move variable-level
-    attributes to the data frame level (and `spread_attrs()` reverses
-    that gathering process). These can be useful, especially, during
-    file conversion to more easily modify attributes that are handled
-    differently across file formats. As an example, the following idiom
-    can be used to trim SPSS value labels to the 32-character maximum
-    allowed by Stata:
-    
-    ``` r
-    dat <- gather_attrs(rio::import("data.sav"))
-    attr(dat, "labels") <- lapply(attributes(dat)$labels, function(x) {
-        if (!is.null(x)) {
-            names(x) <- substring(names(x), 1, 32)
-        }
-        x
-    })
-    export(spread_attrs(dat), "data.dta")
-    ```
-    
-    In addition, two functions (added in v0.5.5) provide easy ways to
-    create character and factor variables from these “labels”
-    attributes. `characterize()` converts a single variable or all
-    variables in a data frame that have “labels” attributes into
-    character vectors based on the mapping of values to value labels.
-    `factorize()` does the same but returns factor variables. This can
-    be especially helpful for converting these rich file formats into
-    open formats (e.g., `export(characterize(import("file.dta")),
-    "file.csv")`.
-
-8.  **rio** imports and exports files based on an internal S3 class
-    infrastructure. This means that other packages can contain
-    extensions to **rio** by registering S3 methods. These methods
-    should take the form `.import.rio_X()` and `.export.rio_X()`, where
-    `X` is the file extension of a file type. An example is provided in
-    the [rio.db package](https://github.com/leeper/rio.db).
 
 ## Other projects
 

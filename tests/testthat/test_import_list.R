@@ -27,6 +27,17 @@ test_that("Import multiple HTML tables in import_list()", {
     expect_true(identical(names(dat[[2]]), names(iris)))
 })
 
+test_that("Import multiple HTML tables in import_list() but with htm #350", {
+    temphtm <- tempfile(fileext = ".htm")
+    file.copy("../testdata/twotables.html", temphtm)
+    dat <- import_list(temphtm)
+    expect_true(identical(dim(dat[[1]]), dim(mtcars)))
+    expect_true(identical(names(dat[[1]]), names(mtcars)))
+    expect_true(identical(dim(dat[[2]]), dim(iris)))
+    expect_true(identical(names(dat[[2]]), names(iris)))
+})
+
+
 test_that("import_list() preserves 'which' names when specified", {
     export(list(a = mtcars, b = iris), "foo.xlsx")
     expect_true(identical(names(import_list("foo.xlsx")), c("a", "b")))
@@ -87,6 +98,44 @@ test_that("File names are added as attributes by import_list()", {
     expect_identical(unlist(lapply(dat, attr, "filename")), expected_attrs)
 
     unlink(c("mtcars.csv", "mtcars.tsv"))
+})
+
+test_that("URL #294", {
+    skip_on_cran()
+    ## url <- "https://evs.nci.nih.gov/ftp1/CDISC/SDTM/SDTM%20Terminology.xls" That's 10MB!
+    url <- "https://github.com/tidyverse/readxl/raw/main/tests/testthat/sheets/sheet-xml-lookup.xlsx"
+    expect_error(x <- import_list(url), NA)
+    expect_true(inherits(x, "list"))
+    expect_true("Asia" %in% names(x))
+    expect_true("Africa" %in% x[[1]]$continent)
+    expect_false("Africa" %in% x[[2]]$continent)
+    ## double URLs; it reads twice the first sheet by default
+    urls <- c(url, url)
+    expect_error(x2 <- import_list(urls), NA)
+    expect_true("sheet-xml-lookup" %in% names(x2))
+    expect_true("Africa" %in% x2[[1]]$continent)
+    expect_true("Africa" %in% x2[[2]]$continent)
+})
+
+test_that("Universal dummy `which` #326", {
+    formats <- c("xlsx", "dta", "sav", "csv", "csv2")
+    for (format in formats) {
+        tempzip <- tempfile(fileext = paste0(".", format, ".zip"))
+        rio::export(mtcars, tempzip, format = format)
+        expect_warning(rio::import(tempzip), NA)
+        expect_warning(rio::import_list(tempzip), NA)
+    }
+})
+
+test_that("Universal dummy `which` (Suggests) #326", {
+    skip_if_not_installed("qs")
+    formats <- c("qs", "parquet", "ods")
+    for (format in formats) {
+        tempzip <- tempfile(fileext = paste0(".", format, ".zip"))
+        rio::export(mtcars, tempzip, format = format)
+        expect_warning(rio::import(tempzip), NA)
+        expect_warning(rio::import_list(tempzip), NA)
+    }
 })
 
 unlink("data.rdata")

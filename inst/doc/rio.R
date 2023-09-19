@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 suppressPackageStartupMessages(library(data.table))
 
 ## ----featuretable, echo = FALSE-----------------------------------------------
@@ -22,7 +22,7 @@ feature_table <- feature_table[,c("format_name", "signature", "import_function",
 colnames(feature_table) <- c("Name", "Extensions / \"format\"", "Import Package", "Export Package", "Type", "Note")
 knitr::kable(feature_table)
 
-## ---- echo=FALSE, results='hide'----------------------------------------------
+## ----echo=FALSE, results='hide'-----------------------------------------------
 library("rio")
 
 export(mtcars, "mtcars.csv")
@@ -44,7 +44,7 @@ all.equal(x, z, check.attributes = FALSE)
 ## -----------------------------------------------------------------------------
 head(import("mtcars_noext", format = "csv"))
 
-## ---- echo=FALSE, results='hide'----------------------------------------------
+## ----echo=FALSE, results='hide'-----------------------------------------------
 unlink("mtcars.csv")
 unlink("mtcars.rds")
 unlink("mtcars.dta")
@@ -98,13 +98,13 @@ identical(import(fwf, widths = c(1, 2, 3)), import(fwf, widths = c(1, -2, 3)))
 convert(fwf, "fwf.csv", in_opts = list(widths = c(1, 2, 3)))
 import("fwf.csv") # check conversion
 
-## ---- echo=FALSE, results='hide'----------------------------------------------
+## ----echo=FALSE, results='hide'-----------------------------------------------
 unlink("mtcars.dta")
 unlink("mtcars.sav")
 unlink("fwf.csv")
 unlink(fwf)
 
-## ---- echo=FALSE, results='hide'----------------------------------------------
+## ----echo=FALSE, results='hide'-----------------------------------------------
 unlink("mtcars.csv")
 unlink("mtcars.rds")
 unlink("mtcars.rdata")

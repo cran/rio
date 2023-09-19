@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -24,6 +24,6 @@ R.utils::withOptions({
     import("example.xlsx", sheet = "iris", n_max = 10, pizza = "pineapple")
 }, rio.ignoreunusedargs = FALSE)
 
-## ---- echo = FALSE, results = 'hide'------------------------------------------
+## ----echo = FALSE, results = 'hide'-------------------------------------------
 unlink("example.xlsx")
 

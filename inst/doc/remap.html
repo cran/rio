@@ -495,7 +495,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">#&gt; 8           5.0         3.4          1.5         0.2  setosa</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">#&gt; 9           4.4         2.9          1.4         0.2  setosa</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">#&gt; 10          4.9         3.1          1.5         0.1  setosa</span></span></code></pre></div>
-<p>If you don’t like this behavior, please change the option <code>rio.ignoreunusedargs</code> to <code>FALSE</code>, i.e. <code>option(rio.ignoreunusedargs = FALSE)</code>.</p>
+<p>If you don’t like this behavior, please change the option <code>rio.ignoreunusedargs</code> to <code>FALSE</code>, i.e. <code>options(rio.ignoreunusedargs = FALSE)</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">options</span>(<span class="dt">rio.ignoreunusedargs =</span> <span class="ot">FALSE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">import</span>(<span class="st">&quot;example.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="st">&quot;iris&quot;</span>, <span class="dt">n_max =</span> <span class="dv">10</span>, <span class="dt">pizza =</span> <span class="st">&quot;pineapple&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; Error in (function (path, sheet = NULL, range = NULL, col_names = TRUE, : unused argument (pizza = &quot;pineapple&quot;)</code></pre>

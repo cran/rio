@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2023-09-19" />
+<meta name="date" content="2024-05-23" />
 
 <title>Import, Export, and Convert Data Files</title>
 
@@ -1503,7 +1503,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Import, Export, and Convert Data Files</h1>
-<h4 class="date">2023-09-19</h4>
+<h4 class="date">2024-05-23</h4>
 
 </div>
 
@@ -1518,7 +1518,15 @@ div.tocify {
 <p><strong>rio</strong> supports a variety of different file formats for import and export. To keep the package slim, all non-essential formats are supported via “Suggests” packages, which are not installed (or loaded) by default. To ensure rio is fully functional, install these packages the first time you use <strong>rio</strong> via:</p>
 <pre class="r"><code>install_formats()</code></pre>
 <p>The full list of supported formats is below:</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="26%"></col>
+<col width="26%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+<col width="5%"></col>
+<col width="17%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">Name</th>
@@ -1532,21 +1540,29 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="left">Archive files (handled by tar)</td>
-<td align="left">bzip2 / xz / tar</td>
+<td align="left">tar / tar.gz / tgz / tar.bz2 / tbz2</td>
 <td align="left">utils</td>
 <td align="left">utils</td>
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">Gzip files</td>
-<td align="left">gz / gzip</td>
+<td align="left">Bzip2</td>
+<td align="left">bz2 / bzip2</td>
 <td align="left">base</td>
 <td align="left">base</td>
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
+<td align="left">Gzip</td>
+<td align="left">gz / gzip</td>
+<td align="left">base</td>
+<td align="left">base</td>
+<td align="left">Default</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
 <td align="left">Zip files</td>
 <td align="left">zip</td>
 <td align="left">utils</td>
@@ -1554,7 +1570,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">CSVY (CSV + YAML metadata header)</td>
 <td align="left">csvy</td>
 <td align="left">data.table</td>
@@ -1562,7 +1578,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Comma-separated data</td>
 <td align="left">csv</td>
 <td align="left">data.table</td>
@@ -1570,7 +1586,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Comma-separated data (European)</td>
 <td align="left">csv2</td>
 <td align="left">data.table</td>
@@ -1578,7 +1594,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Data Interchange Format</td>
 <td align="left">dif</td>
 <td align="left">utils</td>
@@ -1586,7 +1602,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Epiinfo</td>
 <td align="left">epiinfo / rec</td>
 <td align="left">foreign</td>
@@ -1594,7 +1610,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Excel</td>
 <td align="left">excel / xlsx</td>
 <td align="left">readxl</td>
@@ -1602,7 +1618,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Excel (Legacy)</td>
 <td align="left">xls</td>
 <td align="left">readxl</td>
@@ -1610,15 +1626,15 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Fixed-width format data</td>
 <td align="left">fwf</td>
-<td align="left">utils</td>
+<td align="left">readr</td>
 <td align="left">utils</td>
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Fortran data</td>
 <td align="left">fortran</td>
 <td align="left">utils</td>
@@ -1626,7 +1642,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left">No recognized extension</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Google Sheets</td>
 <td align="left">googlesheets</td>
 <td align="left">data.table</td>
@@ -1634,7 +1650,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left">As comma-separated data</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Minitab</td>
 <td align="left">minitab / mtp</td>
 <td align="left">foreign</td>
@@ -1642,7 +1658,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Pipe-separated data</td>
 <td align="left">psv</td>
 <td align="left">data.table</td>
@@ -1650,7 +1666,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">R syntax</td>
 <td align="left">r</td>
 <td align="left">base</td>
@@ -1658,7 +1674,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">SAS</td>
 <td align="left">sas / sas7bdat</td>
 <td align="left">haven</td>
@@ -1666,7 +1682,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left">Export is deprecated</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">SAS XPORT</td>
 <td align="left">xport / xpt</td>
 <td align="left">haven</td>
@@ -1674,7 +1690,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">SPSS</td>
 <td align="left">sav / spss</td>
 <td align="left">haven</td>
@@ -1682,7 +1698,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">SPSS (compressed)</td>
 <td align="left">zsav</td>
 <td align="left">haven</td>
@@ -1690,7 +1706,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">SPSS Portable</td>
 <td align="left">por</td>
 <td align="left">haven</td>
@@ -1698,7 +1714,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Saved R objects</td>
 <td align="left">rda / rdata</td>
 <td align="left">base</td>
@@ -1706,7 +1722,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Serialized R objects</td>
 <td align="left">rds</td>
 <td align="left">base</td>
@@ -1714,7 +1730,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Stata</td>
 <td align="left">dta / stata</td>
 <td align="left">haven</td>
@@ -1722,7 +1738,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Systat</td>
 <td align="left">syd / systat</td>
 <td align="left">foreign</td>
@@ -1730,7 +1746,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Tab-separated data</td>
 <td align="left">/ tsv / txt</td>
 <td align="left">data.table</td>
@@ -1738,7 +1754,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Text Representations of R Objects</td>
 <td align="left">dump</td>
 <td align="left">base</td>
@@ -1746,7 +1762,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Weka Attribute-Relation File Format</td>
 <td align="left">arff / weka</td>
 <td align="left">foreign</td>
@@ -1754,7 +1770,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">XBASE database files</td>
 <td align="left">dbf</td>
 <td align="left">foreign</td>
@@ -1762,7 +1778,7 @@ div.tocify {
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Apache Arrow (Parquet)</td>
 <td align="left">parquet</td>
 <td align="left">arrow</td>
@@ -1770,7 +1786,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Clipboard</td>
 <td align="left">clipboard</td>
 <td align="left">clipr</td>
@@ -1778,7 +1794,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left">default is tsv</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">EViews</td>
 <td align="left">eviews / wf1</td>
 <td align="left">hexView</td>
@@ -1786,7 +1802,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Fast Storage</td>
 <td align="left">fst</td>
 <td align="left">fst</td>
@@ -1794,7 +1810,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Feather R/Python interchange format</td>
 <td align="left">feather</td>
 <td align="left">arrow</td>
@@ -1802,7 +1818,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Graphpad Prism</td>
 <td align="left">pzfx</td>
 <td align="left">pzfx</td>
@@ -1810,7 +1826,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">HTML Tables</td>
 <td align="left">htm / html</td>
 <td align="left">xml2</td>
@@ -1818,7 +1834,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">JSON</td>
 <td align="left">json</td>
 <td align="left">jsonlite</td>
@@ -1826,7 +1842,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Matlab</td>
 <td align="left">mat / matlab</td>
 <td align="left">rmatio</td>
@@ -1834,7 +1850,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">OpenDocument Spreadsheet</td>
 <td align="left">ods</td>
 <td align="left">readODS</td>
@@ -1842,7 +1858,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">OpenDocument Spreadsheet (Flat)</td>
 <td align="left">fods</td>
 <td align="left">readODS</td>
@@ -1850,7 +1866,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Serialized R objects (Quick)</td>
 <td align="left">qs</td>
 <td align="left">qs</td>
@@ -1858,7 +1874,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Shallow XML documents</td>
 <td align="left">xml</td>
 <td align="left">xml2</td>
@@ -1866,7 +1882,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">YAML</td>
 <td align="left">yaml / yml</td>
 <td align="left">yaml</td>
@@ -1884,13 +1900,10 @@ div.tocify {
 <pre class="r"><code>library(&quot;rio&quot;)
 
 x &lt;- import(&quot;mtcars.csv&quot;)
-y &lt;- import(&quot;mtcars.rds&quot;)
-z &lt;- import(&quot;mtcars.dta&quot;)
+y &lt;- import(&quot;mtcars.dta&quot;)
 
 # confirm identical
 all.equal(x, y, check.attributes = FALSE)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>all.equal(x, z, check.attributes = FALSE)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>If for some reason a file does not have an extension, or has a file extension that does not match its actual type, you can manually specify a file format to override the format inference step. For example, we can read in a CSV file that does not have a file extension by specifying <code>csv</code>:</p>
 <pre class="r"><code>head(import(&quot;mtcars_noext&quot;, format = &quot;csv&quot;))</code></pre>
@@ -1914,7 +1927,6 @@ all.equal(x, y, check.attributes = FALSE)</code></pre>
 <pre class="r"><code>library(&quot;rio&quot;)
 
 export(mtcars, &quot;mtcars.csv&quot;)
-export(mtcars, &quot;mtcars.rds&quot;)
 export(mtcars, &quot;mtcars.dta&quot;)</code></pre>
 <p>It is also easy to use <code>export()</code> as part of an R pipeline (from magrittr or dplyr). For example, the following code uses <code>export()</code> to save the results of a simple data transformation:</p>
 <pre class="r"><code>library(&quot;magrittr&quot;)
@@ -1925,12 +1937,6 @@ mtcars %&gt;%
 <p>Some file formats (e.g., Excel workbooks, Rdata files) can support multiple data objects in a single file. <code>export()</code> natively supports output of multiple objects to these types of files:</p>
 <pre class="r"><code># export to sheets of an Excel workbook
 export(list(mtcars = mtcars, iris = iris), &quot;multi.xlsx&quot;)</code></pre>
-<pre class="r"><code># export to an .Rdata file
-## as a named list
-export(list(mtcars = mtcars, iris = iris), &quot;multi.rdata&quot;)
-
-## as a character vector
-export(c(&quot;mtcars&quot;, &quot;iris&quot;), &quot;multi.rdata&quot;)</code></pre>
 <p>It is also possible to use the new (as of v0.6.0) function <code>export_list()</code> to write a list of data frames to multiple files using either a vector of file names or a file pattern:</p>
 <pre class="r"><code>export_list(list(mtcars = mtcars, iris = iris), &quot;%s.tsv&quot;)</code></pre>
 </div>
@@ -1950,11 +1956,41 @@ cat(file = fwf, &quot;123456&quot;, &quot;987654&quot;, sep = &quot;\n&quot;)
 
 # see two ways to read in the file
 identical(import(fwf, widths = c(1, 2, 3)), import(fwf, widths = c(1, -2, 3)))</code></pre>
+<pre><code>## Warning: The `widths` argument of `import()` is deprecated as of rio 1.0.2.
+## ℹ `widths` is kept for backward compatibility. Please use `col_positions` or
+##   unset `widths` to allow automatic guessing, see `?readr::read_fwf`. The
+##   parameter `widths` will be dropped in v2.0.0.
+## ℹ The deprecated feature was likely used in the rio package.
+##   Please report the issue at &lt;https://github.com/gesistsa/rio/issues&gt;.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## Rows: 2 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## 
+## dbl (3): X1, X2, X3
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 2 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## 
+## dbl (3): X1, X2, X3
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code># convert to CSV
-convert(fwf, &quot;fwf.csv&quot;, in_opts = list(widths = c(1, 2, 3)))
-import(&quot;fwf.csv&quot;) # check conversion</code></pre>
-<pre><code>##   V1 V2  V3
+convert(fwf, &quot;fwf.csv&quot;, in_opts = list(widths = c(1, 2, 3)))</code></pre>
+<pre><code>## Rows: 2 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## 
+## dbl (3): X1, X2, X3
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>import(&quot;fwf.csv&quot;) # check conversion</code></pre>
+<pre><code>##   X1 X2  X3
 ## 1  1 23 456
 ## 2  9 87 654</code></pre>
 <p>With metadata-rich file formats (e.g., Stata, SPSS, SAS), it can also be useful to pass imported data through <code>characterize()</code> or <code>factorize()</code> when converting to an open, text-delimited format: <code>characterize()</code> converts a single variable or all variables in a data frame that have “labels” attributes into character vectors based on the mapping of values to value labels (e.g., <code>export(characterize(import(&quot;file.dta&quot;)), &quot;file.csv&quot;)</code>). An alternative approach is exporting to CSVY format, which records metadata in a YAML-formatted header at the beginning of a CSV file.</p>

@@ -44,7 +44,6 @@ get_ext <- function(file) {
     get_info(file)$input
 }
 
-
 .query_format <- function(input, file) {
     unique_rio_formats <- unique(rio_formats[, colnames(rio_formats) != "note"])
     if (file == "clipboard") {
@@ -136,4 +135,26 @@ escape_xml <- function(x, replacement = c("&amp;", "&quot;", "&lt;", "&gt;", "&a
         stop("File names are not unique")
     }
     return(file)
+}
+
+.check_trust <- function(trust, format) {
+    if (is.null(trust)) {
+        lifecycle::deprecate_warn(
+                       when = "1.0.3",
+                       what = "import(trust = 'should be explicit for serialization formats')",
+                       details = paste0("Missing `trust` will be set to FALSE by default for ", format, " in 2.0.0."))
+        trust <- TRUE ## Change this for version 2.0.0
+    }
+    if (isFALSE(trust)) {
+        stop(format, " files may execute arbitary code. Only load ", format, " files that you personally generated or can trust the origin.", call. = FALSE)
+    }
+    NULL
+}
+
+.reset_which <- function(file_type, which) {
+    ## see #412
+    if (file_type %in% c("zip", "tar", "tar.gz", "tar.bz2")) {
+        return(1)
+    }
+    return(which)
 }

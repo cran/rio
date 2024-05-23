@@ -48,9 +48,14 @@
 export_list <- function(x, file, archive = "", ...) {
     .check_file(file, single_only = FALSE)
     archive_format <- find_compress(archive)
-    if (inherits(x, "data.frame")) {
-        stop("'x' must be a list. Perhaps you want export()?")
+    supported_archive_formats <- c("zip", "tar", "tar.gz", "tar.bz2")
+    if (!is.na(archive_format$compress) && !archive_format$compress %in% supported_archive_formats) {
+        stop("'archive' is specified but format is not supported. Only zip and tar formats are supported.", call. = FALSE)
     }
+    if (inherits(x, "data.frame")) {
+        stop("'x' must be a list. Perhaps you want export()?", call. = FALSE)
+    }
+    .check_tar_support(archive_format$compress, getRversion())
 
     outfiles <- .create_outfiles(file, x)
 
@@ -68,7 +73,7 @@ export_list <- function(x, file, archive = "", ...) {
     }
     if (!is.na(archive_format$compress)) {
         .create_directory_if_not_exists(archive)
-        compress_out(archive, outfiles_normalized)
+        compress_out(archive, outfiles_normalized, type = archive_format$compress)
         unlink(outfiles_normalized)
         return(invisible(archive))
     }

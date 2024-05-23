@@ -7,7 +7,7 @@
 export(x, file, format, ...)
 }
 \arguments{
-\item{x}{A data frame or matrix to be written into a file. Exceptions to this rule are that \code{x} can be a list of data frames if the output file format is an OpenDocument Spreadsheet (.ods, .fods), Excel .xlsx workbook, .Rdata file, or HTML file, or a variety of R objects if the output file format is RDS or JSON. See examples.) To export a list of data frames to multiple files, use \code{\link[=export_list]{export_list()}} instead.}
+\item{x}{A data frame, matrix or a single-item list of data frame to be written into a file. Exceptions to this rule are that \code{x} can be a list of multiple data frames if the output file format is an OpenDocument Spreadsheet (.ods, .fods), Excel .xlsx workbook, .Rdata file, or HTML file, or a variety of R objects if the output file format is RDS or JSON. See examples.) To export a list of data frames to multiple files, use \code{\link[=export_list]{export_list()}} instead.}
 
 \item{file}{A character string naming a file. Must specify \code{file} and/or \code{format}.}
 
@@ -47,7 +47,6 @@ object (not just a data frame).
 \item "XBASE" database files (.dbf), using \code{\link[foreign:write.dbf]{foreign::write.dbf()}}
 \item Weka Attribute-Relation File Format (.arff), using \code{\link[foreign:write.arff]{foreign::write.arff()}}
 \item Fixed-width format data (.fwf), using \code{\link[utils:write.table]{utils::write.table()}} with \code{row.names = FALSE}, \code{quote = FALSE}, and \code{col.names = FALSE}
-\item gzip comma-separated data (.csv.gz), using \code{\link[utils:write.table]{utils::write.table()}} with \code{row.names = FALSE}
 \item \href{https://github.com/csvy}{CSVY} (CSV with a YAML metadata header) using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
 \item Apache Arrow Parquet (.parquet), using \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
 \item Feather R/Python interchange format (.feather), using \code{\link[arrow:write_feather]{arrow::write_feather()}}

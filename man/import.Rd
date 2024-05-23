@@ -13,7 +13,7 @@ import(
 )
 }
 \arguments{
-\item{file}{A character string naming a file, URL, or single-file .zip or .tar archive.}
+\item{file}{A character string naming a file, URL, or single-file (can be Gzip or Bzip2 compressed), .zip or .tar archive.}
 
 \item{format}{An optional character string code of file format, which can be used to override the format inferred from \code{file}. Shortcuts include: \dQuote{,} (for comma-separated values), \dQuote{;} (for semicolon-separated values), and \dQuote{|} (for pipe-separated values).}
 
@@ -24,7 +24,7 @@ to set on the import. By default, the return object is always a
 data.table). Other values are ignored, such that a data.frame is returned.
 The parameter takes precedents over parameters in \dots which set a different class.}
 
-\item{which}{This argument is used to control import from multi-object files; as a rule \code{import} only ever returns a single data frame (use \code{\link[=import_list]{import_list()}} to import multiple data frames from a multi-object file). If \code{file} is a compressed directory, \code{which} can be either a character string specifying a filename or an integer specifying which file (in locale sort order) to extract from the compressed directory. For Excel spreadsheets, this can be used to specify a sheet name or number. For .Rdata files, this can be an object name. For HTML files, it identifies which table to extract (from document order). Ignored otherwise. A character string value will be used as a regular expression, such that the extracted file is the first match of the regular expression against the file names in the archive.}
+\item{which}{This argument is used to control import from multi-object files; as a rule \code{import} only ever returns a single data frame (use \code{\link[=import_list]{import_list()}} to import multiple data frames from a multi-object file). If \code{file} is an archive format (zip and tar), \code{which} can be either a character string specifying a filename or an integer specifying which file (in locale sort order) to extract from the compressed directory. But please see the section \code{which} below. For Excel spreadsheets, this can be used to specify a sheet name or number. For .Rdata files, this can be an object name. For HTML files, it identifies which table to extract (from document order). Ignored otherwise. A character string value will be used as a regular expression, such that the extracted file is the first match of the regular expression against the file names in the archive.}
 
 \item{\dots}{Additional arguments passed to the underlying import functions. For example, this can control column classes for delimited file types, or control the use of haven for Stata and SPSS or readxl for Excel (.xlsx) format. See details below.}
 }
@@ -50,9 +50,9 @@ This function imports a data frame or matrix from a data file with the file form
 \item Stata (.dta), using \code{\link[haven:read_dta]{haven::read_dta()}}
 \item SPSS Portable Files (.por), using \code{\link[haven:read_spss]{haven::read_por()}}.
 \item Excel (.xls and .xlsx), using \code{\link[readxl:read_excel]{readxl::read_xlsx()}} or \code{\link[readxl:read_excel]{readxl::read_xls()}}. Use \code{which} to specify a sheet number.
-\item R syntax object (.R), using \code{\link[base:dput]{base::dget()}}
-\item Saved R objects (.RData,.rda), using \code{\link[base:load]{base::load()}} for single-object .Rdata files. Use \code{which} to specify an object name for multi-object .Rdata files. This can be any R object (not just a data frame).
-\item Serialized R objects (.rds), using \code{\link[base:readRDS]{base::readRDS()}}. This can be any R object (not just a data frame).
+\item R syntax object (.R), using \code{\link[base:dput]{base::dget()}}, see \code{trust} below.
+\item Saved R objects (.RData,.rda), using \code{\link[base:load]{base::load()}} for single-object .Rdata files. Use \code{which} to specify an object name for multi-object .Rdata files. This can be any R object (not just a data frame), see \code{trust} below.
+\item Serialized R objects (.rds), using \code{\link[base:readRDS]{base::readRDS()}}. This can be any R object (not just a data frame), see \code{trust} below.
 \item Serialized R objects (.qs), using \code{\link[qs:qread]{qs::qread()}}, which is
 significantly faster than .rds. This can be any R
 object (not just a data frame).
@@ -64,7 +64,6 @@ object (not just a data frame).
 \item Data Interchange Format (.dif), using \code{\link[utils:read.DIF]{utils::read.DIF()}}
 \item Fortran data (no recognized extension), using \code{\link[utils:read.fortran]{utils::read.fortran()}}
 \item Fixed-width format data (.fwf), using a faster version of \code{\link[utils:read.fwf]{utils::read.fwf()}} that requires a \code{widths} argument and by default in rio has \code{stringsAsFactors = FALSE}
-\item gzip comma-separated data (.csv.gz), using \code{\link[utils:read.table]{utils::read.table()}} with \code{row.names = FALSE} and \code{stringsAsFactors = FALSE}
 \item \href{https://github.com/csvy}{CSVY} (CSV with a YAML metadata header) using \code{\link[data.table:fread]{data.table::fread()}}.
 \item Apache Arrow Parquet (.parquet), using \code{\link[arrow:read_parquet]{arrow::read_parquet()}}
 \item Feather R/Python interchange format (.feather), using \code{\link[arrow:read_feather]{arrow::read_feather()}}
@@ -88,6 +87,16 @@ After importing metadata-rich file formats (e.g., from Stata or SPSS), it may be
 \note{
 For csv and txt files with row names exported from \code{\link[=export]{export()}}, it may be helpful to specify \code{row.names} as the column of the table which contain row names. See example below.
 }
+\section{Trust}{
+For serialization formats (.R, .RDS, and .RData), please note that you should only load these files from trusted sources. It is because these formats are not necessarily for storing rectangular data and can also be used to store many things, e.g. code. Importing these files could lead to arbitary code execution. Please read the security principles by the R Project (Plummer, 2024). When importing these files via \code{rio}, you should affirm that you trust these files, i.e. \code{trust = TRUE}. See example below. If this affirmation is missing, the current version assumes \code{trust} to be true for backward compatibility and a deprecation notice will be printed. In the next major release (2.0.0), you must explicitly affirm your trust when importing these files.
+}
+
+\section{Which}{
+For compressed archives (zip and tar, where a compressed file can contain multiple files), it is possible to come to a situation where the parameter \code{which} is used twice to indicate two different concepts. For example, it is unclear for \code{.xlsx.zip}whether \code{which} refers to the selection of an exact file in the archive or the selection of an exact sheet in the decompressed Excel file. In these cases, \code{rio} assumes that \code{which} is only used for the selection of file. After the selection of file with \code{which}, \code{rio} will return the first item, e.g. the first sheet.
+
+Please note, however, \code{.gz} and \code{.bz2} (e.g. \code{.xlsx.gz}) are compressed, but not archive format. In those cases, \code{which} is used the same way as the non-compressed format, e.g. selection of sheet for Excel.
+}
+
 \examples{
 ## For demo, a temp. file path is created with the file extension .csv
 csv_file <- tempfile(fileext = ".csv")
@@ -123,7 +132,18 @@ import(csv_file, nrows = 20)
 class(import(csv_file, setclass = "tibble", data.table = TRUE))
 
 ## the default import class can be set with options(rio.import.class = "data.table")
-## option(rio.import.class = "tibble"), or option(rio.import.class = "arrow")
+## options(rio.import.class = "tibble"), or options(rio.import.class = "arrow")
+
+## Security
+rds_file <- tempfile(fileext = ".rds")
+export(iris, rds_file)
+
+## You should only import serialized formats from trusted sources
+## In this case, you can trust it because it's generated by you.
+import(rds_file, trust = TRUE)
+}
+\references{
+Plummer, M (2024). Statement on CVE-2024-27322. \url{https://blog.r-project.org/2024/05/10/statement-on-cve-2024-27322/}
 }
 \seealso{
 \code{\link[=import_list]{import_list()}}, \code{\link[=characterize]{characterize()}}, \code{\link[=gather_attrs]{gather_attrs()}}, \code{\link[=export]{export()}}, \code{\link[=convert]{convert()}}

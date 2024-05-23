@@ -1,3 +1,27 @@
+# rio 1.1.0
+
+* CRAN release
+
+# rio 1.0.3
+
+* Add `trust` parameter to functions that are used to load various R environment formats (`.R`, `.Rds`, `.Rdata`, etc). This parameter is defaulted to `TRUE` today to ensure backwards compatibility. A deprecation notice warns this will default to `FALSE` in `rio` 2.0. We are informing users that these data types should only be loaded from trusted sources, which should be affirmatively attested to.
+* Test and fix the compression mechanism: Gzip, Bzip2 are now working as expected.
+
+Bug fixes
+
+- Fix #412, prevent double usage of `which` for archive formats
+- Fix #415, both `import_list()` and `export_list()` support tar archives.
+- Fix #421, tar export is only supported by R >= 4.0.3.
+
+# rio 1.0.2
+
+* For missing files in `import_list` it gives more informative warnings fix #389
+* Single-item list of data frames can be exported fix #385
+* Move `stringi` to Suggests to reduce compilation time. Add an attribution to the internal data to list out all required packages #378
+* Move `readr` to Imports for `fwf`. `readr` is a dependency of `haven` so it does not increase the number of dependencies. Remove the original `read.fwf2` which doesn't guess `widths`. Keep the `widths` and `col.names` to maintain compatibility. #381
+* Add (back) a pkgdown website: [https://gesistsa.github.io/rio/](https://gesistsa.github.io/rio/)
+* Update all test cases #380
+
 # rio 1.0.1
 
 * POTENTIALLY BREAKING: Due to compiling time concerns, roll back the decision to move `arrow` to `Imports`. It is now `Suggests`. `setclass = "arrow"` works if `arrow` is installed. #315 #376

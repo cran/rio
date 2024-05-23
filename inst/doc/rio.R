@@ -26,7 +26,6 @@ knitr::kable(feature_table)
 library("rio")
 
 export(mtcars, "mtcars.csv")
-export(mtcars, "mtcars.rds")
 export(mtcars, "mtcars.dta")
 export(mtcars, "mtcars_noext", format = "csv")
 
@@ -34,19 +33,16 @@ export(mtcars, "mtcars_noext", format = "csv")
 library("rio")
 
 x <- import("mtcars.csv")
-y <- import("mtcars.rds")
-z <- import("mtcars.dta")
+y <- import("mtcars.dta")
 
 # confirm identical
 all.equal(x, y, check.attributes = FALSE)
-all.equal(x, z, check.attributes = FALSE)
 
 ## -----------------------------------------------------------------------------
 head(import("mtcars_noext", format = "csv"))
 
 ## ----echo=FALSE, results='hide'-----------------------------------------------
 unlink("mtcars.csv")
-unlink("mtcars.rds")
 unlink("mtcars.dta")
 unlink("mtcars_noext")
 
@@ -54,7 +50,6 @@ unlink("mtcars_noext")
 library("rio")
 
 export(mtcars, "mtcars.csv")
-export(mtcars, "mtcars.rds")
 export(mtcars, "mtcars.dta")
 
 ## -----------------------------------------------------------------------------
@@ -67,14 +62,6 @@ mtcars %>%
 ## -----------------------------------------------------------------------------
 # export to sheets of an Excel workbook
 export(list(mtcars = mtcars, iris = iris), "multi.xlsx")
-
-## -----------------------------------------------------------------------------
-# export to an .Rdata file
-## as a named list
-export(list(mtcars = mtcars, iris = iris), "multi.rdata")
-
-## as a character vector
-export(c("mtcars", "iris"), "multi.rdata")
 
 ## -----------------------------------------------------------------------------
 export_list(list(mtcars = mtcars, iris = iris), "%s.tsv")
@@ -106,11 +93,8 @@ unlink(fwf)
 
 ## ----echo=FALSE, results='hide'-----------------------------------------------
 unlink("mtcars.csv")
-unlink("mtcars.rds")
-unlink("mtcars.rdata")
 unlink("mtcars.dta")
 unlink("multi.xlsx")
-unlink("multi.rdata")
 unlink("mtcars2.dta")
 unlink("mtcars.tsv")
 unlink("iris.tsv")

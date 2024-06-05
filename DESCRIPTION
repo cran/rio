@@ -1,7 +1,7 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(person("Jason", "Becker", role = "aut", email = "jason@jbecker.co"),
              person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com",
 	     	     comment = c(ORCID = "0000-0002-6232-7530")),
@@ -50,7 +50,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.1
 Config/Needs/website: gesistsa/tsatemplate
 NeedsCompilation: no
-Packaged: 2024-05-23 10:35:50 UTC; chainsawriot
+Packaged: 2024-06-05 14:45:29 UTC; chainsawriot
 Author: Jason Becker [aut],
   Chung-hong Chan [aut, cre] (<https://orcid.org/0000-0002-6232-7530>),
   David Schoch [aut] (<https://orcid.org/0000-0003-2952-4812>),
@@ -69,4 +69,4 @@ Author: Jason Becker [aut],
   Alex Bokov [ctb] (<https://orcid.org/0000-0002-0511-9815>)
 Maintainer: Chung-hong Chan <chainsawtiney@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-05-23 11:10:02 UTC
+Date/Publication: 2024-06-05 17:00:01 UTC

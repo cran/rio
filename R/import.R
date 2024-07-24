@@ -42,7 +42,7 @@
 #'     \item Fortran data (no recognized extension), using [utils::read.fortran()]
 #'     \item Fixed-width format data (.fwf), using a faster version of [utils::read.fwf()] that requires a `widths` argument and by default in rio has `stringsAsFactors = FALSE`
 #'     \item [CSVY](https://github.com/csvy) (CSV with a YAML metadata header) using [data.table::fread()].
-#'     \item Apache Arrow Parquet (.parquet), using [arrow::read_parquet()]
+#'     \item Apache Arrow Parquet (.parquet), using [nanoparquet::read_parquet()]
 #'     \item Feather R/Python interchange format (.feather), using [arrow::read_feather()]
 #'     \item Fast storage (.fst), using [fst::read.fst()]
 #'     \item JSON (.json), using [jsonlite::fromJSON()]
@@ -146,7 +146,6 @@ import <- function(file, format, setclass = getOption("rio.import.class", "data.
         ## format such as "|"
         format <- .standardize_format(format)
     }
-    args_list <- list(...)
     class(file) <- c(paste0("rio_", format), class(file))
     if (missing(which)) {
         x <- .import(file = file, ...)

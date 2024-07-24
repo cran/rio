@@ -376,7 +376,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="co">#&gt;   ..- attr(*, &quot;format.spss&quot;)= chr &quot;A1&quot;</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="co">#&gt;   ..- attr(*, &quot;labels&quot;)= Named chr [1:2] &quot;M&quot; &quot;F&quot;</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Male&quot; &quot;Female&quot;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="co">#&gt;  $ rating: num  3 1 4 5 2</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="co">#&gt;  $ rating: num  3 4 1 2 5</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a><span class="co">#&gt;   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F8.0&quot;</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="co">#&gt;   ..- attr(*, &quot;labels&quot;)= Named num [1:2] 1 5</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Good&quot; &quot;Bad&quot;</span></span></code></pre></div>
@@ -387,7 +387,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="co">#&gt;  $ gender: chr  &quot;M&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot; ...</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="co">#&gt;   ..- attr(*, &quot;labels&quot;)= Named chr [1:2] &quot;M&quot; &quot;F&quot;</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Male&quot; &quot;Female&quot;</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="co">#&gt;  $ rating: num  3 1 4 5 2</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="co">#&gt;  $ rating: num  3 4 1 2 5</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="co">#&gt;   ..- attr(*, &quot;labels&quot;)= Named num [1:2] 1 5</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Good&quot; &quot;Bad&quot;</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a><span class="co">#&gt;  - attr(*, &quot;format.spss&quot;)=List of 2</span></span>
@@ -397,15 +397,15 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a><span class="co">#&gt;   ..$ gender: Named chr [1:2] &quot;M&quot; &quot;F&quot;</span></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Male&quot; &quot;Female&quot;</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a><span class="co">#&gt;   ..$ rating: Named num [1:2] 1 5</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Good&quot; &quot;Bad&quot;</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true"></a><span class="kw">attr</span>(g, <span class="st">&quot;labels&quot;</span>)</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true"></a><span class="co">#&gt; $gender</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true"></a><span class="co">#&gt;   Male Female </span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true"></a><span class="co">#&gt;    &quot;M&quot;    &quot;F&quot; </span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true"></a><span class="co">#&gt; </span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true"></a><span class="co">#&gt; $rating</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true"></a><span class="co">#&gt; Good  Bad </span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true"></a><span class="co">#&gt;    1    5</span></span></code></pre></div>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a><span class="co">#&gt;   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Good&quot; &quot;Bad&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">attr</span>(g, <span class="st">&quot;labels&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="co">#&gt; $gender</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="co">#&gt;   Male Female </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="co">#&gt;    &quot;M&quot;    &quot;F&quot; </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="co">#&gt; </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="co">#&gt; $rating</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="co">#&gt; Good  Bad </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a><span class="co">#&gt;    1    5</span></span></code></pre></div>
 
 
 

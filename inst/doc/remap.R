@@ -19,11 +19,6 @@ import("example.xlsx", sheet = "iris", n_max = 10)
 ## ----map4---------------------------------------------------------------------
 import("example.xlsx", sheet = "iris", n_max = 10, pizza = "pineapple")
 
-## ----map5, error = TRUE, echo = FALSE-----------------------------------------
-R.utils::withOptions({
-    import("example.xlsx", sheet = "iris", n_max = 10, pizza = "pineapple")
-}, rio.ignoreunusedargs = FALSE)
-
 ## ----echo = FALSE, results = 'hide'-------------------------------------------
 unlink("example.xlsx")
 

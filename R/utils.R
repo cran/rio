@@ -103,6 +103,9 @@ escape_xml <- function(x, replacement = c("&amp;", "&quot;", "&lt;", "&gt;", "&a
     if (isFALSE(length(file) == 1) && single_only) {
         stop("Invalid `file` argument: `file` must be single", call. = FALSE)
     }
+    if (any(is.na(file))) {
+        stop("Invalid `file` argument: `file` must not be NA", call. = FALSE)
+    }
     invisible(NULL)
 }
 
@@ -120,7 +123,7 @@ escape_xml <- function(x, replacement = c("&amp;", "&quot;", "&lt;", "&gt;", "&a
         if (is.null(names_x)) {
             return(sprintf(file, seq_along(x)))
         }
-        if (any(nchar(names_x) == 0)) {
+        if (!all(nzchar(names_x))) {
             stop("All elements of 'x' must be named or all must be unnamed")
         }
         if (anyDuplicated(names_x)) {

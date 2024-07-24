@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-06-05" />
+<meta name="date" content="2024-07-24" />
 
 <title>Import, Export, and Convert Data Files</title>
 
@@ -1503,7 +1503,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Import, Export, and Convert Data Files</h1>
-<h4 class="date">2024-06-05</h4>
+<h4 class="date">2024-07-24</h4>
 
 </div>
 
@@ -1518,14 +1518,14 @@ div.tocify {
 <p><strong>rio</strong> supports a variety of different file formats for import and export. To keep the package slim, all non-essential formats are supported via “Suggests” packages, which are not installed (or loaded) by default. To ensure rio is fully functional, install these packages the first time you use <strong>rio</strong> via:</p>
 <pre class="r"><code>install_formats()</code></pre>
 <p>The full list of supported formats is below:</p>
-<table style="width:100%;">
+<table>
 <colgroup>
-<col width="26%"></col>
-<col width="26%"></col>
-<col width="11%"></col>
-<col width="11%"></col>
+<col width="25%"></col>
+<col width="25%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
 <col width="5%"></col>
-<col width="17%"></col>
+<col width="21%"></col>
 </colgroup>
 <thead>
 <tr class="header">
@@ -1567,6 +1567,22 @@ div.tocify {
 <td align="left">zip</td>
 <td align="left">utils</td>
 <td align="left">utils</td>
+<td align="left">Default</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Ambiguous file format</td>
+<td align="left">dat</td>
+<td align="left">data.table</td>
+<td align="left"></td>
+<td align="left">Default</td>
+<td align="left">Attempt as delimited text data</td>
+</tr>
+<tr class="even">
+<td align="left">Apache Arrow (Parquet)</td>
+<td align="left">parquet</td>
+<td align="left">nanoparquet</td>
+<td align="left">nanoparquet</td>
 <td align="left">Default</td>
 <td align="left"></td>
 </tr>
@@ -1779,14 +1795,6 @@ div.tocify {
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left">Apache Arrow (Parquet)</td>
-<td align="left">parquet</td>
-<td align="left">arrow</td>
-<td align="left">arrow</td>
-<td align="left">Suggest</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
 <td align="left">Clipboard</td>
 <td align="left">clipboard</td>
 <td align="left">clipr</td>
@@ -1794,7 +1802,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left">default is tsv</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">EViews</td>
 <td align="left">eviews / wf1</td>
 <td align="left">hexView</td>
@@ -1802,7 +1810,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Fast Storage</td>
 <td align="left">fst</td>
 <td align="left">fst</td>
@@ -1810,7 +1818,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Feather R/Python interchange format</td>
 <td align="left">feather</td>
 <td align="left">arrow</td>
@@ -1818,7 +1826,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Graphpad Prism</td>
 <td align="left">pzfx</td>
 <td align="left">pzfx</td>
@@ -1826,7 +1834,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">HTML Tables</td>
 <td align="left">htm / html</td>
 <td align="left">xml2</td>
@@ -1834,7 +1842,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">JSON</td>
 <td align="left">json</td>
 <td align="left">jsonlite</td>
@@ -1842,7 +1850,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Matlab</td>
 <td align="left">mat / matlab</td>
 <td align="left">rmatio</td>
@@ -1850,7 +1858,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">OpenDocument Spreadsheet</td>
 <td align="left">ods</td>
 <td align="left">readODS</td>
@@ -1858,7 +1866,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">OpenDocument Spreadsheet (Flat)</td>
 <td align="left">fods</td>
 <td align="left">readODS</td>
@@ -1866,7 +1874,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Serialized R objects (Quick)</td>
 <td align="left">qs</td>
 <td align="left">qs</td>
@@ -1874,7 +1882,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Shallow XML documents</td>
 <td align="left">xml</td>
 <td align="left">xml2</td>
@@ -1882,7 +1890,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">YAML</td>
 <td align="left">yaml / yml</td>
 <td align="left">yaml</td>

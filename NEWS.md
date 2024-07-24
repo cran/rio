@@ -1,6 +1,16 @@
+# rio 1.2.0
+
+* Fix lintr issues #434 (h/t @bisaloo Hugo Gruson)
+* Drop support for R < 4.0.0 see #436
+* Add support for parquet in the import tier using `nanoparquet` see rio 1.0.1 below.
+
+Bug fixes
+
+* Fix #430 Add back support for `.dat`
+
 # rio 1.1.1
 
-Bus fixes
+Bug fixes
 
 * Fix #425 for archive formats, the file extension of the input file is determined by the compressed file (like prior rio 1.1.0)
 

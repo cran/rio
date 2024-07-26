@@ -1,7 +1,7 @@
 Package: rio
 Type: Package
 Title: A Swiss-Army Knife for Data I/O
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: c(person("Jason", "Becker", role = "aut", email = "jason@jbecker.co"),
              person("Chung-hong", "Chan", role = c("aut", "cre"), email = "chainsawtiney@gmail.com",
 	     	     comment = c(ORCID = "0000-0002-6232-7530")),
@@ -41,17 +41,18 @@ BugReports: https://github.com/gesistsa/rio/issues
 Depends: R (>= 4.0)
 Imports: tools, stats, utils, foreign, haven (>= 1.1.2), curl (>= 0.6),
         data.table (>= 1.11.2), readxl (>= 0.1.1), tibble, writexl,
-        lifecycle, R.utils, readr, nanoparquet
+        lifecycle, R.utils, readr
 Suggests: datasets, bit64, testthat, knitr, magrittr, clipr, fst,
         hexView, jsonlite, pzfx, readODS (>= 2.1.0), rmarkdown, rmatio,
-        xml2 (>= 1.2.0), yaml, qs, arrow (>= 0.17.0), stringi, withr
+        xml2 (>= 1.2.0), yaml, qs, arrow (>= 0.17.0), stringi, withr,
+        nanoparquet
 License: GPL-2
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 Config/Needs/website: gesistsa/tsatemplate
 NeedsCompilation: no
-Packaged: 2024-07-24 08:48:52 UTC; chainsawriot
+Packaged: 2024-07-26 16:26:06 UTC; chainsawriot
 Author: Jason Becker [aut],
   Chung-hong Chan [aut, cre] (<https://orcid.org/0000-0002-6232-7530>),
   David Schoch [aut] (<https://orcid.org/0000-0003-2952-4812>),
@@ -71,4 +72,4 @@ Author: Jason Becker [aut],
   Hugo Gruson [ctb] (<https://orcid.org/0000-0002-4094-1476>)
 Maintainer: Chung-hong Chan <chainsawtiney@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-07-24 09:30:01 UTC
+Date/Publication: 2024-07-26 23:20:06 UTC

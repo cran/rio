@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-07-26" />
+<meta name="date" content="2024-08-19" />
 
 <title>Import, Export, and Convert Data Files</title>
 
@@ -1503,7 +1503,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Import, Export, and Convert Data Files</h1>
-<h4 class="date">2024-07-26</h4>
+<h4 class="date">2024-08-19</h4>
 
 </div>
 
@@ -1512,7 +1512,7 @@ div.tocify {
 <h1>Import, Export, and Convert Data Files</h1>
 <p>The idea behind <strong>rio</strong> is to simplify the process of importing data into R and exporting data from R. This process is, probably unnecessarily, extremely complex for beginning R users. Indeed, R supplies <a href="https://cran.r-project.org/doc/manuals/r-release/R-data.html">an entire manual</a> describing the process of data import/export. And, despite all of that text, most of the packages described are (to varying degrees) out-of-date. Faster, simpler, packages with fewer dependencies have been created for many of the file types described in that document. <strong>rio</strong> aims to unify data I/O (importing and exporting) into two simple functions: <code>import()</code> and <code>export()</code> so that beginners (and experienced R users) never have to think twice (or even once) about the best way to read and write R data.</p>
 <p>The core advantage of <strong>rio</strong> is that it makes assumptions that the user is probably willing to make. Specifically, <strong>rio</strong> uses the file extension of a file name to determine what kind of file it is. This is the same logic used by Windows OS, for example, in determining what application is associated with a given file type. By taking away the need to manually match a file type (which a beginner may not recognize) to a particular import or export function, <strong>rio</strong> allows almost all common data formats to be read with the same function.</p>
-<p>By making import and export easy, it’s an obvious next step to also use R as a simple data conversion utility. Transferring data files between various proprietary formats is always a pain and often expensive. The <code>convert</code> function therefore combines <code>import</code> and <code>export</code> to easily convert between file formats (thus providing a FOSS replacement for programs like <a href="https://stattransfer.com/">Stat/Transfer</a> or <a href="https://www.mtna.us/#/products/sledgehammer">Sledgehammer</a>).</p>
+<p>By making import and export easy, it’s an obvious next step to also use R as a simple data conversion utility. Transferring data files between various proprietary formats is always a pain and often expensive. The <code>convert</code> function therefore combines <code>import</code> and <code>export</code> to easily convert between file formats (thus providing a FOSS replacement for programs like Stat/Transfer or Sledgehammer.</p>
 <div id="supported-file-formats" class="section level2">
 <h2>Supported file formats</h2>
 <p><strong>rio</strong> supports a variety of different file formats for import and export. To keep the package slim, all non-essential formats are supported via “Suggests” packages, which are not installed (or loaded) by default. To ensure rio is fully functional, install these packages the first time you use <strong>rio</strong> via:</p>

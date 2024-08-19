@@ -1,6 +1,6 @@
-345dc3f86d998924855d060d11161260 *DESCRIPTION
+3244cc2ecf5050c085c453115e2868be *DESCRIPTION
 8620a402d96d51752db18d32efeccca9 *NAMESPACE
-664795956c6be0735a7a81b789367251 *NEWS.md
+750908d2367d3fa1c4f347358d4e04ae *NEWS.md
 57348ed683ea9ae7d0074d1148734984 *R/characterize.R
 9bf5feab9a39544ae225e9dd9a0b6120 *R/compression.R
 807ddc7d46c576546e3a1e74d634153a *R/convert.R
@@ -24,14 +24,19 @@ c83a328c2e2d3ccd7f833da05e0fc9ac *R/remote_to_local.R
 7b006ddbc0c79a66593e79faff37dee0 *build/vignette.rds
 10d45832d34b09559c23c29362cad423 *inst/CITATION
 5c30adebcb89825549d5609439609123 *inst/doc/extension.R
+de6ca8d3c9e38a95202c14292ac751d3 *inst/doc/extension.Rmd
 b64f6b55503c515566fe4b04f0970506 *inst/doc/extension.html
 f12bff071ab3f2dbac493065848f98d4 *inst/doc/labelled.R
-6bd2fe23e64089813d56b4b7c34c9e2f *inst/doc/labelled.html
+8edce779bf5ec09051660d36fb752f4f *inst/doc/labelled.Rmd
+91fb161c32082683646701ecab5d2bab *inst/doc/labelled.html
+ba75c9b6382514c0caa9a1d7a79aae6b *inst/doc/philosophy.Rmd
 5a329bd9f880788e8adfb8f5f677a0dd *inst/doc/philosophy.html
 35ca6504a4b6f07186d3419c087e4204 *inst/doc/remap.R
+43610d2a5f4f895b656b06d0b584897a *inst/doc/remap.Rmd
 b04c81c4a6b181575684bc43634bae8e *inst/doc/remap.html
 f72022aadc5a55d95027f4e424a77196 *inst/doc/rio.R
-99def44d34dbb67b1f49369b33cc8a0f *inst/doc/rio.html
+3afc43de362e6015bc0c58295284ff76 *inst/doc/rio.Rmd
+66584e6d3b28365523c775ba2332544e *inst/doc/rio.html
 83ac65fcc39b019e543625a644ef7c0d *man/characterize.Rd
 2a8458a6c3e87a9730f950a6b515d8bd *man/convert.Rd
 b2cf00a278415d50c286f8118fb0a5cb *man/export.Rd
@@ -111,4 +116,4 @@ de6ca8d3c9e38a95202c14292ac751d3 *vignettes/extension.Rmd
 8edce779bf5ec09051660d36fb752f4f *vignettes/labelled.Rmd
 ba75c9b6382514c0caa9a1d7a79aae6b *vignettes/philosophy.Rmd
 43610d2a5f4f895b656b06d0b584897a *vignettes/remap.Rmd
-0a43fc3f04dac7744038680bfe8cedc2 *vignettes/rio.Rmd
+3afc43de362e6015bc0c58295284ff76 *vignettes/rio.Rmd

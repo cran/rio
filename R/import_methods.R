@@ -288,6 +288,9 @@ import_delim <- function(file, which = 1, sep = "auto", header = "auto", strings
 }
 
 #' @export
+.import.rio_xlsm <- .import.rio_xlsx
+
+#' @export
 .import.rio_fortran <- function(file, which = 1, style, ...) {
     if (missing(style)) {
         stop("Import of Fortran format data requires a 'style' argument. See ? utils::read.fortran().")
@@ -421,4 +424,10 @@ extract_html_row <- function(x, empty_value) {
 .import.rio_qs <- function(file, which = 1, ...) {
     .check_pkg_availability("qs")
     .docall(qs::qread, ..., args = list(file = file))
+}
+
+#' @export
+.import.rio_qs2 <- function(file, which = 1, ...) {
+  .check_pkg_availability("qs2")
+  .docall(qs2::qs_read, ..., args = list(file = file))
 }

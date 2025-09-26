@@ -1,3 +1,13 @@
+# rio 1.2.4
+
+* Fix #463, export_list also allows ods and fods
+* Fix #417, add qs2 support, h/t Jacob Mears #472
+
+Bug fixes
+
+* Fix #458, custom S3 import and export functions work again
+* Fix #467, Respect the format argument to import_list(), h/t Bill Denney #468
+
 # rio 1.2.3
 
 * Fix #453, don't nudge the user to install all suggested packages

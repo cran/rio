@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-09-25" />
+<meta name="date" content="2026-04-01" />
 
 <title>Import, Export, and Convert Data Files</title>
 
@@ -1503,7 +1503,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Import, Export, and Convert Data Files</h1>
-<h4 class="date">2025-09-25</h4>
+<h4 class="date">2026-04-01</h4>
 
 </div>
 
@@ -1518,14 +1518,14 @@ div.tocify {
 <p><strong>rio</strong> supports a variety of different file formats for import and export. To keep the package slim, all non-essential formats are supported via “Suggests” packages, which are not installed (or loaded) by default. To ensure rio is fully functional, install these packages the first time you use <strong>rio</strong> via:</p>
 <pre class="r"><code>install_formats()</code></pre>
 <p>The full list of supported formats is below:</p>
-<table style="width:100%;">
+<table>
 <colgroup>
-<col width="22%"></col>
-<col width="22%"></col>
-<col width="9%"></col>
-<col width="9%"></col>
+<col width="25%"></col>
+<col width="25%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
 <col width="5%"></col>
-<col width="30%"></col>
+<col width="21%"></col>
 </colgroup>
 <thead>
 <tr class="header">
@@ -1883,22 +1883,14 @@ div.tocify {
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">Serialized R objects (qs)</td>
-<td align="left">qs</td>
-<td align="left">qs</td>
-<td align="left">qs</td>
-<td align="left">Suggest</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
 <td align="left">Serialized R objects (qs2)</td>
 <td align="left">qs2</td>
 <td align="left">qs2</td>
 <td align="left">qs2</td>
 <td align="left">Suggest</td>
-<td align="left">Replaces {qs} package which will be deprecated.</td>
+<td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Shallow XML documents</td>
 <td align="left">xml</td>
 <td align="left">xml2</td>
@@ -1906,7 +1898,7 @@ div.tocify {
 <td align="left">Suggest</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">YAML</td>
 <td align="left">yaml / yml</td>
 <td align="left">yaml</td>
@@ -1986,7 +1978,7 @@ identical(import(fwf, widths = c(1, 2, 3)), import(fwf, widths = c(1, -2, 3)))</
 ##   parameter `widths` will be dropped in v2.0.0.
 ## ℹ The deprecated feature was likely used in the rio package.
 ##   Please report the issue at &lt;https://github.com/gesistsa/rio/issues&gt;.
-## This warning is displayed once every 8 hours.
+## This warning is displayed once per session.
 ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 ## generated.</code></pre>
 <pre><code>## Rows: 2 Columns: 3

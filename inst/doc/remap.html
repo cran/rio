@@ -498,7 +498,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>If you don’t like this behavior, please change the option <code>rio.ignoreunusedargs</code> to <code>FALSE</code>, i.e. <code>options(rio.ignoreunusedargs = FALSE)</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">options</span>(<span class="dt">rio.ignoreunusedargs =</span> <span class="ot">FALSE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">import</span>(<span class="st">&quot;example.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="st">&quot;iris&quot;</span>, <span class="dt">n_max =</span> <span class="dv">10</span>, <span class="dt">pizza =</span> <span class="st">&quot;pineapple&quot;</span>)</span></code></pre></div>
-<pre><code>#&gt; Error in (function (path, sheet = NULL, range = NULL, col_names = TRUE, : unused argument (pizza = &quot;pineapple&quot;)</code></pre>
+<pre><code>#&gt; Error:
+#&gt; ! unused argument (pizza = &quot;pineapple&quot;)</code></pre>
 </div>
 
 
